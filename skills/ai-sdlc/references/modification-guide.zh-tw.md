@@ -11,7 +11,7 @@ description: >
 
 # modification-guide — 修改治理與變更記錄
 
-> 語言 / Language: **繁體中文** · [English](SKILL.en.md)
+> 語言 / Language: **繁體中文** · [English](modification-guide.md)
 
 ## 用途
 

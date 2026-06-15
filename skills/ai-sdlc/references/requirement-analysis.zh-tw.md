@@ -11,7 +11,7 @@ description: >
 
 # requirement-analysis — 需求分析產出 AI Guideline
 
-> 語言 / Language: **繁體中文** · [English](SKILL.en.md)
+> 語言 / Language: **繁體中文** · [English](requirement-analysis.md)
 
 ## 用途
 

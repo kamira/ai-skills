@@ -13,6 +13,8 @@ description: >
 
 # modification-guide — change governance & change records
 
+> 語言 / Language: [繁體中文](modification-guide.zh-tw.md) · **English**
+
 ## Purpose
 
 Every modification or new feature on an existing system passes through here first: analyze what the change will touch, produce a clear modification guide, update structure docs in sync, and leave a change record. The goal is to avoid the architectural drift caused by "changing the code while docs and decisions fall behind".

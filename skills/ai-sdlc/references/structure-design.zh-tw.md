@@ -10,7 +10,7 @@ description: >
 
 # structure-design — 產出四種結構文件
 
-> 語言 / Language: **繁體中文** · [English](SKILL.en.md)
+> 語言 / Language: **繁體中文** · [English](structure-design.md)
 
 ## 用途
 

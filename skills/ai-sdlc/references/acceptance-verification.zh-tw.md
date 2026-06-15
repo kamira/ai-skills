@@ -10,7 +10,7 @@ description: >
 
 # acceptance-verification — 驗收成果
 
-> 語言 / Language: **繁體中文** · [English](SKILL.en.md)
+> 語言 / Language: **繁體中文** · [English](acceptance-verification.md)
 
 ## 用途
 
