@@ -62,6 +62,16 @@ then acts.
 
 Read only the reference for the current stage to avoid loading irrelevant content at once.
 
+## Session startup check (required for cross-session / incremental development)
+
+**On every re-entry, before touching any new requirement, scan existing docs for stages left half-done:**
+
+1. Read the latest CHG under `docs/changes/`: any whose status is not "Accepted" means the previous session's change is only half complete.
+2. Cross-check `docs/acceptance/`: if a CHG has no matching ACC report, acceptance was handed off but nobody picked it up.
+3. **Close those pending acceptances first (run acceptance-verification), then start the new requirement.**
+
+Why: the most common break in cross-session work is "the modification flow treats acceptance as the next step and hands it off, but the next session brings a new feature, not the acceptance" — so acceptance hangs forever. Checking on entry lets the "modify -> verify" loop reconnect across sessions.
+
 ## Mandatory rule: changes always go through governance first
 
 **Whenever the user proposes a "modification" or "new feature" within a session, you must first
@@ -70,6 +80,11 @@ touch existing structure and prior decisions; skipping governance causes archite
 missing records. Modification governance has two entry points: (1) a user-initiated change, and
 (2) a failed acceptance routed back for fixes — both go through "governance -> re-implement ->
 re-verify", closing the loop.
+
+**Close acceptance in the same round**: once a change is implemented, **immediately run
+acceptance-verification in the same round to produce the ACC** and set the CHG status to
+"Accepted" — do NOT just mark it "pending acceptance" and stop. In cross-session work nobody
+will come back to do a deferred acceptance.
 
 ## Document storage convention
 
@@ -92,3 +107,4 @@ paths in the AI Guideline.
 2. **Documents are the truth**: if the structure changes, update the structure docs in sync.
 3. **Trace every change**: a modification always leaves a record under `docs/changes/`.
 4. **Acceptance aligns to source**: criteria come from the Guideline and the change's mod guide.
+5. **Don't rely on memory — rely on the docs**: a long conversation's context may be compacted, losing or distorting earlier decisions. **Don't go by recollection** — before acting, re-confirm existing constraints and decisions from the files under `docs/` (Guideline, structure, CHG, ACC); when memory and the docs disagree, the docs win. This keeps compaction, cross-session work, and handoffs from causing drift.
