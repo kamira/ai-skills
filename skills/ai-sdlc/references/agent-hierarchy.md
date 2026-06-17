@@ -34,17 +34,14 @@ Turn "several agents working together" into a **chartered, bounded, managed** hi
 
 > Applicability: **solo or team**. A solo user with an AI that spawns sub-agents can use this org too (analysis/implementation/acceptance are all AI sub-agents); you are the top-level manager.
 
-## Recursive creation depends on the AI mechanism (important)
+## Recursive creation: current state and guidance
 
-Whether "a sub-agent can spawn its own sub-agents" is possible **depends on the underlying AI platform/mechanism supporting nested sub-agents** — some mechanisms only let the top level dispatch sub-agents, and sub-agents can't dispatch further. So:
+- **Nested sub-agents are supported**: a sub-agent may spawn its own sub-agents; **max depth 5**. So the recursive-delegation path is usable — no need to fall back to flat.
+- **But keep it shallow (2–3 levels)**: the deeper the nesting, the higher the coordination/tracking/traceback cost and the harder it is for parents to manage. Needing more depth usually means the task should be split or redesigned, not stacked deeper.
+- **Use a tools allowlist to control "who can spawn"**: whether an agent can spawn sub-agents is governed by its **tool grant** — only roles that need to dispatch (e.g. lead implementer I1) get the `Agent`/spawn tool; roles that don't (verifier V1, pure sub-implementers I1.x) are **not given the `Agent` tool**, mechanically preventing them from spawning. This turns "permission narrows only" into something enforced by the tool list, not just discipline.
+- **Governance principles hold at any depth**: IDs, fixed scope, no exceeding the remit, org registry, active parent management, implementer-doesn't-self-verify.
 
-- **If nesting is allowed**: proceed with "recursive delegation, permission narrows only + active parent management" above.
-- **If nesting is not allowed (single-level dispatch only)**: fall back to an equivalent outcome —
-  - the **top-level agent directly creates all needed agents** (flat org), acting as everyone's parent; or
-  - that agent **does the sub-tasks itself, in sequence** (no further dispatch), then reports.
-- **Regardless of depth, these don't change**: IDs, fixed scope, no exceeding the remit, org registry, parent management, implementer-doesn't-self-verify. **Only the "hierarchy depth" is limited by platform capability**; the governance principles hold.
-
-On entry, check whether the current mechanism supports nesting; if unsure, use a flat org — it's the safest.
+In practice: before going past 2–3 levels, ask "should this task be split finer or its boundaries redrawn?"; approaching depth 5 is a warning sign.
 
 ## Typical chain (implementation scenario)
 
@@ -60,19 +57,32 @@ A1 analysis ──► I1 lead implementer ──► V1 independent acceptance
 4. **Only after all implementation is complete**, hand off to an **independent verifier (V1)** — V1 ≠ any agent in the implementation chain, and **read-only** — for multi-scenario acceptance, producing the ACC (see independent-acceptance).
 5. Iron rules: **I1 does not self-verify** (player can't be referee); **V1 does not edit code** (found a problem → back to modification-guide for the implementation chain to fix).
 
+## Role startup spec (tools allowlist)
+
+Each agent is **granted a tools allowlist at startup, by role** (least privilege). This spec is the authorization basis when an **outer tool (python, etc.) invokes/runs an AI** to act as a role; it **also applies to traditional pure CLI / GUI operation** — "can execute" covers running commands, running tests, and driving a GUI, not just AI calls.
+
+| Role | Can spawn (`Agent` tool) | Can write code/structure | Can execute (CLI / script / GUI) | Notes |
+|------|--------------------------|--------------------------|----------------------------------|-------|
+| A1 analysis | ✗ | ✗ (writes docs/ only) | ✓ (read code, run analysis tools) | analysis only |
+| I1 lead impl | ✓ (dispatch I1.x) | ✓ own scope | ✓ | gets `Agent` because it dispatches |
+| I1.x sub-impl | ✗ | ✓ own module | ✓ | no further dispatch → no `Agent` |
+| **V1 verifier** | **✗ (tools exclude `Agent`)** | **✗ (read-only on the code/structure under review)** | **✓ may run tests/scripts/CLI/GUI to verify** | reads code & criteria, writes only its ACC; **cannot spawn sub-agents or edit the code under review**, but **may execute** for multi-scenario verification |
+
+> **"Read-only" ≠ "cannot execute"**: V1's read-only means "cannot modify the code/structure under review and cannot spawn sub-agents"; it **may still** run tests via python/CLI or drive a GUI to verify (acceptance needs this). Putting "no `Agent` tool" in V1's startup spec mechanically guarantees it won't "fix while verifying" or spawn agents — more reliable than discipline alone.
+
 ## Org registry (coordination file)
 
-Maintain the org table in `docs/coordination.md` so anyone/any agent can see who does what and who manages whom:
+Maintain the org table in `docs/coordination.md` so anyone/any agent can see who does what, who manages whom, and what tools were granted:
 
 ```markdown
 # Agent org
-| ID   | Role | Parent | Task / scope | R/W permission | Status |
-|------|------|--------|--------------|----------------|--------|
-| A1   | analysis | —  | requirement/structure/impact | docs/ + read code | done |
-| I1   | lead impl | — | coordinate impl, integrate | RW src/ | in progress |
-| I1.1 | sub-impl | I1 | module X | RW src/x | in progress |
-| I1.2 | sub-impl | I1 | module Y | RW src/y | done |
-| V1   | verifier | — | multi-scenario acceptance | read-only + write docs/acceptance | standby |
+| ID   | Role | Parent | Task / scope | R/W permission | Tools | Status |
+|------|------|--------|--------------|----------------|-------|--------|
+| A1   | analysis | —  | requirement/structure/impact | read code; write docs/ only | no Agent; can execute analysis | done |
+| I1   | lead impl | — | coordinate impl, integrate | RW src/ | Agent (can dispatch); can execute | in progress |
+| I1.1 | sub-impl | I1 | module X | RW src/x | no Agent; can execute | in progress |
+| I1.2 | sub-impl | I1 | module Y | RW src/y | no Agent; can execute | done |
+| V1   | verifier | — | multi-scenario acceptance | read-only on code; write docs/acceptance | **no Agent; can execute (tests/CLI/GUI)** | standby |
 ```
 
 ## Relation to the rest of the flow
