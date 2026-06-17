@@ -23,9 +23,11 @@ documents as the basis for later work** — instead of guessing from scratch eac
 acting, read here to decide "which stage applies now", then read the matching guide under
 `references/`.
 
-## Detect → load (auto-trigger)
+**One skill, solo to team**: defaults to solo / single-agent; **when it detects collaboration (multiple agents, cross-session handoff, multiple repos) it auto-escalates to team mode**, loading the matching collaboration references. "Team" isn't limited to humans — it can be an **AI-agent team** (different instances / contexts) collaborating through `docs/`. No edition to choose; one skill adapts.
 
-**Don't wait to be told; when you detect the situations below, proactively load the matching reference. These can arise solo or in a team** (e.g. even solo, one requirement often spans multiple repos):
+## Detect → load (auto-detect, user can choose / override)
+
+**Auto-detect by default: when you detect the situations below, proactively load the matching reference without being told. But the user may explicitly choose or override — the user's instruction wins** (e.g. "force team mode", "no CI/CD this time", "skip cross-repo", "self-verify is fine"); auto-detection applies only when the user hasn't specified.
 
 | Detected situation | Load |
 |--------------------|------|
@@ -37,7 +39,7 @@ acting, read here to decide "which stage applies now", then read the matching gu
 | Taking over / cross-session entry | Session startup check first: read existing docs/ + error knowledge base + `doc-integrity` |
 | Project has / is adopting CI/CD | `ci-cd` (optional; pre-commit or pipeline) |
 
-Detection-first, naming-second: even if the user doesn't say it explicitly, load and follow when the situation matches.
+Explicit wins, else detect: **follow an explicit instruction when given; otherwise use detection.** Overrides should tighten safety freely; when the user wants to relax a high-risk gate, flag the risk first, then follow their decision.
 
 ## Why this is needed
 
