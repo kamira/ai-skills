@@ -4,3 +4,6 @@ skills/*-workspace/
 # 系統與相依
 .DS_Store
 node_modules/
+__pycache__/
+*.pyc
+.pytest_cache/
