@@ -92,7 +92,7 @@ Two cross-cutting guides (available anytime):
 
 Read only the reference for the current stage to avoid loading irrelevant content at once.
 
-> **Multi-person / multi-agent teams**: this skill is the solo / single-agent base; for team collaboration (handoff, parallel work, independent acceptance, roles and read/write permissions) use `ai-sdlc-team`.
+> **Multi-person / multi-agent teams**: team collaboration (handoff, parallel work, independent acceptance, roles and read/write permissions) is **built into this skill** — when it detects a collaboration situation it auto-loads `cross-agent` / `independent-acceptance` / `agent-hierarchy`. No separate skill to install.
 >
 > **Cross-project**: when multiple projects are involved at once, the Guideline / CHG / ACC / structure docs must note their owning "Project" in the header, and change/acceptance ids should carry a project prefix, to avoid mixing records across projects.
 
