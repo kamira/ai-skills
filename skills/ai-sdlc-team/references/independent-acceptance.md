@@ -15,7 +15,7 @@ description: >
 
 ## Purpose
 
-When code is done and needs verifying, it **must not be verified by the agent that wrote it** — player as referee tends to test only the happy paths it thought of, reuse its own wrong assumptions, and stay blind to its own blind spots. The team edition requires verification by a **different agent**, under **different scenarios**, aggregated into one ACC. This is the team-strengthened version of ai-sdlc's solo acceptance-verification.
+When code is done and needs verifying, it **must not be verified by the agent that wrote it** — player as referee tends to test only the happy paths it thought of, reuse its own wrong assumptions, and stay blind to its own blind spots. The team edition requires verification by a **different agent**, under **different scenarios**, aggregated into one ACC. This is the team-strengthened version of the acceptance-verification stage.
 
 > "Team" is not limited to humans. **AI-agent teams** apply equally: the implementing agent and the verifying agent are different instances/contexts — and that's exactly where the independence comes from.
 
@@ -54,6 +54,6 @@ Verify each criterion under several scenarios for real coverage:
 
 ## Relation to the base flow
 
-- Extends ai-sdlc's `acceptance-verification`: same "align to source, evidence per item, run what's scriptable", but upgrades "who verifies and under how many scenarios" to **independent + multi-scenario**.
+- Extends this skill's `acceptance-verification`: same "align to source, evidence per item, run what's scriptable", but upgrades "who verifies and under how many scenarios" to **independent + multi-scenario**.
 - Pairs with `cross-agent`: the verifying agent gets the criteria and current result via docs/, no verbal handoff from the implementer.
 - Pairs with `ci-cd` (optional): the scenarios that can be automated (clean environment, many inputs, regression) are run repeatedly by the pipeline.

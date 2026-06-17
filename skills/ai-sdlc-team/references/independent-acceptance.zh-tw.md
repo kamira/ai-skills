@@ -12,7 +12,7 @@ description: >
 
 ## 用途
 
-code 改完要驗收時,**不能由寫它的那個 agent 自己驗**——球員兼裁判,容易只測自己想到的 happy path、沿用自己當初的錯誤假設、對自己的盲點視而不見。團隊版要求:由**不同 agent**、在**不同情境**下跑驗證,再彙整成一份 ACC。這是 ai-sdlc 單人版 acceptance-verification 的團隊強化。
+code 改完要驗收時,**不能由寫它的那個 agent 自己驗**——球員兼裁判,容易只測自己想到的 happy path、沿用自己當初的錯誤假設、對自己的盲點視而不見。團隊版要求:由**不同 agent**、在**不同情境**下跑驗證,再彙整成一份 ACC。這是 acceptance-verification 階段的團隊強化。
 
 > 「團隊」不限於人。**AI agent 團隊**同樣適用:實作 agent 與驗收 agent 是不同的執行個體/context,獨立性正來自此。
 
@@ -51,6 +51,6 @@ code 改完要驗收時,**不能由寫它的那個 agent 自己驗**——球員
 
 ## 與既有流程的關係
 
-- 延伸 ai-sdlc 的 `acceptance-verification`:同樣「對齊來源、每條附證據、可程式化就實測」,但把「誰來驗、在幾種情境驗」升級為**獨立 + 多情境**。
+- 延伸本 skill 的 `acceptance-verification`:同樣「對齊來源、每條附證據、可程式化就實測」,但把「誰來驗、在幾種情境驗」升級為**獨立 + 多情境**。
 - 與 `cross-agent` 搭配:驗收 agent 透過 docs/ 取得驗收條件與成果現況,不需實作者口頭交接。
 - 與 `ci-cd`(選用)搭配:多情境中「可自動化」的部分(乾淨環境、多輸入、回歸)交給 pipeline 反覆跑。

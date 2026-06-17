@@ -1,52 +1,80 @@
 ---
 name: ai-sdlc-team
 description: >
-  ai-sdlc 的團隊版:在單人版 ai-sdlc 的「需求分析→結構設計→修改治理→驗收」流程之上,加上
-  多代理 / 多 session 協作機制與(選用)CI/CD 整合。當同一專案由多個 AI agent、或多人 / 多 session
-  接力或並行開發、需要交接不漂移、避免並行衝突、或想把文件治理接上 CI/CD 門檻時,務必使用本 skill,
-  並依需求讀 references:跨 agent 協作與交接讀 cross-agent;CI/CD 整合讀 ci-cd(選用)。前提是專案
-  已採用 ai-sdlc 的文件治理(docs/ 為唯一事實來源)。Use for team / multi-agent development.
+  AI 開發治理(團隊版,自我完備):涵蓋完整流程——需求分析→結構設計→修改治理→驗收,加上抗漂移、
+  子代理工作日誌與錯誤知識庫、(選用)CI/CD,以及團隊協作機制(跨 agent 交接/並行、獨立驗收、角色與
+  讀寫權限)。當專案由多人或多個 AI agent 接力/並行開發、需要交接不漂移、獨立把關時使用。團隊不限於
+  人,可為 AI agent 團隊。本版自含,無需另裝個人版 ai-sdlc。Use for team / multi-agent development.
 ---
 
-# ai-sdlc-team — AI 開發治理(團隊版)
+# ai-sdlc-team — AI 開發治理(團隊版,自我完備)
 
 > 語言 / Language: **繁體中文** · [English](SKILL.md)
 
-這是 [`ai-sdlc`](../ai-sdlc/SKILL.zh-tw.md) 的**團隊延伸層**。單人版負責「一個人/一個 agent 把需求做成文件治理」;團隊版負責「**多個 agent / 多人協作時,如何不漂移、可交接、並用 CI/CD 把關**」。
-
-## 單人版 vs 團隊版
-
-- **ai-sdlc(單人版)**:核心四階段——需求分析(AI Guideline)、結構設計(四種結構)、修改治理(變更記錄)、驗收(報告與回修迴圈)。適合一人或單一 agent 的開發治理。
-- **ai-sdlc-team(本 skill,團隊版)**:假設已採用 ai-sdlc,**額外**處理多人/多 agent 協作的兩件事——跨 agent 協作與交接、以及(選用)把治理接上 CI/CD。
-
-> 本 skill 不重述四階段細節;階段內容請讀 ai-sdlc 的 references。本 skill 專注於「協作層」與「自動化把關層」。
+讓 AI 協助開發時有一致流程可循,並支援**多人 / 多 AI agent 協作**。核心理念:**先把需求、結構、變更、驗收都記錄成文件,大家(含未來的自己、別的 agent)讀文件當依據**,而不是靠各自的對話記憶。**本版自我完備,涵蓋完整治理 + 協作,不需另裝個人版 `ai-sdlc`**(個人單純開發可改用較精簡的 `ai-sdlc`)。
 
 ## 「團隊」不限於人——可以是 AI agent 團隊
 
-這裡的「團隊」指**多個獨立執行單位**,可以是多位開發者、也可以是**多個 AI agent**(不同執行個體 / 不同 context),或兩者混合。多 agent 協作正是本 skill 的核心情境:它們無法共用對話記憶,只能靠 `docs/` 協作;而「實作 agent」與「驗收 agent」分離所帶來的獨立性,正是團隊版把關品質的關鍵。
+「團隊」指**多個獨立執行單位**:多位開發者、多個 AI agent(不同執行個體 / 不同 context),或混合。它們無法共用對話記憶,只能靠 `docs/` 協作;而「實作 agent」與「驗收 agent」分離帶來的獨立性,正是把關品質的關鍵。
 
-## 前提:docs/ 是團隊的唯一事實來源
+## 流程閉環
 
-團隊協作能成立的關鍵,是每個 agent / 每個人都把狀態與決策寫進 `docs/`,並在進場時先讀它——而不是靠各自的對話記憶(無法跨單位、會被壓縮)。這延續 ai-sdlc 的「文件即真實 / 不倚賴記憶」原則,並把它從「個人記憶」升級為「團隊協作媒介」。
+```
+ [需求/新功能]
+      │
+      ▼
+ 需求分析 ──► 結構設計 ──► 實作 ──► 驗收
+ (Guideline)  (四種結構)            │
+                            ┌───────┴───────┐
+                          通過            未通過
+                            │                │
+                            ▼                ▼
+                          完成          修改治理 → 重新實作 → 重新驗收
+```
 
-## 與基底 ai-sdlc 的分工
+## 階段指引(依需求載入)
 
-**抗漂移(doc-integrity)、CI/CD(選用)都在基底 `ai-sdlc`**(單人/團隊共用,故放基底);本團隊版只加「協作層」的兩件事。請搭配 `ai-sdlc` 一起使用。
+| 階段 | 何時使用 | 指引 |
+|------|----------|------|
+| 1. 需求分析 | 新專案/新需求 | [`references/requirement-analysis.zh-tw.md`](references/requirement-analysis.zh-tw.md) |
+| 2. 結構設計 | Guideline 確立,訂系統結構 | [`references/structure-design.zh-tw.md`](references/structure-design.zh-tw.md) |
+| 3. 修改治理 | 提出修改/新功能時(**必走**) | [`references/modification-guide.zh-tw.md`](references/modification-guide.zh-tw.md) |
+| 4. 驗收 | 實作/修改完成 | [`references/acceptance-verification.zh-tw.md`](references/acceptance-verification.zh-tw.md) |
 
-| 面向 | 何時讀 | 指引 |
-|------|--------|------|
-| 跨 agent 協作 / 交接 | 工作換手、跨 session 累加、或多 agent 同時動同一專案 | [`references/cross-agent.zh-tw.md`](references/cross-agent.zh-tw.md) |
-| 跨 agent / 多情境獨立驗收 | code 改完要驗收時(由不同 agent、不同情境跑) | [`references/independent-acceptance.zh-tw.md`](references/independent-acceptance.zh-tw.md) |
-| 文檔抗漂移與驗證 | (在基底)確認文件仍可信、變更收尾、進場接手 | `ai-sdlc` 的 `references/doc-integrity` |
-| CI/CD 整合(**選用**) | (在基底)依需求把門檻自動化 | `ai-sdlc` 的 `references/ci-cd` |
+## 跨階段指引
 
-重點:`cross-agent` 涵蓋**順序接力**與**並行多 agent**,並要求每個 agent 帶**明確角色與讀寫權限**;`independent-acceptance` 要求**驗收者 ≠ 實作者、跨情境、且驗收者唯讀**。抗漂移與 CI/CD 用基底 ai-sdlc 的對應 reference。
+| 面向 | 何時使用 | 指引 |
+|------|----------|------|
+| 文檔抗漂移與驗證 | 確認文件仍可信、變更收尾、進場接手 | [`references/doc-integrity.zh-tw.md`](references/doc-integrity.zh-tw.md) |
+| 子代理工作日誌 + 錯誤知識庫 | 派子代理、或被派執行前 | [`references/agent-worklog.zh-tw.md`](references/agent-worklog.zh-tw.md) |
+| CI/CD 整合(**選用**) | 把門檻自動化成 pre-commit 或 pipeline | [`references/ci-cd.zh-tw.md`](references/ci-cd.zh-tw.md) |
 
-## 使用原則(在 ai-sdlc 原則之上)
+## 團隊協作指引
 
-1. **每個 agent 都要有明確角色與讀寫權限**:派工(人或 AI agent)時先定義「角色 + 可讀/可寫範圍」——例如實作者可寫其 claim 範圍、驗收者**唯讀**(只能讀程式與條件、只能寫自己的 ACC,不可改被驗的碼)。權限分離是獨立性與防誤改的基礎。
-2. **進場先讀 docs/**:任何 agent 接手前,先讀既有文件還原狀態(含 ai-sdlc 的 Session 啟動檢查)。
-3. **離場留乾淨狀態**:當場驗收、回填狀態、同步結構文件,讓下一棒讀文件就能接。
-4. **並行要先認領**:多 agent 同時動時,先在協調文件 claim 不重疊範圍(含角色與讀寫範圍),單寫者規則避免互相覆蓋。
-5. **驗收要獨立、多情境、唯讀**:code 改完**不由實作的 agent 自驗**,交給唯讀的驗收 agent、在不同情境下跑再彙整(見 independent-acceptance)。
-6. **抗漂移與自動化**:文件持續驗證、不漂移(用基底 ai-sdlc 的 doc-integrity);有 CI/CD 則把門檻自動化(基底 ci-cd,選用)。
+| 面向 | 何時使用 | 指引 |
+|------|----------|------|
+| 跨 agent 協作 / 交接 | 換手、跨 session 累加、多 agent 同時動 | [`references/cross-agent.zh-tw.md`](references/cross-agent.zh-tw.md) |
+| 跨 agent / 多情境獨立驗收 | code 改完,由不同 agent、唯讀、多情境驗 | [`references/independent-acceptance.zh-tw.md`](references/independent-acceptance.zh-tw.md) |
+
+## 強制規則:修改一定先治理
+
+只要有人提出「修改」或「新功能」,**先走 `modification-guide`,不可直接改碼**;實作完**同一輪當場驗收**產出 ACC、回填 CHG 狀態,不可把驗收交棒給下一個 session(沒人會接)。
+
+## Session 啟動檢查(跨 session / 換手必做)
+
+每次進場、動新需求前先掃:`docs/changes/` 有沒有未驗收的 CHG、`docs/acceptance/` 有沒有缺 ACC、`docs/knowledge/` 錯誤知識庫有哪些已知坑——先補未收尾的、讀過知識庫,再開始。
+
+## 文件存放慣例
+
+產出放在**目標專案** `docs/`:`ai-guideline.md`、`structure/{directory,logical,design,data}.md`、`changes/CHG-*.md`、`acceptance/ACC-*.md`、`worklog/`、`knowledge/errors.md`。**跨專案**時,各文件標頭註明所屬「專案」,編號可帶專案前綴。
+
+## 使用原則
+
+1. **每個 agent 都要有明確角色與讀寫權限**:派工(人或 AI agent)先定義「角色 + 可讀/可寫範圍」;驗收者**唯讀**(只讀碼與條件、只寫自己的 ACC,不可改被驗的碼)。最小權限。
+2. **子代理執行前先寫、遇錯記錄再續**:子代理動手前先在 worklog 寫「要做什麼」;遇錯記「什麼錯+根因+解法」再繼續;完成回報錯誤清單,由上層彙整進知識庫。
+3. **進場先讀 docs/(含知識庫)**:不倚賴記憶,以文件為準;記憶與文件衝突時以文件為準(抗壓縮/換手)。
+4. **離場留乾淨狀態**:當場驗收、回填狀態、同步結構文件。
+5. **並行要先認領**:在協調文件 claim 不重疊範圍(含角色與讀寫權限),單寫者規則。
+6. **驗收獨立、多情境、唯讀**:不由實作者自驗。
+7. **文件抗漂移**:結構變了就同步,發現漂移回流程補記。
+8. **能自動就自動(選用)**:有 CI/CD 就把門檻放 pre-commit / pipeline。

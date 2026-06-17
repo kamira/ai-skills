@@ -1,55 +1,83 @@
 ---
 name: ai-sdlc-team
 description: >
-  The team edition of ai-sdlc: on top of the solo ai-sdlc flow (requirement analysis → structure
-  design → modification governance → acceptance), it adds multi-agent / multi-session collaboration
-  and optional CI/CD integration. Use this when one project is developed by multiple AI agents, or
-  by several people / sessions sequentially or in parallel, when work must hand off without drift,
-  when parallel conflicts must be avoided, or when you want to wire document governance into CI/CD
-  gates; read the references as needed — cross-agent for collaboration/handoff, ci-cd for CI/CD
-  integration (optional). Assumes the project already uses ai-sdlc's document governance (docs/ as
-  the single source of truth).
+  AI development governance (team edition, self-contained): covers the full flow — requirement
+  analysis → structure design → modification governance → acceptance — plus anti-drift, a subagent
+  worklog and error knowledge base, optional CI/CD, and team collaboration (cross-agent handoff /
+  parallel work, independent acceptance, roles and read/write permissions). Use when a project is
+  developed by several people or multiple AI agents sequentially or in parallel, needs drift-free
+  handoff, and independent gating. "Team" is not limited to humans; it can be an AI-agent team. This
+  edition is self-contained — the solo ai-sdlc skill is not required.
 ---
 
-# ai-sdlc-team — AI development governance (team edition)
+# ai-sdlc-team — AI development governance (team edition, self-contained)
 
 > 語言 / Language: [繁體中文](SKILL.zh-tw.md) · **English**
 
-This is the **team extension layer** for [`ai-sdlc`](../ai-sdlc/SKILL.md). The solo edition handles "one person / one agent turning requirements into document-governed work"; the team edition handles "**how multiple agents / people collaborate without drift, hand off cleanly, and gate via CI/CD**".
-
-## Solo vs team
-
-- **ai-sdlc (solo)**: the core four stages — requirement analysis (AI Guideline), structure design (four structures), modification governance (change records), acceptance (report + re-fix loop). For one person or a single agent.
-- **ai-sdlc-team (this skill)**: assumes ai-sdlc is in use and **additionally** handles two collaboration concerns — cross-agent collaboration/handoff, and (optional) wiring governance into CI/CD.
-
-> This skill does not restate the four stages; for stage details read ai-sdlc's references. This skill focuses on the "collaboration layer" and the "automated-gating layer".
+Gives the AI a consistent development process and supports **multi-person / multi-AI-agent collaboration**. Core idea: **capture requirements, structure, changes, and acceptance as documents, and everyone (including your future self and other agents) reads the docs as the basis** — not individual conversation memory. **This edition is self-contained: it covers full governance + collaboration and does not require the solo `ai-sdlc` skill** (for plain individual work, the lighter `ai-sdlc` is an option).
 
 ## "Team" is not limited to humans — it can be an AI-agent team
 
-"Team" here means **multiple independent execution units**: several developers, or **multiple AI agents** (different instances / different contexts), or a mix. Multi-agent collaboration is the core scenario of this skill: agents can't share conversation memory, so they collaborate only through `docs/`; and the independence from separating the "implementing agent" and the "verifying agent" is exactly how the team edition gates quality.
+"Team" means **multiple independent execution units**: several developers, multiple AI agents (different instances / contexts), or a mix. They can't share conversation memory, so they collaborate only through `docs/`; and the independence from separating the "implementing agent" and the "verifying agent" is how quality is gated.
 
-## Premise: docs/ is the team's single source of truth
+## The closed loop
 
-Team collaboration works only if every agent / person writes state and decisions into `docs/` and reads it on entry — rather than relying on individual conversation memory (which can't cross units and gets compacted). This continues ai-sdlc's "documents are the truth / don't rely on memory" principle, promoting it from "personal memory" to "team collaboration medium".
+```
+ [requirement / new feature]
+      │
+      ▼
+ requirement analysis ──► structure design ──► implement ──► acceptance
+ (Guideline)              (four structures)                  │
+                                                    ┌────────┴────────┐
+                                                  pass             fail
+                                                    │                │
+                                                    ▼                ▼
+                                                  done    modification governance → re-implement → re-verify
+```
 
-## Split with the base ai-sdlc
+## Stage guides (load as needed)
 
-**Anti-drift (doc-integrity) and CI/CD (optional) live in the base `ai-sdlc`** (shared by solo and team, so they sit in the base); this team edition adds only the two "collaboration layer" concerns. Use it together with `ai-sdlc`.
+| Stage | When to use | Guide |
+|-------|-------------|-------|
+| 1. Requirement analysis | new project/requirement | [`references/requirement-analysis.md`](references/requirement-analysis.md) |
+| 2. Structure design | Guideline confirmed; define structure | [`references/structure-design.md`](references/structure-design.md) |
+| 3. Modification governance | a modification/new feature is proposed (**mandatory**) | [`references/modification-guide.md`](references/modification-guide.md) |
+| 4. Acceptance | implementation/change done | [`references/acceptance-verification.md`](references/acceptance-verification.md) |
 
-| Aspect | When to read | Guide |
-|--------|--------------|-------|
-| Cross-agent collaboration / handoff | work hands off, accumulates across sessions, or multiple agents touch the same project | [`references/cross-agent.md`](references/cross-agent.md) |
-| Cross-agent / multi-scenario independent acceptance | when code is done and acceptance is due (different agent, different scenarios) | [`references/independent-acceptance.md`](references/independent-acceptance.md) |
-| Document anti-drift & verification | (in the base) confirm docs are trustworthy; at close-out; on takeover | `ai-sdlc`'s `references/doc-integrity` |
-| CI/CD integration (**optional**) | (in the base) automate the gates per need | `ai-sdlc`'s `references/ci-cd` |
+## Cross-cutting guides
 
-In short: `cross-agent` covers **sequential handoff** and **parallel multi-agent**, and requires every agent to carry an **explicit role and read/write permission**; `independent-acceptance` requires **verifier ≠ implementer, across scenarios, and the verifier is read-only**. Use the base ai-sdlc's references for anti-drift and CI/CD.
+| Aspect | When to use | Guide |
+|--------|-------------|-------|
+| Document anti-drift & verification | confirm docs are trustworthy; at close-out; on takeover | [`references/doc-integrity.md`](references/doc-integrity.md) |
+| Subagent worklog + error knowledge base | before dispatching subagents, or before a dispatched run | [`references/agent-worklog.md`](references/agent-worklog.md) |
+| CI/CD integration (**optional**) | automate gates as pre-commit or pipeline | [`references/ci-cd.md`](references/ci-cd.md) |
 
-## Operating principles (on top of ai-sdlc's)
+## Team collaboration guides
 
-1. **Every agent has an explicit role and read/write permission**: when dispatching work (human or AI agent), define "role + readable/writable scope" up front — e.g. the implementer may write within its claimed scope; the verifier is **read-only** (may read the code and criteria, may write only its own ACC, must not edit the code under review). Permission separation is the basis of independence and of preventing accidental edits.
-2. **Read docs/ on entry**: before any agent takes over, read existing docs to restore state (including ai-sdlc's Session startup check).
-3. **Leave a clean state on exit**: close acceptance in the same round, backfill status, sync structure docs, so the next agent can continue just by reading docs.
-4. **Claim before parallel work**: when multiple agents work at once, claim non-overlapping scope (with role and read/write scope) in the coordination file first; the single-writer rule avoids overwrites.
-5. **Acceptance must be independent, multi-scenario, read-only**: when code is done, it is **not self-verified by the implementing agent** — a read-only verifier agent runs verification under different scenarios, then aggregates (see independent-acceptance).
-6. **Anti-drift and automation**: keep docs verified and drift-free (use the base ai-sdlc's doc-integrity); with CI/CD, automate the gates (base ci-cd, optional).
+| Aspect | When to use | Guide |
+|--------|-------------|-------|
+| Cross-agent collaboration / handoff | handoff, cross-session accumulation, concurrent multi-agent | [`references/cross-agent.md`](references/cross-agent.md) |
+| Cross-agent / multi-scenario independent acceptance | code done; verified by a different, read-only agent across scenarios | [`references/independent-acceptance.md`](references/independent-acceptance.md) |
+
+## Mandatory rule: changes always go through governance first
+
+Whenever someone proposes a "modification" or "new feature", **go through `modification-guide` first; do not edit code directly**; once implemented, **close acceptance in the same round** (produce the ACC, backfill CHG status) — don't hand acceptance off to the next session (nobody picks it up).
+
+## Session startup check (required across sessions / handoffs)
+
+On every entry, before any new requirement, scan: any non-Accepted CHG under `docs/changes/`, any missing ACC under `docs/acceptance/`, and the known pitfalls in `docs/knowledge/` — close what's pending and read the knowledge base, then start.
+
+## Document storage convention
+
+Outputs live under the **target project's** `docs/`: `ai-guideline.md`, `structure/{directory,logical,design,data}.md`, `changes/CHG-*.md`, `acceptance/ACC-*.md`, `worklog/`, `knowledge/errors.md`. **Across projects**, note each doc's owning "Project" in the header and prefix ids with the project.
+
+## Operating principles
+
+1. **Every agent has an explicit role and read/write permission**: when dispatching (human or AI agent), define "role + readable/writable scope"; the verifier is **read-only** (reads code & criteria, writes only its ACC, never edits the code under review). Least privilege.
+2. **Subagents write before executing, record errors then continue**: a subagent writes "what I'm doing" in the worklog before acting; on error records "what + root cause + fix" then continues; reports its error list on completion, which the parent consolidates into the knowledge base.
+3. **Read docs/ on entry (incl. the knowledge base)**: don't rely on memory; the docs win when they disagree (resilient to compaction/handoff).
+4. **Leave a clean state on exit**: close acceptance, backfill status, sync structure docs.
+5. **Claim before parallel work**: claim non-overlapping scope (with role and R/W) in the coordination file; single-writer rule.
+6. **Acceptance is independent, multi-scenario, read-only**: not self-verified by the implementer.
+7. **Docs resist drift**: sync structure on change; when drift is found, record the fix back through the flow.
+8. **Automate where you can (optional)**: with CI/CD, place gates in pre-commit / pipeline.

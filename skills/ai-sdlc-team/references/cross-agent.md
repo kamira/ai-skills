@@ -24,7 +24,7 @@ Keep one project consistent, conflict-free, and handoff-ready when it's develope
 
 ## Core principle: docs/ is the single source of truth between agents
 
-Don't pass state between agents through conversation memory — it can't cross agents and gets compacted. Every agent **reads `docs/` on entry** (echoing ai-sdlc's "Session startup check" and the principle "don't rely on memory, rely on the docs"). The precondition for the next agent to continue is that the previous agent wrote the full state into the docs.
+Don't pass state between agents through conversation memory — it can't cross agents and gets compacted. Every agent **reads `docs/` on entry** (echoing this skill's "Session startup check" and the principle "don't rely on memory, rely on the docs"). The precondition for the next agent to continue is that the previous agent wrote the full state into the docs.
 
 ## Mode A: sequential handoff (one agent at a time)
 
@@ -65,6 +65,6 @@ Risks: overwriting each other, conflicting structure docs, duplicate/conflicting
 
 ## Relation to the base flow
 
-- **Sequential handoff** = a direct application of ai-sdlc's "Session startup check" + "close acceptance in the same round".
+- **Sequential handoff** = a direct application of this skill's "Session startup check" + "close acceptance in the same round".
 - **Parallel** = the above plus claim / single-writer / integration acceptance.
 - Both rest on "documents are the truth / don't rely on memory" — without reliable shared docs, cross-agent collaboration inevitably drifts.

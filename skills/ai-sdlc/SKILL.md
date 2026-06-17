@@ -65,7 +65,8 @@ Two cross-cutting guides (available anytime):
 | Aspect | When to use | Guide |
 |--------|-------------|-------|
 | Document anti-drift & verification | confirm existing docs are trustworthy; at change close-out; on takeover (needed even solo) | [`references/doc-integrity.md`](references/doc-integrity.md) |
-| CI/CD integration (**optional**) | per solo/team need, to automate acceptance & structure-consistency as PR gates | [`references/ci-cd.md`](references/ci-cd.md) |
+| Subagent worklog + error knowledge base | before you dispatch subagents, or before running a dispatched task (applies to solo dispatching subagents too) | [`references/agent-worklog.md`](references/agent-worklog.md) |
+| CI/CD integration (**optional**) | per need, to automate acceptance & structure-consistency as pre-commit or pipeline gates | [`references/ci-cd.md`](references/ci-cd.md) |
 
 Read only the reference for the current stage to avoid loading irrelevant content at once.
 
