@@ -13,6 +13,20 @@ description: >
 
 讓 AI 協助開發時有一致流程可循,並支援**多人 / 多 AI agent 協作**。核心理念:**先把需求、結構、變更、驗收都記錄成文件,大家(含未來的自己、別的 agent)讀文件當依據**,而不是靠各自的對話記憶。**本版自我完備,涵蓋完整治理 + 協作,不需另裝個人版 `ai-sdlc`**(個人單純開發可改用較精簡的 `ai-sdlc`)。
 
+## 偵測即載入(自動觸發)
+
+**不要等使用者點名;偵測到下列情境就主動載入對應 reference**(同一套偵測機制,單人或團隊皆適用):
+
+| 偵測到的情境 | 主動載入 |
+|--------------|----------|
+| 涉及多個 git repo / 多 repo 共用契約 | `cross-repo`(+ `scripts/cross_repo_check.py` 查漂移) |
+| 並行多 agent、跨 session 接力、交接/換手 | `cross-agent` |
+| 要派子代理 / 多 agent 分工 | `agent-worklog` + `agent-hierarchy` |
+| 提出「修改 / 新功能」 | `modification-guide`(強制) |
+| code 改完要驗收(尤其高風險、由不同 agent) | `acceptance-verification` + `independent-acceptance` |
+| 進場接手 / 跨 session | Session 啟動檢查:讀既有 docs/ + 錯誤知識庫 + `doc-integrity` |
+| 專案有 / 要導入 CI/CD | `ci-cd`(選用;pre-commit 或 pipeline) |
+
 ## 「團隊」不限於人——可以是 AI agent 團隊
 
 「團隊」指**多個獨立執行單位**:多位開發者、多個 AI agent(不同執行個體 / 不同 context),或混合。它們無法共用對話記憶,只能靠 `docs/` 協作;而「實作 agent」與「驗收 agent」分離帶來的獨立性,正是把關品質的關鍵。

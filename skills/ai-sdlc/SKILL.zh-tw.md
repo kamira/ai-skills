@@ -16,6 +16,22 @@ description: >
 
 這套 skill 讓 AI 協助開發時有一致流程可循。核心理念:**先把需求、結構、變更、驗收都記錄成文件,AI 後續工作時讀這些文件當作依據**,而不是每次從零猜測。動手前先讀這裡,判斷「現在該用哪個階段」,再去讀 `references/` 內對應的詳細指引。
 
+## 偵測即載入(自動觸發)
+
+**不要等使用者點名;偵測到下列情境就主動載入對應 reference。這些情境單人或團隊都可能遇到**(例如單人也常一個需求橫跨多個 repo):
+
+| 偵測到的情境 | 主動載入 |
+|--------------|----------|
+| 涉及多個 git repo / 多 repo 共用契約 | `cross-repo`(+ `scripts/cross_repo_check.py` 查漂移) |
+| 並行多 agent、跨 session 接力、交接/換手 | `cross-agent` |
+| 要派子代理 / 多 agent 分工 | `agent-worklog` + `agent-hierarchy` |
+| 提出「修改 / 新功能」 | `modification-guide`(強制) |
+| code 改完要驗收(尤其高風險、由不同 agent) | `acceptance-verification`;高風險 → `independent-acceptance` |
+| 進場接手 / 跨 session | 先做 Session 啟動檢查:讀既有 docs/ + 錯誤知識庫 + `doc-integrity` |
+| 專案有 / 要導入 CI/CD | `ci-cd`(選用;pre-commit 或 pipeline) |
+
+偵測為主、點名為輔:即使使用者沒明講,只要情境符合就載入並依循。
+
 ## 為什麼需要
 
 AI 協助開發最大的問題是「失憶」與「漂移」:每次對話缺乏先前決策脈絡,容易做出與既有架構衝突的修改。本流程把每階段產出固定成文件(AI Guideline、結構文件、變更記錄、驗收報告),讓任何一次任務都能先讀文件、再動手。

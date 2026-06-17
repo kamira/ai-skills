@@ -16,6 +16,20 @@ description: >
 
 Gives the AI a consistent development process and supports **multi-person / multi-AI-agent collaboration**. Core idea: **capture requirements, structure, changes, and acceptance as documents, and everyone (including your future self and other agents) reads the docs as the basis** — not individual conversation memory. **This edition is self-contained: it covers full governance + collaboration and does not require the solo `ai-sdlc` skill** (for plain individual work, the lighter `ai-sdlc` is an option).
 
+## Detect → load (auto-trigger)
+
+**Don't wait to be told; when you detect the situations below, proactively load the matching reference** (the same detection mechanism applies solo or in a team):
+
+| Detected situation | Load |
+|--------------------|------|
+| Multiple git repos / a shared cross-repo contract | `cross-repo` (+ `scripts/cross_repo_check.py` for drift) |
+| Parallel multi-agent, cross-session relay, handoff | `cross-agent` |
+| Dispatching sub-agents / multi-agent split | `agent-worklog` + `agent-hierarchy` |
+| A "modification / new feature" is proposed | `modification-guide` (mandatory) |
+| Code done, acceptance due (esp. high-risk, by a different agent) | `acceptance-verification` + `independent-acceptance` |
+| Taking over / cross-session entry | Session startup check: read existing docs/ + error knowledge base + `doc-integrity` |
+| Project has / is adopting CI/CD | `ci-cd` (optional; pre-commit or pipeline) |
+
 ## "Team" is not limited to humans — it can be an AI-agent team
 
 "Team" means **multiple independent execution units**: several developers, multiple AI agents (different instances / contexts), or a mix. They can't share conversation memory, so they collaborate only through `docs/`; and the independence from separating the "implementing agent" and the "verifying agent" is how quality is gated.

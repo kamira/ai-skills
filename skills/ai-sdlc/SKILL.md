@@ -23,6 +23,22 @@ documents as the basis for later work** — instead of guessing from scratch eac
 acting, read here to decide "which stage applies now", then read the matching guide under
 `references/`.
 
+## Detect → load (auto-trigger)
+
+**Don't wait to be told; when you detect the situations below, proactively load the matching reference. These can arise solo or in a team** (e.g. even solo, one requirement often spans multiple repos):
+
+| Detected situation | Load |
+|--------------------|------|
+| Multiple git repos / a shared cross-repo contract | `cross-repo` (+ `scripts/cross_repo_check.py` for drift) |
+| Parallel multi-agent, cross-session relay, handoff | `cross-agent` |
+| Dispatching sub-agents / multi-agent split | `agent-worklog` + `agent-hierarchy` |
+| A "modification / new feature" is proposed | `modification-guide` (mandatory) |
+| Code done, acceptance due (esp. high-risk, by a different agent) | `acceptance-verification`; high-risk → `independent-acceptance` |
+| Taking over / cross-session entry | Session startup check first: read existing docs/ + error knowledge base + `doc-integrity` |
+| Project has / is adopting CI/CD | `ci-cd` (optional; pre-commit or pipeline) |
+
+Detection-first, naming-second: even if the user doesn't say it explicitly, load and follow when the situation matches.
+
 ## Why this is needed
 
 The biggest problems with AI-assisted development are amnesia and drift: each conversation
