@@ -8,6 +8,8 @@ description: >
   資料四種結構、變更記錄與影響分析、驗收報告與未通過回修迴圈。特別注意:使用者一旦提出「修改」
   或「新功能」,必須先走修改治理(modification-guide)而非直接改程式碼。Use this whenever
   planning, designing, modifying, or verifying software so the work stays documented and traceable.
+metadata:
+  version: 1.0.0
 ---
 
 # ai-sdlc — AI 開發治理流程

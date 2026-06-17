@@ -11,6 +11,8 @@ description: >
   analysis, and acceptance reports with a re-fix loop. Important: as soon as the user proposes
   a modification or new feature, go through modification governance first rather than editing
   code directly.
+metadata:
+  version: 1.0.0
 ---
 
 # ai-sdlc — AI Development Governance
