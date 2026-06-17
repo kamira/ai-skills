@@ -29,17 +29,19 @@ acting, read here to decide "which stage applies now", then read the matching gu
 
 **Auto-detect by default: when you detect the situations below, proactively load the matching reference without being told. But the user may explicitly choose or override — the user's instruction wins** (e.g. "force team mode", "no CI/CD this time", "skip cross-repo", "self-verify is fine"); auto-detection applies only when the user hasn't specified.
 
-| Detected situation | Load |
-|--------------------|------|
-| Multiple git repos / a shared cross-repo contract | `cross-repo` (+ `scripts/cross_repo_check.py` for drift) |
-| Parallel multi-agent, cross-session relay, handoff | `cross-agent` |
-| Dispatching sub-agents / multi-agent split | `agent-worklog` + `agent-hierarchy` |
-| A "modification / new feature" is proposed | `modification-guide` (mandatory) |
-| Code done, acceptance due (esp. high-risk, by a different agent) | `acceptance-verification`; high-risk → `independent-acceptance` |
-| Taking over / cross-session entry | Session startup check first: read existing docs/ + error knowledge base + `doc-integrity` |
-| Project has / is adopting CI/CD | `ci-cd` (optional; pre-commit or pipeline) |
+| Situation | Detection cues (any one counts) | Load |
+|-----------|----------------------------------|------|
+| Multiple repos / shared contract | several repo paths/URLs; mentions of frontend+backend, microservice, SDK+server, multi-package monorepo; changes to API/schema/event/shared types/protobuf; words: cross-repo, contract, upstream/downstream, integrate | `cross-repo` (+ `scripts/cross_repo_check.py`) |
+| Parallel / cross-session handoff | multiple agents at once; taking over someone's / a prior session's project; words: take over, hand off, continue, simultaneously, in parallel, split up | `cross-agent` |
+| Dispatch sub-agents / multi-agent split | you plan to spawn subagents; task large enough to split across units; words: dispatch, sub-agent, split tasks, divide, orchestrate | `agent-worklog` + `agent-hierarchy` |
+| Modification / new feature (existing system) | adjust/fix/extend/refactor/rename/delete an existing feature/file/table; words: change, add, tweak, refactor, optimize, fix bug, replace | `modification-guide` (**mandatory**) |
+| Acceptance / confirm it meets the bar | "done / is this right / verify / check / test it"; a change just implemented | `acceptance-verification`; **high-risk → `independent-acceptance`** |
+| Taking over / cross-session entry | every new session start, or taking over an existing `docs/` project | Session startup check: read existing docs/ + error knowledge base + `doc-integrity` |
+| Has / adopting CI/CD | repo has `.github/`, `.gitlab-ci.yml`, `.pre-commit-config.yaml`, Jenkinsfile; or mentions pipeline/hook/gate | `ci-cd` (optional) |
 
-Explicit wins, else detect: **follow an explicit instruction when given; otherwise use detection.** Overrides should tighten safety freely; when the user wants to relax a high-risk gate, flag the risk first, then follow their decision.
+**Close false negatives (better over-load than miss)**: cues are often implicit — "while you're at it, also tweak the backend" = multi-repo + modification; "you split it up" = multi-agent; "continue that earlier project" = cross-session takeover. **If a cue plausibly matches, load the reference**; over-loading is cheap, missing governance is costly. When unsure, lean toward loading.
+
+Explicit wins, else detect: **follow an explicit instruction when given; otherwise use detection.** Overrides may tighten safety freely; when the user wants to relax a high-risk gate, flag the risk first, then follow their decision.
 
 ## Why this is needed
 

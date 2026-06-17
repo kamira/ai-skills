@@ -62,9 +62,11 @@ Suggested split: **put the fast and cheap in pre-commit for instant feedback; pu
 pre-commit:
   - run: <lint / format>
   - run: <quick unit tests>
+  - run: python3 scripts/doc_integrity_check.py --staged   # structure drift + CHG↔ACC link; blocks the commit
   - check: commit message or staged diff contains a "CHG-" reference
-  - check: if staged files include structural paths (src/models|schema) but docs/structure not staged → remind
 ```
+
+> **Turn "by discipline" into "by machine"**: `scripts/doc_integrity_check.py --staged` checks, before commit, "structural code changed but docs/structure not synced" and "an implemented CHG has no matching ACC (acceptance hanging)", failing the commit otherwise. Semantic content still needs a human/agent, but *whether it's synced* is machine-enforced — no longer discipline-only.
 
 ## Platform-neutral example (pipeline, pseudo)
 

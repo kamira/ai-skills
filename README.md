@@ -55,7 +55,9 @@ ai-skills/
 └── skills/
     └── ai-sdlc/                   # 單一 skill(自適應單人/團隊)
         ├── SKILL.md / SKILL.zh-tw.md       # orchestrator(英文 / 繁中)
-        ├── scripts/cross_repo_check.py     # 跨 repo 指標漂移檢查(可接 pre-commit/CI)
+        ├── scripts/
+        │   ├── cross_repo_check.py         # 跨 repo 指標漂移檢查(可接 pre-commit/CI)
+        │   └── doc_integrity_check.py      # 文檔抗漂移:結構同步 + CHG↔ACC 連結(可接 pre-commit/CI)
         ├── references/                     # 11 份,各檔 .md(英文)+ .zh-tw.md(繁中):
         │   ├── requirement-analysis · structure-design · modification-guide · acceptance-verification
         │   ├── doc-integrity(抗漂移)· agent-worklog(子代理日誌+錯誤知識庫)

@@ -22,17 +22,19 @@ description: >
 
 **預設自主偵測:偵測到下列情境就主動載入對應 reference,不必等使用者點名。但使用者可明確選擇或覆寫——以使用者明示為準**(例如「強制用團隊模式」「這次不要 CI/CD」「先別管 cross-repo」「自驗就好」);使用者沒指定時才走自動判斷。
 
-| 偵測到的情境 | 主動載入 |
-|--------------|----------|
-| 涉及多個 git repo / 多 repo 共用契約 | `cross-repo`(+ `scripts/cross_repo_check.py` 查漂移) |
-| 並行多 agent、跨 session 接力、交接/換手 | `cross-agent` |
-| 要派子代理 / 多 agent 分工 | `agent-worklog` + `agent-hierarchy` |
-| 提出「修改 / 新功能」 | `modification-guide`(強制) |
-| code 改完要驗收(尤其高風險、由不同 agent) | `acceptance-verification`;高風險 → `independent-acceptance` |
-| 進場接手 / 跨 session | 先做 Session 啟動檢查:讀既有 docs/ + 錯誤知識庫 + `doc-integrity` |
-| 專案有 / 要導入 CI/CD | `ci-cd`(選用;pre-commit 或 pipeline) |
+| 情境 | 偵測訊號(線索;命中任一就算) | 主動載入 |
+|------|--------------------------------|----------|
+| 多 repo / 共用契約 | 出現多個 repo 路徑/URL;提到前端+後端、microservice、SDK+server、monorepo 多 package;改到 API/schema/event/共用型別/protobuf;字眼:跨 repo、契約、上下游、串接 | `cross-repo`(+ `scripts/cross_repo_check.py`) |
+| 並行 / 跨 session 交接 | 多個 agent 同時動;接手他人/前一 session 的專案;字眼:接手、交接、換手、續做、同時、並行、分頭 | `cross-agent` |
+| 派子代理 / 多 agent 分工 | 你打算開 subagent;任務大到要拆給多個執行單位;字眼:分派、子代理、拆任務、分工、orchestrate | `agent-worklog` + `agent-hierarchy` |
+| 修改 / 新功能(對既有系統) | 對已存在的功能/檔案/資料表要調整、修正、擴充、重構、改名、刪除;字眼:改、加、調整、重構、優化、修 bug、換掉 | `modification-guide`(**強制**) |
+| 要驗收 / 確認達標 | 「做完了/對嗎/驗一下/檢查/測測看」;一項變更剛實作完 | `acceptance-verification`;**高風險 → `independent-acceptance`** |
+| 進場接手 / 跨 session | 每次新 session 開始、或接手既有 `docs/` 專案 | Session 啟動檢查:讀既有 docs/ + 錯誤知識庫 + `doc-integrity` |
+| 有 / 要導入 CI/CD | repo 有 `.github/`、`.gitlab-ci.yml`、`.pre-commit-config.yaml`、Jenkinsfile;或提到 pipeline/hook/門檻 | `ci-cd`(選用) |
 
-自動判斷 vs 使用者選擇:**有明示用明示,沒明示用偵測**。覆寫只縮不放安全性——使用者可加嚴(要求更高把關),要放寬高風險把關時應提醒風險再依其決定。
+**堵漏報(寧可多載不可漏)**:訊號常是隱含的——使用者說「順便也改一下後端」=多 repo+修改;「你來分頭處理」=多 agent;「之前那個專案繼續」=跨 session 接手。**只要疑似命中就先載對應 reference**;載多了成本低,漏掉治理代價高。判不準時,偏向載入。
+
+自動判斷 vs 使用者選擇:**有明示用明示,沒明示用偵測**。覆寫只縮不放安全性——使用者可加嚴(要求更高把關);要放寬高風險把關時應先提醒風險再依其決定。
 
 ## 為什麼需要
 
