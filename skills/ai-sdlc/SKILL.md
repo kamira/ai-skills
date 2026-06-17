@@ -38,6 +38,7 @@ acting, read here to decide "which stage applies now", then read the matching gu
 | Acceptance / confirm it meets the bar | "done / is this right / verify / check / test it"; a change just implemented | `acceptance-verification`; **high-risk → `independent-acceptance`** |
 | Taking over / cross-session entry | every new session start, or taking over an existing `docs/` project | Session startup check: read existing docs/ + error knowledge base + `doc-integrity` |
 | Has / adopting CI/CD | repo has `.github/`, `.gitlab-ci.yml`, `.pre-commit-config.yaml`, Jenkinsfile; or mentions pipeline/hook/gate | `ci-cd` (optional) |
+| Autonomous multi-stage run / external orchestrator drives the flow | an agent will auto-run several stages, or Python/etc. drives it; words: run end-to-end, autonomous, unattended, automated flow | `autonomy` (halt-point contract; query `scripts/halt_gate.py`) |
 
 **Close false negatives (better over-load than miss)**: cues are often implicit — "while you're at it, also tweak the backend" = multi-repo + modification; "you split it up" = multi-agent; "continue that earlier project" = cross-session takeover. **If a cue plausibly matches, load the reference**; over-loading is cheap, missing governance is costly. When unsure, lean toward loading.
 

@@ -82,7 +82,8 @@ One record per change; suggested filename `docs/changes/CHG-YYYYMMDD-NN.md`:
 - Type: new feature / fix / refactor / adjustment
 - Proposed by: <user>
 - Implemented by: <person / agent id>   ← used for the "verifier ≠ implementer" identity check
-- Risk: high / medium / low (see grading below)
+- Risk: high / medium / low (see grading below; drives acceptance rigor, CI gates, and autonomy halts)
+- Autonomy: (optional) auto / halt   ← override the autonomous-run halt point (tighten only; see autonomy)
 - Related: <requirement ID / prior change / acceptance report>
 
 ## Motivation

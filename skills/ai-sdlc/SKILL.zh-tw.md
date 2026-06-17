@@ -31,6 +31,7 @@ description: >
 | 要驗收 / 確認達標 | 「做完了/對嗎/驗一下/檢查/測測看」;一項變更剛實作完 | `acceptance-verification`;**高風險 → `independent-acceptance`** |
 | 進場接手 / 跨 session | 每次新 session 開始、或接手既有 `docs/` 專案 | Session 啟動檢查:讀既有 docs/ + 錯誤知識庫 + `doc-integrity` |
 | 有 / 要導入 CI/CD | repo 有 `.github/`、`.gitlab-ci.yml`、`.pre-commit-config.yaml`、Jenkinsfile;或提到 pipeline/hook/門檻 | `ci-cd`(選用) |
+| 自主連跑 / 外部程式驅動流程 | agent 要自己連跑多階段、或用 Python 等外部協調器驅動;字眼:自動跑完、自主、無人值守、自動化流程 | `autonomy`(停點契約;查 `scripts/halt_gate.py`) |
 
 **堵漏報(寧可多載不可漏)**:訊號常是隱含的——使用者說「順便也改一下後端」=多 repo+修改;「你來分頭處理」=多 agent;「之前那個專案繼續」=跨 session 接手。**只要疑似命中就先載對應 reference**;載多了成本低,漏掉治理代價高。判不準時,偏向載入。
 
