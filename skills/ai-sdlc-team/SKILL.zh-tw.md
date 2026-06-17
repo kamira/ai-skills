@@ -47,6 +47,7 @@ description: >
 |------|----------|------|
 | 文檔抗漂移與驗證 | 確認文件仍可信、變更收尾、進場接手 | [`references/doc-integrity.zh-tw.md`](references/doc-integrity.zh-tw.md) |
 | 子代理工作日誌 + 錯誤知識庫 | 派子代理、或被派執行前 | [`references/agent-worklog.zh-tw.md`](references/agent-worklog.zh-tw.md) |
+| 代理編制與階層 | 多 agent 分工、或某 agent 要再派子 agent(編號+固定範圍+不越權;遞迴視平台) | [`references/agent-hierarchy.zh-tw.md`](references/agent-hierarchy.zh-tw.md) |
 | 跨 repo 協調與一致性 | 需求/變更橫跨多個 git repo、或多 repo 共用契約 | [`references/cross-repo.zh-tw.md`](references/cross-repo.zh-tw.md) |
 | CI/CD 整合(**選用**) | 把門檻自動化成 pre-commit 或 pipeline | [`references/ci-cd.zh-tw.md`](references/ci-cd.zh-tw.md) |
 
