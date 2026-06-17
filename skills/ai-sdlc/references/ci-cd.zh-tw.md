@@ -35,8 +35,13 @@ description: >
 2. **PR 必連 CHG**:PR 描述要含 `CHG-` 參照(對應「每次變更留痕」)。
 3. **結構同步檢查**:若這次改了結構性程式(如 `src/models/**`、schema)卻沒同步 `docs/structure/`,警告或擋下(對應「文件即真實」)。
 4. **驗收門檻**:存在對應本次變更、且結論為「通過」的 ACC,才可合併(對應「當場驗收」)。
+5. **身分檢查(驗收者 ≠ 實作者)**:比對 ACC 的「驗收者」與 CHG 的「實作者」(或 commit author / agent id),**兩者必須不同**——把「球員不可兼裁判」變成機器可擋。**高風險變更強制此 gate**;低風險可豁免(允許自驗)。
 
-導入時建議**從寬到嚴**:先上「測試必綠 + PR 連 CHG」,團隊習慣後再加結構同步與 ACC 門檻,避免一次太嚴卡住流程。
+導入時建議**從寬到嚴**:先上「測試必綠 + PR 連 CHG」,團隊習慣後再加結構同步、ACC 與身分檢查門檻,避免一次太嚴卡住流程。
+
+### 依風險分級套用 gates
+
+讀 CHG 的「風險分級」決定要套哪些 gate:**高風險**→全部(含身分檢查、完整 pipeline、多情境);**中**→測試+結構同步+ACC;**低**→測試必綠即可、可走 pre-commit。讓嚴格度與風險匹配,而非一視同仁。
 
 ## 兩個檢查點:pre-commit(初步)與 pipeline(完整)
 
@@ -72,6 +77,7 @@ jobs:
       - check: 若 changed_files 命中 src/models|schema 等結構性路徑,
                則 docs/structure/ 必須也有變更                # gate 3:結構同步
       - check: docs/acceptance 內存在對應本次 CHG 且結論=通過的 ACC  # gate 4:驗收門檻
+      - check: 若 CHG 風險=高,ACC 的「驗收者」≠ CHG 的「實作者」     # gate 5:身分檢查
 ```
 
 GitHub Actions 對應做法舉例:用 `on: pull_request` 觸發;`gate 1` 跑測試步驟;`gate 2/3/4` 用一個腳本讀 PR body 與 `git diff --name-only` 比對路徑、並 grep `docs/acceptance/` 對應檔,任何一項不過就讓該 step 退出非零碼擋下合併。其他平台(GitLab CI 的 `rules` / Jenkins 的 stage)概念相同。

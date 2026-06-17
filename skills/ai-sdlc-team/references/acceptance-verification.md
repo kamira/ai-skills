@@ -51,6 +51,8 @@ If these documents are missing, return to the matching skill to fill in the base
 - Project: <project id / name>   ← required across projects, matching the CHG / Guideline of the same project
 - Date: YYYY-MM-DD
 - Target: <feature / change ID CHG-...>
+- Verifier: <person / agent id>   ← should be ≠ the CHG's implementer (must differ for high-risk; CI can identity-check on this)
+- Risk: high / medium / low (inherit from the CHG; decides how many scenarios to verify)
 - Baseline source: <ai-guideline §7 / CHG-... modification guide>
 - Conclusion: Pass / Partial pass / Fail
 

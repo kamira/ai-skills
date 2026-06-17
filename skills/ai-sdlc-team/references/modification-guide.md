@@ -81,6 +81,8 @@ One record per change; suggested filename `docs/changes/CHG-YYYYMMDD-NN.md`:
 - Date: YYYY-MM-DD
 - Type: new feature / fix / refactor / adjustment
 - Proposed by: <user>
+- Implemented by: <person / agent id>   ← used for the "verifier ≠ implementer" identity check
+- Risk: high / medium / low (see grading below)
 - Related: <requirement ID / prior change / acceptance report>
 
 ## Motivation
@@ -100,6 +102,18 @@ One record per change; suggested filename `docs/changes/CHG-YYYYMMDD-NN.md`:
 ## Status
 Draft / Implemented / Accepted (link acceptance report)
 ```
+
+## Risk grading and matching rigor
+
+Grade each change's risk first so **governance rigor matches risk** (don't over-govern low risk, don't under-govern high risk):
+
+| Level | Typical cases | Required rigor |
+|-------|---------------|----------------|
+| **High** | data model / migration, auth, payments, deletion / irreversible, cross-module interfaces, security | **independent acceptance** (verifier ≠ implementer) + **multi-scenario**; CI **identity check**; full pipeline; rollback plan required |
+| **Medium** | behavior change to existing features, new non-breaking endpoint/field | at least independent acceptance or full tests; structure sync; pipeline gate |
+| **Low** | copy, comments, styling, pure internal refactor with test coverage | self-verify + tests green; pre-commit is enough |
+
+When in doubt, grade up. Put the risk in the CHG header; it drives the acceptance and CI gates that follow.
 
 ## Writing tips
 

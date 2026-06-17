@@ -38,8 +38,13 @@ description: >
 2. **PR must link a CHG**: PR description must contain a `CHG-` reference (maps to "trace every change").
 3. **Structure-sync check**: if this PR changed structural code (e.g. `src/models/**`, schema) but didn't update `docs/structure/`, warn or block (maps to "documents are the truth").
 4. **Acceptance gate**: an ACC for this change exists and concludes "pass" before merge (maps to "close acceptance in the same round").
+5. **Identity check (verifier ≠ implementer)**: compare the ACC's "Verifier" with the CHG's "Implemented by" (or commit author / agent id); **they must differ** — turning "player can't be referee" into a machine-enforceable gate. **Mandatory for high-risk changes**; low-risk may be exempt (self-verification allowed).
 
-Adopt **loose → strict**: start with "tests green + PR links CHG", and once the team is used to it add structure-sync and the ACC gate, so you don't stall the flow by being too strict at once.
+Adopt **loose → strict**: start with "tests green + PR links CHG", and once the team is used to it add structure-sync, the ACC gate, and the identity check, so you don't stall the flow by being too strict at once.
+
+### Apply gates by risk level
+
+Read the CHG's "Risk" to decide which gates apply: **high** → all of them (identity check, full pipeline, multi-scenario); **medium** → tests + structure-sync + ACC; **low** → tests green is enough, pre-commit is fine. Match rigor to risk rather than treating everything the same.
 
 ## Two checkpoints: pre-commit (preliminary) and pipeline (full)
 
@@ -75,6 +80,7 @@ jobs:
       - check: if changed_files match structural paths (src/models|schema),
                then docs/structure/ must also have changes        # gate 3: structure sync
       - check: docs/acceptance has an ACC for this CHG concluding "pass"  # gate 4: acceptance gate
+      - check: if CHG risk=high, the ACC's "Verifier" ≠ the CHG's "Implemented by"  # gate 5: identity check
 ```
 
 GitHub Actions example: trigger on `on: pull_request`; `gate 1` runs the test step; `gate 2/3/4` use a script that reads the PR body and `git diff --name-only`, compares paths, and greps `docs/acceptance/` for the matching file — any failing check exits non-zero to block the merge. Other platforms (GitLab CI `rules`, Jenkins stages) work the same way.
