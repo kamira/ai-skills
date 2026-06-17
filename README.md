@@ -60,8 +60,10 @@ ai-skills/
 ├── dist/                          # 可安裝的 .skill 發佈版
 │   ├── ai-sdlc.skill / .zh-tw.skill            # 單人版(英文 / 繁中)
 │   └── ai-sdlc-team.skill / .zh-tw.skill       # 團隊版(英文 / 繁中)
+├── examples/cross-repo/           # 跨 repo 範本專案(authority + 2 消費 repo + XCHG)
 └── skills/                        # Skill 原始檔
     ├── ai-sdlc/                   # 單人版(自含)
+    │   ├── scripts/cross_repo_check.py   # 跨 repo 指標漂移檢查(可接 pre-commit/CI)
     │   ├── SKILL.md / SKILL.zh-tw.md       # orchestrator(英文 / 繁中)
     │   ├── references/                     # 各檔 .md(英文)+ .zh-tw.md(繁中)
     │   │   ├── requirement-analysis · structure-design · modification-guide · acceptance-verification
