@@ -50,6 +50,7 @@ Gives the AI a consistent development process and supports **multi-person / mult
 |--------|-------------|-------|
 | Document anti-drift & verification | confirm docs are trustworthy; at close-out; on takeover | [`references/doc-integrity.md`](references/doc-integrity.md) |
 | Subagent worklog + error knowledge base | before dispatching subagents, or before a dispatched run | [`references/agent-worklog.md`](references/agent-worklog.md) |
+| Cross-repo coordination & consistency | a requirement/change spans multiple git repos, or repos share a contract | [`references/cross-repo.md`](references/cross-repo.md) |
 | CI/CD integration (**optional**) | automate gates as pre-commit or pipeline | [`references/ci-cd.md`](references/ci-cd.md) |
 
 ## Team collaboration guides

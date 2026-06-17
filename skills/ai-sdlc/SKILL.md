@@ -66,6 +66,7 @@ Two cross-cutting guides (available anytime):
 |--------|-------------|-------|
 | Document anti-drift & verification | confirm existing docs are trustworthy; at change close-out; on takeover (needed even solo) | [`references/doc-integrity.md`](references/doc-integrity.md) |
 | Subagent worklog + error knowledge base | before you dispatch subagents, or before running a dispatched task (applies to solo dispatching subagents too) | [`references/agent-worklog.md`](references/agent-worklog.md) |
+| Cross-repo coordination & consistency | a requirement/change spans multiple git repos, or repos share a contract | [`references/cross-repo.md`](references/cross-repo.md) |
 | CI/CD integration (**optional**) | per need, to automate acceptance & structure-consistency as pre-commit or pipeline gates | [`references/ci-cd.md`](references/ci-cd.md) |
 
 Read only the reference for the current stage to avoid loading irrelevant content at once.
