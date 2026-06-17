@@ -30,24 +30,26 @@ This is the **team extension layer** for [`ai-sdlc`](../ai-sdlc/SKILL.md). The s
 
 ## Premise: docs/ is the team's single source of truth
 
-Team collaboration works only if every agent / person writes state and decisions into `docs/` and reads it on entry — rather than relying on individual conversation memory (which can't cross units and gets compacted). This continues ai-sdlc's "documents are the truth / don't rely on memory" principle, promoting it from "personal memory" to "team collaboration medium". **For exactly this reason, the documents themselves must be drift-resistant and continuously verified** (see doc-integrity).
+Team collaboration works only if every agent / person writes state and decisions into `docs/` and reads it on entry — rather than relying on individual conversation memory (which can't cross units and gets compacted). This continues ai-sdlc's "documents are the truth / don't rely on memory" principle, promoting it from "personal memory" to "team collaboration medium".
 
-## References (load as needed)
+## Split with the base ai-sdlc
+
+**Anti-drift (doc-integrity) and CI/CD (optional) live in the base `ai-sdlc`** (shared by solo and team, so they sit in the base); this team edition adds only the two "collaboration layer" concerns. Use it together with `ai-sdlc`.
 
 | Aspect | When to read | Guide |
 |--------|--------------|-------|
 | Cross-agent collaboration / handoff | work hands off, accumulates across sessions, or multiple agents touch the same project | [`references/cross-agent.md`](references/cross-agent.md) |
-| Document anti-drift & verification | confirm existing docs are trustworthy; at change close-out; on takeover | [`references/doc-integrity.md`](references/doc-integrity.md) |
-| Cross-agent / multi-scenario independent acceptance | when code is done and acceptance is due (run by a different agent, different scenarios) | [`references/independent-acceptance.md`](references/independent-acceptance.md) |
-| CI/CD integration (**optional**) | project has/adopts CI/CD; want acceptance & structure-consistency as PR gates | [`references/ci-cd.md`](references/ci-cd.md) |
+| Cross-agent / multi-scenario independent acceptance | when code is done and acceptance is due (different agent, different scenarios) | [`references/independent-acceptance.md`](references/independent-acceptance.md) |
+| Document anti-drift & verification | (in the base) confirm docs are trustworthy; at close-out; on takeover | `ai-sdlc`'s `references/doc-integrity` |
+| CI/CD integration (**optional**) | (in the base) automate the gates per need | `ai-sdlc`'s `references/ci-cd` |
 
-In short: `cross-agent` covers **sequential handoff** and **parallel multi-agent**; `doc-integrity` keeps **docs from drifting** from code or each other; `independent-acceptance` requires **verifier ≠ implementer, across scenarios**; `ci-cd` (optional) automates those gates. Projects without a pipeline skip ci-cd and rely on the flow.
+In short: `cross-agent` covers **sequential handoff** and **parallel multi-agent**, and requires every agent to carry an **explicit role and read/write permission**; `independent-acceptance` requires **verifier ≠ implementer, across scenarios, and the verifier is read-only**. Use the base ai-sdlc's references for anti-drift and CI/CD.
 
 ## Operating principles (on top of ai-sdlc's)
 
-1. **Read docs/ on entry**: before any agent takes over, read existing docs to restore state (including ai-sdlc's Session startup check).
-2. **Leave a clean state on exit**: close acceptance in the same round, backfill status, sync structure docs, so the next agent can continue just by reading docs.
-3. **Claim before parallel work**: when multiple agents work at once, claim non-overlapping scope in the coordination file first; the single-writer rule avoids overwrites.
-4. **Acceptance must be independent and multi-scenario**: when code is done, it is **not self-verified by the implementing agent** — a different agent runs verification under different scenarios, then aggregates (see independent-acceptance).
-5. **Verify docs, resist drift**: documents aren't just written — continuously verify they're consistent with the code and with each other; when drift is found, record the fix back through the flow (see doc-integrity).
-6. **Automate where you can (optional)**: with CI/CD, turn acceptance, structure-sync, and change traceability into machine gates rather than relying on discipline.
+1. **Every agent has an explicit role and read/write permission**: when dispatching work (human or AI agent), define "role + readable/writable scope" up front — e.g. the implementer may write within its claimed scope; the verifier is **read-only** (may read the code and criteria, may write only its own ACC, must not edit the code under review). Permission separation is the basis of independence and of preventing accidental edits.
+2. **Read docs/ on entry**: before any agent takes over, read existing docs to restore state (including ai-sdlc's Session startup check).
+3. **Leave a clean state on exit**: close acceptance in the same round, backfill status, sync structure docs, so the next agent can continue just by reading docs.
+4. **Claim before parallel work**: when multiple agents work at once, claim non-overlapping scope (with role and read/write scope) in the coordination file first; the single-writer rule avoids overwrites.
+5. **Acceptance must be independent, multi-scenario, read-only**: when code is done, it is **not self-verified by the implementing agent** — a read-only verifier agent runs verification under different scenarios, then aggregates (see independent-acceptance).
+6. **Anti-drift and automation**: keep docs verified and drift-free (use the base ai-sdlc's doc-integrity); with CI/CD, automate the gates (base ci-cd, optional).

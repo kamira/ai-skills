@@ -42,7 +42,8 @@ The validated common case (matches the cross-session scenario in the loop test).
 
 Risks: overwriting each other, conflicting structure docs, duplicate/conflicting changes, CHG number clashes. Mechanism:
 
-- **Claim**: before starting, declare in the coordination file (below) "I'm doing X, locking scope Y", with owner + time + status (in progress). Claim first, then work.
+- **Claim**: before starting, declare in the coordination file (below) "my **role**, I'm doing X, locking scope Y, my **read/write permission**", with owner + time + status (in progress). Claim first, then work.
+- **Role and read/write permission**: every agent has an explicit role (implementer / verifier / integrator / reviewer…) and a **readable/writable scope**. Least privilege: grant only the write scope that role needs. E.g. the verifier is **read-only** (must not edit the code under review); the implementer may write only its claimed scope; structure docs are written by whoever owns that module. This both prevents accidental edits in parallel and is the precondition for independent acceptance.
 - **Scope boundary**: claim **non-overlapping** module/file scopes. On overlap, the later agent waits or coordinates — never barges in.
 - **Single-writer rule**: the same structure doc / same module is written by only one agent at a time, to avoid races.
 - **Reserve CHG numbers**: CHG uses date+sequence; reserve the number at claim time (e.g. CHG-YYYYMMDD-03) so two agents don't collide.
@@ -56,10 +57,10 @@ Risks: overwriting each other, conflicting structure docs, duplicate/conflicting
 
 ```markdown
 # Coordination board
-| Owner | Locked scope | CHG | Status | Time |
-|-------|--------------|-----|--------|------|
-| agentA | src/modules/billing | CHG-20260616-03 | in progress | ... |
-| agentB | src/modules/report  | CHG-20260616-04 | done | ... |
+| Owner | Role | R/W permission | Locked scope | CHG | Status | Time |
+|-------|------|----------------|--------------|-----|--------|------|
+| agentA | implementer | RW: src/modules/billing | src/modules/billing | CHG-20260616-03 | in progress | ... |
+| agentB | verifier | read-only | src/modules/report | CHG-20260616-04 | done | ... |
 ```
 
 ## Relation to the base flow

@@ -54,6 +54,7 @@ Produce `docs/ai-guideline.md` using this fixed structure:
 ```markdown
 # AI Guideline — <project/feature name>
 
+- Project: <project id / name>   ← required across projects, so this doc is clearly attributable
 - Version: v1.0
 - Date: YYYY-MM-DD
 - Status: Draft / Confirmed

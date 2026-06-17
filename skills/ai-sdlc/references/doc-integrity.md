@@ -1,11 +1,12 @@
 ---
 name: doc-integrity
 description: >
-  Document anti-drift and verification: in a team / multi-agent setting, docs/ is the single source
-  of truth, so the documents themselves must be continuously verified and must not drift from the
-  code or from each other. Read this to confirm existing docs are still trustworthy, when closing a
-  change, or when an agent takes over. Covers code↔doc bidirectional consistency, doc↔doc
-  consistency, scriptable drift detection, and independent review.
+  Document anti-drift and verification: ai-sdlc uses docs/ as the basis for later work, so the
+  documents themselves must be continuously verified and must not drift from the code or from each
+  other — solo development drifts too (you change code and forget to update the docs), and it's
+  worse in a team / multi-agent setting. Read this to confirm existing docs are still trustworthy,
+  when closing a change, or on takeover. Covers code↔doc bidirectional consistency, doc↔doc
+  consistency, scriptable drift detection, and independent review. Applies to solo and teams.
 ---
 
 # doc-integrity — document anti-drift & verification
@@ -14,7 +15,7 @@ description: >
 
 ## Purpose
 
-Team / multi-agent collaboration treats `docs/` as the single source of truth — so **once the docs drift from reality (the code) or from each other, the whole governance collapses**: later agents make wrong decisions based on wrong docs. This file ensures docs are not merely "written" but **continuously verified and kept drift-free**.
+ai-sdlc uses `docs/` as the basis for later work (**solo or team**) — so **once the docs drift from reality (the code) or from each other, later decisions rest on a wrong basis**. Drift is not a team-only problem: solo / single-agent work also "changes the code but forgets to update the docs"; it's just worse and harder to spot with a team / multiple agents. This file ensures docs are not merely "written" but **continuously verified and kept drift-free**.
 
 ## When to read
 

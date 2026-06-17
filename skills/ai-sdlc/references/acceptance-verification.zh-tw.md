@@ -46,6 +46,7 @@ description: >
 ```markdown
 # ACC-YYYYMMDD-NN — <驗收標的>
 
+- 專案:<專案代號 / 名稱>   ← 跨專案時必填,對應同專案的 CHG / Guideline
 - 日期:YYYY-MM-DD
 - 標的:<功能 / 變更編號 CHG-...>
 - 基準來源:<ai-guideline §7 / CHG-... 修改指引>

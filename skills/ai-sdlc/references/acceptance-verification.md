@@ -48,6 +48,7 @@ If these documents are missing, return to the matching skill to fill in the base
 ```markdown
 # ACC-YYYYMMDD-NN — <acceptance target>
 
+- Project: <project id / name>   ← required across projects, matching the CHG / Guideline of the same project
 - Date: YYYY-MM-DD
 - Target: <feature / change ID CHG-...>
 - Baseline source: <ai-guideline §7 / CHG-... modification guide>

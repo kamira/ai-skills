@@ -60,7 +60,18 @@ then acts.
 | 3. Modification governance | A modification/new feature is proposed (**mandatory**) | [`references/modification-guide.md`](references/modification-guide.md) | `docs/changes/*.md` + updated structure |
 | 4. Acceptance | Implementation/change done; confirm it meets the bar | [`references/acceptance-verification.md`](references/acceptance-verification.md) | `docs/acceptance/*.md` |
 
+Two cross-cutting guides (available anytime):
+
+| Aspect | When to use | Guide |
+|--------|-------------|-------|
+| Document anti-drift & verification | confirm existing docs are trustworthy; at change close-out; on takeover (needed even solo) | [`references/doc-integrity.md`](references/doc-integrity.md) |
+| CI/CD integration (**optional**) | per solo/team need, to automate acceptance & structure-consistency as PR gates | [`references/ci-cd.md`](references/ci-cd.md) |
+
 Read only the reference for the current stage to avoid loading irrelevant content at once.
+
+> **Multi-person / multi-agent teams**: this skill is the solo / single-agent base; for team collaboration (handoff, parallel work, independent acceptance, roles and read/write permissions) use `ai-sdlc-team`.
+>
+> **Cross-project**: when multiple projects are involved at once, the Guideline / CHG / ACC / structure docs must note their owning "Project" in the header, and change/acceptance ids should carry a project prefix, to avoid mixing records across projects.
 
 ## Session startup check (required for cross-session / incremental development)
 

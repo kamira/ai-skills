@@ -52,6 +52,7 @@ description: >
 ```markdown
 # AI Guideline — <專案/功能名稱>
 
+- 專案:<專案代號 / 名稱>   ← 跨專案時必填,讓本文件可明確歸屬
 - 版本:v1.0
 - 日期:YYYY-MM-DD
 - 狀態:草稿 / 已確認

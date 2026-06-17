@@ -77,6 +77,7 @@ One record per change; suggested filename `docs/changes/CHG-YYYYMMDD-NN.md`:
 ```markdown
 # CHG-YYYYMMDD-NN — <change title>
 
+- Project: <project id / name>   ← required across projects; when several projects are in play, prefix the change id (e.g. PROJ-CHG-…)
 - Date: YYYY-MM-DD
 - Type: new feature / fix / refactor / adjustment
 - Proposed by: <user>
