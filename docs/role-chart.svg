@@ -1,0 +1,72 @@
+<svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="ttl desc">
+<title id="ttl">ai-sdlc 角色圖</title>
+<desc id="desc">上層 orchestrator 指派 A1 分析、I1 實作主(下轄 I1.1/I1.2 實作子)、V1 獨立驗收;另有選用的整合者與審閱者。每個角色標註工具授權,實作與驗收必須分離。</desc>
+<style>
+  text{font-family:ui-sans-serif,system-ui,"Noto Sans CJK TC","PingFang TC",sans-serif}
+  .h{fill:#1b1b1a;font-weight:700}
+  .t{fill:#1b1b1a}
+  .m{fill:#6c6c66}
+  .box{fill:#f6f6f3;stroke:#d8d8d1;stroke-width:1.5}
+  .acc{fill:#eef4ff;stroke:#8fb4ec;stroke-width:1.6}
+  .accT{fill:#1c4e8a;font-weight:700}
+  .opt{fill:#faf9f6;stroke:#cfcfc8;stroke-width:1.4;stroke-dasharray:5 4}
+  .ln{stroke:#9a9a92;stroke-width:1.5;fill:none}
+  .lnd{stroke:#9a9a92;stroke-width:1.5;fill:none;marker-end:url(#a)}
+</style>
+<defs><marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#9a9a92"/></marker></defs>
+
+<text x="24" y="30" class="h" font-size="17">ai-sdlc 角色圖 · v1.0.0</text>
+<text x="24" y="50" class="m" font-size="12">偵測即載入 · 依職責授權(tools allowlist)· 實作與驗收必須分離</text>
+
+<rect class="box" x="320" y="66" width="260" height="58" rx="10"/>
+<text x="450" y="90" text-anchor="middle" class="h" font-size="13">Orchestrator · 上層(parent)</text>
+<text x="450" y="110" text-anchor="middle" class="m" font-size="11">指派·追蹤·收斂·查停點  ·  tools: Agent ✓</text>
+
+<path class="ln" d="M450,124 L450,150 M160,150 L740,150 M160,150 L160,196 M450,150 L450,196 M740,150 L740,196"/>
+
+<rect class="box" x="40" y="196" width="240" height="86" rx="10"/>
+<text x="56" y="222" class="h" font-size="13">A1 · 分析 analyst</text>
+<text x="56" y="244" class="m" font-size="11">產出 Guideline · 四結構 · 影響分析</text>
+<text x="56" y="266" class="m" font-size="11">tools: 無 Agent · 寫 docs/(不寫 src)</text>
+
+<rect class="box" x="330" y="196" width="240" height="86" rx="10"/>
+<text x="346" y="222" class="h" font-size="13">I1 · 實作主 lead-impl</text>
+<text x="346" y="244" class="m" font-size="11">拆任務 · 分派 · 整合自檢 · 留 CHG</text>
+<text x="346" y="266" class="m" font-size="11">tools: Agent ✓(可分派)· RW src/</text>
+
+<rect class="acc" x="620" y="196" width="240" height="86" rx="10"/>
+<text x="636" y="222" class="accT" font-size="13">V1 · 驗收 verifier(獨立)</text>
+<text x="636" y="244" class="m" font-size="11">多情境驗收 → ACC · 不自驗</text>
+<text x="636" y="266" class="m" font-size="11">tools: 無 Agent · 對碼唯讀 · 可執行</text>
+
+<path class="lnd" d="M280,239 L324,239"/>
+<path class="lnd" d="M570,239 L614,239"/>
+<text x="302" y="232" text-anchor="middle" class="m" font-size="10">交付</text>
+<text x="592" y="232" text-anchor="middle" class="m" font-size="10">交付</text>
+
+<path class="ln" d="M450,282 L450,300 M360,300 L540,300 M360,300 L360,322 M540,300 L540,322"/>
+<rect class="box" x="296" y="322" width="128" height="54" rx="9"/>
+<text x="360" y="345" text-anchor="middle" class="t" font-size="11.5" font-weight="700">I1.1 實作子</text>
+<text x="360" y="363" text-anchor="middle" class="m" font-size="10">模組X·無Agent·RW src/x</text>
+<rect class="box" x="476" y="322" width="128" height="54" rx="9"/>
+<text x="540" y="345" text-anchor="middle" class="t" font-size="11.5" font-weight="700">I1.2 實作子</text>
+<text x="540" y="363" text-anchor="middle" class="m" font-size="10">模組Y·無Agent·RW src/y</text>
+
+<path class="lnd" d="M740,282 C740,330 600,345 604,349" opacity="0.6"/>
+<text x="690" y="312" text-anchor="middle" class="m" font-size="10">未過 → 回修(I1)</text>
+
+<rect class="opt" x="40" y="410" width="240" height="50" rx="10"/>
+<text x="56" y="433" class="t" font-size="12" font-weight="700">整合者 integrator(選用)</text>
+<text x="56" y="451" class="m" font-size="10.5">並行多變更 → 整合驗收</text>
+<rect class="opt" x="330" y="410" width="240" height="50" rx="10"/>
+<text x="346" y="433" class="t" font-size="12" font-weight="700">審閱者 reviewer(選用)</text>
+<text x="346" y="451" class="m" font-size="10.5">文件/決策唯讀審閱</text>
+
+<rect x="624" y="410" width="16" height="14" class="acc" rx="3"/>
+<text x="648" y="421" class="m" font-size="10.5">獨立驗收(必須與實作分離)</text>
+<rect x="624" y="432" width="16" height="14" class="opt" rx="3"/>
+<text x="648" y="443" class="m" font-size="10.5">選用角色(視規模啟用)</text>
+<text x="624" y="461" class="m" font-size="10.5">虛線箭頭 = 驗收未通過回修迴圈</text>
+
+<text x="24" y="500" class="m" font-size="10.5">停點:低風險全自主、中風險合併/失敗停、高風險每關卡停(autonomy)。載入子集見 role_refs.json。</text>
+</svg>

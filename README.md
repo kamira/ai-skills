@@ -52,6 +52,7 @@ ai-skills/
 ├── .gitignore                     # 排除評測產物等
 ├── dist/                          # 可安裝的 .skill 發佈版
 │   └── ai-sdlc.skill / .zh-tw.skill            # 英文 / 繁中
+├── docs/role-chart.svg            # 角色圖(說明用,非 skill 內容,不入封裝)
 ├── examples/cross-repo/           # 跨 repo 範本專案(authority + 2 消費 repo + XCHG)
 └── skills/
     └── ai-sdlc/                   # 單一 skill(自適應單人/團隊)
