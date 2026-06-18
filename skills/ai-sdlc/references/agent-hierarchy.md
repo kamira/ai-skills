@@ -57,6 +57,50 @@ A1 analysis ──► I1 lead implementer ──► V1 independent acceptance
 4. **Only after all implementation is complete**, hand off to an **independent verifier (V1)** — V1 ≠ any agent in the implementation chain, and **read-only** — for multi-scenario acceptance, producing the ACC (see independent-acceptance).
 5. Iron rules: **I1 does not self-verify** (player can't be referee); **V1 does not edit code** (found a problem → back to modification-guide for the implementation chain to fix).
 
+## Role catalog (responsibilities)
+
+What each role is responsible for — what it does, takes in, produces, must not do, hands off to, and which ai-sdlc stage it maps to. Tool grants are in the next section.
+
+### Orchestrator / parent
+- **Responsibility**: decompose and assign, track progress, confirm and verify sub-agents' output, converge/aggregate, record errors into the knowledge base; check the halt contract at each gate to decide whether to report to the human.
+- **In**: user requirement / a task handed down. **Out**: the org (coordination), aggregated results, reports to the human.
+- **Must not**: self-clear a gate that should halt (see autonomy); leave sub-agents unmanaged.
+- **Stage**: overall control. **Hands off to**: A1 → I1 → V1.
+
+### A1 analyst
+- **Responsibility**: turn the requirement into a basis for work — AI Guideline, the four structures, impact analysis / module split.
+- **In**: the requirement. **Out**: `docs/ai-guideline.md`, `docs/structure/*`, impact analysis.
+- **May**: clarify, design, define interface contracts and acceptance criteria. **Must not**: write implementation code.
+- **Stage**: requirement analysis + structure design. **Hands off to**: I1 (with module split and integration points).
+
+### I1 lead implementer
+- **Responsibility**: from A1's analysis, split implementation into sub-tasks, dispatch sub-agents, build shared foundations, integrate, self-check at the implementation level, leave a change record.
+- **In**: A1's output. **Out**: `src/*`, `docs/changes/CHG-*` (with risk, implementer).
+- **May**: write code in its scope, dispatch I1.x, integrate and self-test. **Must not**: self-declare acceptance (no ACC), loosen a high-risk halt, change the meaning of A1's structure docs (must go through modification-guide).
+- **Stage**: modification governance + implementation. **Hands off to**: V1 (with the source of acceptance criteria).
+
+### I1.x sub-implementer
+- **Responsibility**: complete a single assigned module only.
+- **In**: the sub-task + locked scope from I1. **Out**: that module's code + self-tests.
+- **May**: write its module, import shared layers. **Must not**: exceed the module, edit others' modules, spawn sub-agents (no `Agent` tool).
+- **Stage**: implementation. **Hands off to**: report back to I1.
+
+### V1 verifier
+- **Responsibility**: independent, multi-scenario acceptance of the result, producing the ACC; align to source docs not the implementer's self-report; prefer cross-model.
+- **In**: the source of criteria (Guideline §7 / the CHG) + the result. **Out**: `docs/acceptance/ACC-*`.
+- **May**: read code and criteria, run tests/scripts/CLI/GUI to verify, write its own ACC. **Must not**: edit the code/structure under review, spawn sub-agents.
+- **Stage**: acceptance. **Hands off to**: pass → close out and backfill the CHG; fail → back to `modification-guide` for I1 to fix.
+
+### Integrator (parallel work)
+- **Responsibility**: when multiple parallel changes touch the same structure / depend on each other, run one integration acceptance to confirm mutual compatibility.
+- **In**: each claim's output + their ACCs. **Out**: an integration ACC. **Must not**: skip it (independent green lights ≠ overall compatible).
+
+### Reviewer (optional)
+- **Responsibility**: independent review of docs/decisions (the non-scriptable semantic consistency and "does the rationale still hold" in doc-integrity).
+- **May**: read-only review, raise issues into the docs. **Must not**: directly edit the reviewed content (return it to the owning role).
+
+> One person/agent may hold several roles, but **implementation and acceptance must be separate** (the I1 chain ≠ V1); other roles may be merged by scale.
+
 ## Role startup spec (tools allowlist)
 
 Each agent is **granted a tools allowlist at startup, by role** (least privilege). This spec is the authorization basis when an **outer tool (python, etc.) invokes/runs an AI** to act as a role; it **also applies to traditional pure CLI / GUI operation** — "can execute" covers running commands, running tests, and driving a GUI, not just AI calls.
