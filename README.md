@@ -53,6 +53,7 @@ ai-skills/
 ├── dist/                          # 可安裝的 .skill 發佈版
 │   └── ai-sdlc.skill / .zh-tw.skill            # 英文 / 繁中
 ├── docs/ai-sdlc/                  # 說明用文件(非 skill 內容,不入封裝;依 skill 分目錄)
+│   ├── CHANGELOG.md               # 版本變更記錄(ai-sdlc-vX.Y.Z)
 │   ├── role-chart.svg             # 角色圖
 │   └── evaluation-summary.md      # 評測總結(iteration/loop/壓縮/團隊/編制)
 ├── examples/ai-sdlc/              # 範例(依 skill 分目錄)
