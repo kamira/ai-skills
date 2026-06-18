@@ -59,8 +59,11 @@ ai-skills/
         ├── scripts/
         │   ├── cross_repo_check.py         # 跨 repo 指標漂移檢查(可接 pre-commit/CI)
         │   ├── doc_integrity_check.py      # 文檔抗漂移:結構同步 + CHG↔ACC 連結(可接 pre-commit/CI)
-        │   └── halt_gate.py                # 自主停點查詢:風險×關卡→AUTO/HALT
-        ├── assets/halt_policy.json         # 停點契約(可編輯)
+        │   ├── halt_gate.py                # 自主停點查詢:風險×關卡→AUTO/HALT
+        │   └── role_loadout.py             # 角色→該載入 references 子集查詢
+        ├── assets/
+        │   ├── halt_policy.json            # 停點契約(可編輯)
+        │   └── role_refs.json              # 角色→references 對應(程式可讀單一真相)
         ├── references/                     # 12 份,各檔 .md(英文)+ .zh-tw.md(繁中):
         │   ├── requirement-analysis · structure-design · modification-guide · acceptance-verification
         │   ├── doc-integrity(抗漂移)· agent-worklog(子代理日誌+錯誤知識庫)

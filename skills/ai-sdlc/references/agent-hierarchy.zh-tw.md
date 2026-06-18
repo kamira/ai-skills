@@ -99,6 +99,24 @@ A1 分析 ──► I1 實作主 ──► V1 獨立驗收
 
 > 一人/一 agent 可身兼多角色,但**實作與驗收必須分離**(I1 鏈 ≠ V1);其餘角色可視規模合併。
 
+### 角色 → 載入 references(依職責載入子集)
+
+啟動某角色時,只載該角色需要的 references 子集(基本集),再依偵測情境追加:
+
+| 角色 | 基本載入(references) | 偵測到時追加 |
+|------|----------------------|--------------|
+| orchestrator | agent-hierarchy · agent-worklog · autonomy · doc-integrity | 視情況全部 |
+| analyst (A1) | requirement-analysis · structure-design · doc-integrity | multi-repo→cross-repo |
+| lead-implementer (I1) | modification-guide · structure-design · agent-hierarchy · agent-worklog · doc-integrity | multi-repo→cross-repo;有 CI→ci-cd |
+| sub-implementer (I1.x) | modification-guide · agent-worklog | — |
+| verifier (V1) | acceptance-verification · independent-acceptance · doc-integrity | — |
+| integrator | independent-acceptance · cross-agent · doc-integrity | — |
+| reviewer | doc-integrity · independent-acceptance | — |
+
+情境追加(偵測旗標):multi-repo→`cross-repo`、並行/交接→`cross-agent`、自主連跑→`autonomy`、有 CI/CD→`ci-cd`。
+
+> **程式可讀**:本表的機器版在 [`assets/role_refs.json`](../assets/role_refs.json)(**JSON 為程式的單一真相,本表是其人類視圖,兩者須一致**)。外部協調器可用 [`scripts/role_loadout.py`](../scripts/role_loadout.py) 查:`python3 scripts/role_loadout.py --role verifier`、`--role I1 --multi-repo --cicd`(印出該載清單;`--json` 給程式取用)。
+
 ## 角色啟動規格(工具授權 allowlist)
 
 每個 agent **啟動時依角色給定 tools allowlist**(最小權限)。這份規格是「當外部工具(python 等)呼叫/執行一個 AI 來擔任某角色」時的授權依據;**也適用於傳統的純 CLI / GUI 操作**——「可執行」涵蓋跑指令、跑測試、操作 GUI,不是只給 AI 用。
