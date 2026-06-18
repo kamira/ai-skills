@@ -50,7 +50,7 @@ python3 scripts/cross_repo_check.py manifest.json
 # manifest.json: { "authority": "authority-repo", "repos": ["repoA","repoB"] }
 ```
 
-可參考 repo 內 `examples/cross-repo/` 範本專案(authority + 兩個消費 repo + XCHG 範例)。
+可參考 repo 內 `examples/ai-sdlc/cross-repo/` 範本專案(authority + 兩個消費 repo + XCHG 範例)。
 
 ## 跨 repo 驗收(整合驗收)
 

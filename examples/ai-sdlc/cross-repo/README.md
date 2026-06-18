@@ -17,7 +17,7 @@ examples/cross-repo/
 ## 跑漂移檢查
 
 ```bash
-python3 ../../skills/ai-sdlc/scripts/cross_repo_check.py manifest.json
+python3 ../../../skills/ai-sdlc/scripts/cross_repo_check.py manifest.json
 ```
 
 - 全部 repo 指標 == 權威版本 → 退出碼 0。

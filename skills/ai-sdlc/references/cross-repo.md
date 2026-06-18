@@ -53,7 +53,7 @@ python3 scripts/cross_repo_check.py manifest.json
 # manifest.json: { "authority": "authority-repo", "repos": ["repoA","repoB"] }
 ```
 
-See the `examples/cross-repo/` template project in the repo (authority + two consumer repos + an XCHG example).
+See the `examples/ai-sdlc/cross-repo/` template project in the repo (authority + two consumer repos + an XCHG example).
 
 ## Cross-repo acceptance (integration acceptance)
 
