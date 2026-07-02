@@ -99,6 +99,10 @@ def main(argv: list[str]) -> int:
 
     status_counts = {"draft": 0, "implemented": 0, "paused": 0, "accepted": 0, "unknown": 0}
     hanging, paused_list, emergency_n, docsync_n = [], [], 0, 0
+    lite_n, preauth_n = 0, 0
+    lite_re = re.compile(r"自驗|self-?verified", re.IGNORECASE)
+    lowrisk_re = re.compile(r"(風險分級|Risk)\s*[::]\s*[^\n]{0,40}?(低|low)", re.IGNORECASE)
+    preauth_re = re.compile(r"預授權|pre-?auth", re.IGNORECASE)
     if ch_dir.is_dir():
         for chg in sorted(ch_dir.glob("CHG-*.md")):
             text = read(chg)
@@ -109,6 +113,10 @@ def main(argv: list[str]) -> int:
                 emergency_n += 1
             if any(h in low for h in DOCSYNC):
                 docsync_n += 1
+            if lite_re.search(text) and lowrisk_re.search(text):
+                lite_n += 1
+            if preauth_re.search(text):
+                preauth_n += 1
             chg_id = (CHG_RE.search(chg.stem) or CHG_RE.search(text))
             cid = chg_id.group(0) if chg_id else chg.stem
             if st == "implemented" and cid.lower() not in acc_text:
@@ -120,6 +128,8 @@ def main(argv: list[str]) -> int:
     r["paused"] = paused_list
     r["emergency_retroactive_chg"] = emergency_n
     r["doc_sync_chg(drift_signal)"] = docsync_n
+    r["lite_chg"] = lite_n
+    r["preauth_usage"] = preauth_n
 
     # --- ACC 結論率 ---
     concl = {"pass": 0, "partial": 0, "fail": 0, "unknown": 0}
@@ -187,6 +197,7 @@ def main(argv: list[str]) -> int:
           f"(通過率 {r['acc_pass_rate']})")
     print(f"緊急/追溯 CHG:{emergency_n}(常態性偏高=正常流程太慢的訊號)")
     print(f"文件同步 CHG(漂移訊號):{docsync_n}")
+    print(f"lite 佔比:{lite_n}/{sum(status_counts.values())};預授權使用:{preauth_n}(異常偏高=白名單/邊界該 review)")
     print(f"進行中 claim:{active};停滯:{len(stale)}")
     for s in stale:
         print(f"  - {s}")

@@ -28,15 +28,15 @@ description: >
    - 給下層的範圍**只能是自己範圍的子集**(權限不可放大);
    - 整條鏈(編號、角色、範圍、父子關係)都要登記在協調文件;
    - **由上層主動管理**:上層負責指派、追蹤、收斂,不能放生。
-4. **上層職責**:指派任務 → 追蹤進度 → 確認與驗證子代理產出 → 收斂彙整 → 把錯誤入知識庫(見 agent-worklog)。派工包含**替每個 subagent 組派發包**(範圍握手的讀取包:branch + 結構位置 + 需求切片 + 鎖定位置,加上相關契約/knowledge)並**審查其 scoped ack**——四鍵與派發一致才准動手(見 handshake「分層握手」)。
+4. **上層職責**:指派任務 → 追蹤進度 → 確認與驗證子代理產出 → 收斂彙整 → 把錯誤入知識庫(見 agent-worklog)。派工包含**替每個 subagent 組派發包**(範圍握手的讀取包:branch + 結構位置 + 需求切片 + 鎖定位置,加上相關契約/knowledge)並**審查其 scoped ack**——四鍵與派發一致才准動手(見 handshake「分層握手」)。中/高風險決策時,派發者還要**召集審議會並裁決其判決**;每一層往上交一行判決摘要,且**硬 fail 不壓縮直達上層——任何一層不得吞掉**(見 review-panel)。
 
 > 適用範圍:**單人或團隊皆適用**。個人用一個會開子代理的 AI,同樣可用此編制(分析/實作/驗收都由 AI 子代理擔任),你就是最上層管理者。
 
 ## 遞迴建置:現況與建議
 
-- **巢狀子代理已支援**:子 agent 可再建子 agent;**最大深度 5**。所以遞迴授權路徑可用,不必退扁平。
+- **巢狀子代理已支援**(視平台而定):子 agent 可再建子 agent;深度上限**依平台**(例如某些平台為 5)。遞迴授權路徑可用,不必退扁平。
 - **但建議保持淺(2–3 層)**:層數越深,協調、追蹤、回溯成本越高、上層越難管理。需要更深時,通常代表任務該再拆分或重新設計,而非一路往下疊。
-- **用 tools allowlist 控制「誰能 spawn」**:是否能再開子代理,由該 agent 的**工具授權**決定——只有需要分派的角色(如實作主 I1)才授予 `Agent`/spawn 工具;不需分派的角色(驗收 V1、純實作子 I1.x)**不給 `Agent` 工具**,從機制上擋住它再開子代理。這把「權限只縮不放」變成可由工具清單強制,而非只靠自律。
+- **用 tools allowlist 控制「誰能 spawn」**:是否能再開子代理,由該 agent 的**工具授權**決定——只有需要分派的角色(如實作主 I1)才授予派生能力(Claude 上是 `Agent` 工具;**對應到你的平台等效機制——本套件不限定 Claude**);不需分派的角色(驗收 V1、純實作子 I1.x)**不給**,從機制上擋住它再開子代理。這把「權限只縮不放」變成可由工具清單強制,而非只靠自律。
 - **不變的治理原則**:不論層深,編號、固定範圍、不得越權、登記編制、上層主動管理、實作者不自驗都不變。
 
 實務:超過 2–3 層前先想「是不是該把任務拆細或重畫邊界」;接近深度 5 應視為警訊。
@@ -58,6 +58,8 @@ A1 分析 ──► I1 實作主 ──► V1 獨立驗收
 ## 角色職責目錄(role catalog)
 
 每個角色的「職責內容」——做什麼、吃什麼、產出什麼、不可做什麼、交給誰、對應哪個 ai-sdlc 階段。工具授權見下一節。
+
+> **只讀自己的職責卡**:被派發的 agent 從派發包拿到**自己那一張職責卡**,只讀那張——下面的完整目錄是**派發者**要讀的(它需要編制全貌,你不需要)。把所有角色職責都載進來是目錄式思維,不是範圍式思維;燒掉的正是分層握手要省的 context。
 
 ### 上層 / orchestrator(parent)
 - **職責**:拆解與指派、追蹤進度、確認與驗證子代理產出、收斂彙整、把錯誤入知識庫;在每個關卡查停點契約決定要不要回報人類。
@@ -113,6 +115,7 @@ A1 分析 ──► I1 實作主 ──► V1 獨立驗收
 | sub-implementer (I1.x) | modification-guide · agent-worklog | — |
 | verifier (V1) | acceptance-verification · independent-acceptance | 多分支→branch-isolation |
 | integrator | independent-acceptance · cross-agent | — |
+| 審議席(seat-*) | review-panel + 該席那一份領域 ref(risk/impact→modification-guide;drift→doc-integrity;compliance→knowledge;security→autonomy;consistency→branch-isolation·cross-repo) | —(唯讀、不可 spawn) |
 | reviewer | independent-acceptance | — |
 
 情境追加(偵測旗標):multi-repo→`cross-repo`、多分支→`branch-isolation`、並行/交接→`cross-agent`、自主連跑→`autonomy`、有 CI/CD→`ci-cd`。

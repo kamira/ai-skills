@@ -47,6 +47,9 @@ PAUSED_HINTS = ["暫停", "paused"]
 # CHG-lite:低風險 + 內嵌自驗 → 豁免獨立 ACC 檔(見 modification-guide「CHG-lite」)
 SELF_ACC_RE = re.compile(r"自驗|self-?verified", re.IGNORECASE)
 LOW_RISK_RE = re.compile(r"(風險分級|Risk)\s*[::]\s*[^\n]{0,40}?(低|low)", re.IGNORECASE)
+# 審議會:高風險已實作 CHG 必附審議判決(見 review-panel)
+HIGH_RISK_RE = re.compile(r"(風險分級|Risk)\s*[::]\s*[^\n]{0,40}?(高|high)", re.IGNORECASE)
+VERDICT_RE = re.compile(r"\[verdict\]|審議判決|Review verdicts", re.IGNORECASE)
 
 # --- 欄位 lint(雙語;pattern 命中任一即算有該欄) ---
 CHG_REQUIRED_FIELDS = {
@@ -134,6 +137,8 @@ def check_chg_acc(repo: Path) -> list[str]:
         chg_id = m.group(0) if m else chg.stem
         if chg_id.lower() not in acc_text.lower():
             problems.append(f"{chg.name}({chg_id})已實作但 docs/acceptance/ 找不到對應 ACC — 驗收懸空")
+        if HIGH_RISK_RE.search(text) and not VERDICT_RE.search(text):
+            problems.append(f"{chg.name}({chg_id})為高風險且已實作,但無審議判決([verdict] / 審議判決節)— 高風險必須全席審議(見 review-panel)")
     return problems
 
 

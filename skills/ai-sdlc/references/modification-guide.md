@@ -43,7 +43,7 @@ Exception: a brand-new project from scratch goes through `requirement-analysis` 
 3. **Produce the modification guide**: use the template below to write concrete, executable steps so an implementer (human or AI) can just follow them. During implementation, **tick each step off the moment it's done** — if the session dies mid-implementation, the next session reconciles the unticked steps against the working tree (see handshake) instead of guessing how far you got.
 4. **Adjust structure documents + revise the Guideline**: if the change alters the structure, **update** the corresponding files under `docs/structure/` — structure docs must always reflect the latest truth. If the change also touches requirements/scope/acceptance criteria, **revise `docs/ai-guideline.md` and bump it too** (a stale Guideline misleads later stages).
 5. **Leave a change record**: add a record under `docs/changes/` (see template), stating motivation and trade-offs clearly. For a fix driven by failed acceptance, link back to that ACC report in the record's "Related" field.
-6. **Confirm gate (before touching code)**: present the user a short summary — motivation, impact scope, the decisions **made on their behalf** (anything not derivable from the Guideline/docs/their instructions), and the risk grade — and get their confirmation before implementing. The user **reviews the risk grade here** (see grading: high-risk-list hits don't accept self-downgrades). **Pre-authorization**: the user may waive per-change confirmation for a class of changes ("this kind, just do it") — record it as a knowledge directive; matching changes skip the gate. Autonomous runs use the halt contract (autonomy) instead of this interactive gate — same intent, two channels.
+6. **Confirm gate (before touching code)**: present the user a short summary — motivation, impact scope, the decisions **made on their behalf** (anything not derivable from the Guideline/docs/their instructions), and the risk grade — and get their confirmation before implementing. The user **reviews the risk grade here** (see grading: high-risk-list hits don't accept self-downgrades). **Pre-authorization**: the user may waive per-change confirmation for a class of changes ("this kind, just do it") — record it as a knowledge directive, written **narrow** (situation + boundary; a fuzzy boundary falls back to asking). Usage is counted in governance health; a class that misfires is **auto-revoked** (see CHG-lite). In solo sessions the AI should **proactively suggest** pre-authorization when it notices repeated confirmations of the same class. Autonomous runs use the halt contract (autonomy) instead of this interactive gate — same intent, two channels.
 7. **Close acceptance in the same round (no handoff)**: once implemented, **immediately produce the matching `docs/acceptance/ACC-*.md` via `acceptance-verification` within the same round**, and update this CHG's status to "Accepted" with a link to the ACC. **Do not just mark it "pending acceptance" and stop** — in cross-session work the next session brings a new requirement, nobody comes back to do a deferred acceptance, so it hangs forever. **If items still fail, return to step 1, forming a "fix → re-implement → re-verify" loop until everything passes or the user explicitly accepts.**
 
 ## Modification guide template
@@ -121,8 +121,8 @@ Grade each change's risk first so **governance rigor matches risk** (don't over-
 
 | Level | Typical cases | Required rigor |
 |-------|---------------|----------------|
-| **High** | data model / migration, auth, payments, deletion / irreversible, cross-module interfaces, security | **independent acceptance** (verifier ≠ implementer) + **multi-scenario** + **regression run (affected scope)**; CI **identity check**; full pipeline; rollback plan required |
-| **Medium** | behavior change to existing features, new non-breaking endpoint/field | at least independent acceptance or full tests; **regression run (affected scope)**; structure sync; pipeline gate |
+| **High** | data model / migration, auth, payments, deletion / irreversible, cross-module interfaces, security | **full review panel** (see review-panel) + **independent acceptance** (verifier ≠ implementer) + **multi-scenario** + **regression run (affected scope)**; CI **identity check**; full pipeline; rollback plan required |
+| **Medium** | behavior change to existing features, new non-breaking endpoint/field | three-seat review (risk/impact/drift); at least independent acceptance or full tests; **regression run (affected scope)**; structure sync; pipeline gate |
 | **Low** | copy, comments, styling, pure internal refactor with test coverage | self-verify + tests green; pre-commit is enough |
 
 When in doubt, grade up. Put the risk in the CHG header; it drives the acceptance and CI gates that follow.
@@ -142,9 +142,10 @@ Record-keeping cost must scale with risk too — demanding the full template for
 Accepted — self-verified (low risk): <one-line reproducible evidence, e.g. `pytest tests/x -q` green>
 ```
 
-- Only for risk **low** (per the grading table); anything touching structure, data, or interfaces is not low.
+- **Eligibility is a whitelist, not a feeling**: copy/comments, styling, docs-only edits, pure internal refactors with test coverage. Anything touching structure, data, or interfaces is out; outside the whitelist → full template, no matter how small it feels.
 - The inline self-acceptance line replaces a separate ACC **only at low risk** (the grading table already allows self-verify there) — it must contain the evidence, and the lint accepts it (a low-risk CHG marked self-verified is exempt from the ACC-file requirement).
-- Medium / high risk always use the full template + a separate ACC.
+- **Misfire = forced upgrade**: if a lite change is later caught breaking something (regression / acceptance), backfill a **full CHG** with the root cause into knowledge, and any pre-authorization covering that class is **auto-revoked** until the user re-grants it.
+- Medium / high risk always use the full template + a separate ACC (+ review panel per risk, see review-panel).
 
 ## Expedited path (emergency)
 

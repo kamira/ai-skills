@@ -2,6 +2,19 @@
 
 本檔記錄 `ai-sdlc` skill 的版本變更。格式參考 Keep a Changelog;版本採語意化(references 內容微調→patch、新增 reference/機制→minor、流程或契約破壞性改動→major)。tag 採 skill 範圍 `ai-sdlc-vX.Y.Z`。版本號寫於 `skills/ai-sdlc/SKILL.md` 的 `metadata.version`。
 
+## [1.8.0] — 2026-07-02
+
+輕的更輕、重的更穩,以風險分級切換(見 `docs/ai-sdlc/changes/CHG-20260702-06.md`)。
+
+### Added
+- **新 reference `review-panel`(決策審議會)**:規則多到單 agent 吃不下 → 分席審議,每席只載一個領域(risk/impact/drift/compliance/security/consistency),一行判決(`[verdict]` 格式);**否決制**(硬規則席 fail 派發者不可推翻,推翻走確認閘);**風險縮放開席**(高=全席強制、中=三席、低=不開);**遞迴上捲**(每層:組包/裁決/一行摘要上交;硬 fail 不壓縮直達上層,任何中層不得吞);**降級**=序列自審同格式;判決入 CHG,lint 驗高風險必附。
+- **單人快速路徑**(SKILL 明文):solo+白名單低風險=lite+預授權+自驗為**預設**;lite 資格改**白名單制**(文案/註解/樣式/有測試內部重構);**闖禍強制升級**(補完整 CHG+根因入 knowledge+該類預授權自動失效);預授權須窄、用量入健康度、AI 主動建議。
+- **只讀自己的職責卡**:被派發 agent 只讀派發包中自己那張職責卡/席位列,完整目錄屬派發者(agent-hierarchy、review-panel)。
+- **平台中立**:SKILL 明文全套為 markdown+Python,不限 Claude;`Agent` 工具改寫為「派生能力+平台等效」;遞迴深度上限改「依平台」。
+- `role_refs.json` **v3**:六個 `seat-*` 角色;orchestrator 加載 review-panel。
+- lint:高風險已實作 CHG 必附審議判決;健康度:lite 佔比、預授權使用次數。
+- evals +3(id 18 審議會、19 fast path、20 role 卡範圍讀取),共 20。
+
 ## [1.7.0] — 2026-07-02
 
 確認閘與「先問不代決」(見 `docs/ai-sdlc/changes/CHG-20260702-05.md`)。
@@ -118,6 +131,7 @@ requirement-analysis、structure-design、modification-guide、acceptance-verifi
 - 雙語(`.md` 英文 / `.zh-tw.md` 繁中);發佈 `dist/ai-sdlc.skill`、`ai-sdlc.zh-tw.skill`。
 - 回歸集 `evals/evals.json`(skilltest)。
 
+[1.8.0]: 對應 tag ai-sdlc-v1.8.0
 [1.7.0]: 對應 tag ai-sdlc-v1.7.0
 [1.6.0]: 對應 tag ai-sdlc-v1.6.0
 [1.5.0]: 對應 tag ai-sdlc-v1.5.0

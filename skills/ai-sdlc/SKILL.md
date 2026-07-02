@@ -12,7 +12,7 @@ description: >
   a modification or new feature, go through modification governance first rather than editing
   code directly.
 metadata:
-  version: 1.7.0
+  version: 1.8.0
 ---
 
 # ai-sdlc — AI Development Governance
@@ -25,7 +25,7 @@ documents as the basis for later work** — instead of guessing from scratch eac
 acting, read here to decide "which stage applies now", then read the matching guide under
 `references/`.
 
-**One skill, solo to team**: defaults to solo / single-agent; **when it detects collaboration (multiple agents, cross-session handoff, multiple repos) it auto-escalates to team mode**, loading the matching collaboration references. "Team" isn't limited to humans — it can be an **AI-agent team** (different instances / contexts) collaborating through `docs/`. No edition to choose; one skill adapts.
+**One skill, solo to team**: defaults to solo / single-agent; **when it detects collaboration (multiple agents, cross-session handoff, multiple repos) it auto-escalates to team mode**, loading the matching collaboration references. "Team" isn't limited to humans — it can be an **AI-agent team** (different instances / contexts) collaborating through `docs/`. No edition to choose; one skill adapts. **Platform-neutral**: everything here is plain markdown + Python scripts — any AI agent that can read files and run scripts can follow the flow; platform-specific tool names (e.g. the `Agent` spawn tool) map to your framework's equivalents.
 
 ## Detect → load (auto-detect, user can choose / override)
 
@@ -38,6 +38,7 @@ acting, read here to decide "which stage applies now", then read the matching gu
 | Dispatch sub-agents / multi-agent split | you plan to spawn subagents; task large enough to split across units; words: dispatch, sub-agent, split tasks, divide, orchestrate | `agent-worklog` + `agent-hierarchy` |
 | Modification / new feature (existing system) | adjust/fix/extend/refactor/rename/delete an existing feature/file/table; words: change, add, tweak, refactor, optimize, fix bug, replace | `modification-guide` (**mandatory**) |
 | Acceptance / confirm it meets the bar | "done / is this right / verify / check / test it"; a change just implemented | `acceptance-verification`; **high-risk → `independent-acceptance`** |
+| Medium/high-risk change decision | CHG graded medium or high; grading disputed; rules exceed one agent's context | `review-panel` (seats by domain; full panel at high, three seats at medium; serialized self-review when spawning isn't available) |
 | Taking over / cross-session entry | every new session start, or taking over an existing `docs/` project | `handshake` (entry handshake: read docs+knowledge+branch+working tree, echo back; dispatched subagents use the scoped tier) + `doc-integrity` |
 | User correction directive / request conflicts with a known rule | "don't do this", "I told you before"; or a new request violates an existing directive | `knowledge` (record/update; on conflict → triple confirm + impact disclosure) |
 | Multiple branches exist | feature/release/hotfix in parallel; requirements/acceptance on different branches | `branch-isolation` (use only current-branch sources; no cross-branch reference) |
@@ -125,6 +126,10 @@ re-verify", closing the loop.
 acceptance-verification in the same round to produce the ACC** and set the CHG status to
 "Accepted" — do NOT just mark it "pending acceptance" and stop. In cross-session work nobody
 will come back to do a deferred acceptance.
+
+## Solo fast path (the default for solo + low risk)
+
+Lightweight is the **default**, not a favor to ask for. Solo + whitelist-eligible low risk (copy/comments, styling, docs-only, tested internal refactors) = **CHG-lite + inline self-acceptance** (see modification-guide), with the confirm gate skippable via **pre-authorization** (narrow directives; the AI proactively suggests one after repeated same-class confirmations). What never turns off: commit anchoring, the one-line reproducible evidence, lint, and the misfire rule (a lite change caught breaking something → full CHG + the pre-authorization auto-revokes). Heavier machinery — full template, review panel, independent acceptance — engages by risk: light where being wrong is cheap, heavy where it isn't.
 
 ## Document storage convention
 

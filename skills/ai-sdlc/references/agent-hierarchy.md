@@ -30,15 +30,15 @@ Turn "several agents working together" into a **chartered, bounded, managed** hi
    - the scope it grants downward **must be a subset of its own** (permission cannot widen);
    - the whole chain (ID, role, scope, parent-child) is registered in the coordination file;
    - **the parent actively manages**: assign, track, converge — don't let them run loose.
-4. **Parent's duties**: assign tasks → track progress → confirm and verify sub-agents' output → converge/aggregate → record errors into the knowledge base (see agent-worklog). Dispatching includes **composing each subagent's dispatch briefing** (the scoped-handshake reading package: branch + structural location + requirement slice + locked location, plus relevant contracts/knowledge) and **auditing its scoped ack** — the four keys must match the dispatch before the subagent acts (see handshake "tiered handshake").
+4. **Parent's duties**: assign tasks → track progress → confirm and verify sub-agents' output → converge/aggregate → record errors into the knowledge base (see agent-worklog). Dispatching includes **composing each subagent's dispatch briefing** (the scoped-handshake reading package: branch + structural location + requirement slice + locked location, plus relevant contracts/knowledge) and **auditing its scoped ack** — the four keys must match the dispatch before the subagent acts (see handshake "tiered handshake"). For medium/high-risk decisions the dispatcher also **convenes the review panel and adjudicates its verdicts**; every layer rolls a one-line verdict summary up, and **hard fails escalate uncompressed — no layer may swallow one** (see review-panel).
 
 > Applicability: **solo or team**. A solo user with an AI that spawns sub-agents can use this org too (analysis/implementation/acceptance are all AI sub-agents); you are the top-level manager.
 
 ## Recursive creation: current state and guidance
 
-- **Nested sub-agents are supported**: a sub-agent may spawn its own sub-agents; **max depth 5**. So the recursive-delegation path is usable — no need to fall back to flat.
+- **Nested sub-agents are supported** (where the platform allows): a sub-agent may spawn its own sub-agents; the depth cap is **platform-dependent** (e.g. 5 on some platforms). The recursive-delegation path is usable — no need to fall back to flat.
 - **But keep it shallow (2–3 levels)**: the deeper the nesting, the higher the coordination/tracking/traceback cost and the harder it is for parents to manage. Needing more depth usually means the task should be split or redesigned, not stacked deeper.
-- **Use a tools allowlist to control "who can spawn"**: whether an agent can spawn sub-agents is governed by its **tool grant** — only roles that need to dispatch (e.g. lead implementer I1) get the `Agent`/spawn tool; roles that don't (verifier V1, pure sub-implementers I1.x) are **not given the `Agent` tool**, mechanically preventing them from spawning. This turns "permission narrows only" into something enforced by the tool list, not just discipline.
+- **Use a tools allowlist to control "who can spawn"**: whether an agent can spawn sub-agents is governed by its **tool grant** — only roles that need to dispatch (e.g. lead implementer I1) get the spawn capability (`Agent` tool on Claude; **map to your platform's equivalent — this suite is not Claude-specific**); roles that don't (verifier V1, pure sub-implementers I1.x) are **not given it**, mechanically preventing them from spawning. This turns "permission narrows only" into something enforced by the tool list, not just discipline.
 - **Governance principles hold at any depth**: IDs, fixed scope, no exceeding the remit, org registry, active parent management, implementer-doesn't-self-verify.
 
 In practice: before going past 2–3 levels, ask "should this task be split finer or its boundaries redrawn?"; approaching depth 5 is a warning sign.
@@ -60,6 +60,8 @@ A1 analysis ──► I1 lead implementer ──► V1 independent acceptance
 ## Role catalog (responsibilities)
 
 What each role is responsible for — what it does, takes in, produces, must not do, hands off to, and which ai-sdlc stage it maps to. Tool grants are in the next section.
+
+> **Read only your own card**: a dispatched agent receives **its own role card** in the briefing and reads only that — the full catalog below is the **dispatcher's** reading (it needs the org view; you don't). Loading every role's duties is catalog-thinking, not scoped-thinking; it burns the very context budget the tiered handshake protects.
 
 ### Orchestrator / parent
 - **Responsibility**: decompose and assign, track progress, confirm and verify sub-agents' output, converge/aggregate, record errors into the knowledge base; check the halt contract at each gate to decide whether to report to the human.
@@ -116,6 +118,7 @@ When starting a role, load the **common set** first, then that role's **base set
 | verifier (V1) | acceptance-verification · independent-acceptance | multi-branch→branch-isolation |
 | integrator | independent-acceptance · cross-agent | — |
 | reviewer | independent-acceptance | — |
+| panel seat (seat-*) | review-panel + its one domain ref (risk/impact→modification-guide; drift→doc-integrity; compliance→knowledge; security→autonomy; consistency→branch-isolation·cross-repo) | — (read-only, no spawn) |
 
 Situational adds (detection flags): multi-repo→`cross-repo`, multi-branch→`branch-isolation`, parallel/handoff→`cross-agent`, autonomous run→`autonomy`, CI/CD→`ci-cd`.
 
