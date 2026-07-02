@@ -30,7 +30,7 @@ Turn "several agents working together" into a **chartered, bounded, managed** hi
    - the scope it grants downward **must be a subset of its own** (permission cannot widen);
    - the whole chain (ID, role, scope, parent-child) is registered in the coordination file;
    - **the parent actively manages**: assign, track, converge — don't let them run loose.
-4. **Parent's duties**: assign tasks → track progress → confirm and verify sub-agents' output → converge/aggregate → record errors into the knowledge base (see agent-worklog).
+4. **Parent's duties**: assign tasks → track progress → confirm and verify sub-agents' output → converge/aggregate → record errors into the knowledge base (see agent-worklog). Dispatching includes **composing each subagent's dispatch briefing** (the scoped-handshake reading package: branch + structural location + requirement slice + locked location, plus relevant contracts/knowledge) and **auditing its scoped ack** — the four keys must match the dispatch before the subagent acts (see handshake "tiered handshake").
 
 > Applicability: **solo or team**. A solo user with an AI that spawns sub-agents can use this org too (analysis/implementation/acceptance are all AI sub-agents); you are the top-level manager.
 
@@ -81,7 +81,7 @@ What each role is responsible for — what it does, takes in, produces, must not
 
 ### I1.x sub-implementer
 - **Responsibility**: complete a single assigned module only.
-- **In**: the sub-task + locked scope from I1. **Out**: that module's code + self-tests.
+- **In**: the sub-task + locked scope from I1 (as a dispatch briefing; entry = **scoped handshake**, not full — see handshake). **Out**: that module's code + self-tests.
 - **May**: write its module, import shared layers. **Must not**: exceed the module, edit others' modules, spawn sub-agents (no `Agent` tool).
 - **Stage**: implementation. **Hands off to**: report back to I1.
 

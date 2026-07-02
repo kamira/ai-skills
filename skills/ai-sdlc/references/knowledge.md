@@ -28,11 +28,12 @@ When you receive a user correction (not a requirement change), **write it into t
 
 ```markdown
 ## DIR-<n> — <one-line rule>
-- date / branch: YYYY-MM-DD / <branch>
+- date / branch: YYYY-MM-DD (UTC+0) / <branch>
 - context: <when it applies>
 - rule: <do / don't>
 - reason: <why (user's reason or inferred)>
 - source: <summary of the user's instruction>
+- confidence: user-confirmed / agent-inferred   ← who established the rule (see priority below)
 - status: active
 ```
 
@@ -47,6 +48,10 @@ When a directive is **updated later**, **rewrite the existing entry, don't add a
 ## Priority and conflict handling (req 5)
 
 The knowledge base is a **high-priority rule set**, not optional advice — it represents "the user already taught this; don't repeat it".
+
+**Source confidence (pollution guard)**: since every later session obeys this file, a wrong or over-generalized entry poisons everything downstream. Tag each entry:
+- `user-confirmed` — the user explicitly said it (or confirmed an inference). **Binding**; overriding requires the triple confirmation below.
+- `agent-inferred` — an agent generalized it from observation. **Advisory**: follow it by default, but a plain user instruction overrides it (no triple confirmation); the first time it's applied in a session, say so — giving the user the chance to confirm it (upgrade to user-confirmed) or discard it. Agents must not record an entry as user-confirmed without an actual user statement.
 
 - Read it on entry (handshake); planning and implementation must obey current directives.
 - **When the knowledge base conflicts with a new user request** (the new request would violate a directive): **do not decide unilaterally** (neither silently follow knowledge nor silently follow the new request). Use **triple confirmation + impact disclosure**:

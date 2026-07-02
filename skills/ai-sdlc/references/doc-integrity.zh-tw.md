@@ -41,7 +41,8 @@ ai-sdlc 把 `docs/` 當作後續工作的依據(**單人或團隊皆然**)——
 ## 驗證方式
 
 - **可程式化的就寫檢查腳本**(優先,因為可重複、無偏誤):
-  - 本 skill 附 **`scripts/doc_integrity_check.py`**:檢查「改了結構性程式卻沒同步 `docs/structure/`」與「已實作的 CHG 沒有對應 ACC」,不過就回非零碼。接 pre-commit / CI 即可把「靠遵守」變「機器擋」:`python3 scripts/doc_integrity_check.py --staged`。
+  - 本 skill 附 **`scripts/doc_integrity_check.py`**:檢查「改了結構性程式卻沒同步 `docs/structure/`」與「已實作的 CHG 沒有對應 ACC」(狀態「暫停」屬合法 WIP,跳過),外加**模板欄位 lint**(CHG/ACC 必填標頭欄)、docs/ 的 **secrets 掃描**、以及 `--commits-since <錨點>`(commit message 沒引用任何 CHG 編號=未治理工作)。任一命中回非零碼。接 pre-commit / CI 即可把「靠遵守」變「機器擋」:`python3 scripts/doc_integrity_check.py --staged`。
+  - **看趨勢,不只點檢**:`scripts/governance_health.py` 產出 repo 治理健康度——CHG 狀態分佈、懸空驗收、暫停/停滯項、緊急追溯與文件同步次數、ACC 通過率。定期跑(或 CI 非阻斷);回顧發現進 knowledge。
   - 文件中提到的實體/模組名,用 grep 在程式中找不到 → flag(可能文件過時或命名漂移)。
   - 每條 FR 在結構/ACC 出現過。
 - **無法程式化的由獨立 agent 審閱**:語意是否仍正確、決策理由是否仍成立——交給非作者的 agent 看(見 independent-acceptance)。
@@ -53,7 +54,24 @@ ai-sdlc 把 `docs/` 當作後續工作的依據(**單人或團隊皆然**)——
 - [ ] 可追溯:連得到對應的 FR / CHG / ACC 編號
 - [ ] 與最新程式一致(縱向)
 - [ ] 與其他結構文件一致(橫向)
+- [ ] **不含 secrets**(token、密碼、金鑰、連線字串——用名稱/位置引用,絕不寫值;文件長存且共用)
+- [ ] **保護名單文件**(knowledge directives、halt policy、Guideline):對它們的變更必須讓使用者看得見——在進場 ack 點名 / 有 CHG 涵蓋,不得默默改
+
+## 慣例版本(只往後適用)
+
+記錄帶 `Skill: ai-sdlc vX.Y`——寫成當下依的慣例版本。**新規則只往後適用**:不可回頭 fail 舊慣例下寫成的記錄(機器 lint 硬性要求的只有 v1.0 就存在的欄位;更嚴的檢查走選用旗標如 `--require-commit`)。進場時比對執行中 skill 版本與近期記錄的版本:記錄**比 skill 新** → skill 過舊,先升級再工作(見 handshake)。
 
 ## 發現漂移時
 
 **不要默默改文件**——回 `modification-guide` 補一筆「文件同步」變更(或在當前 CHG 註明),寫清楚漂移內容與修正,維持留痕。漂移本身就是一個值得記錄的訊號:它代表先前某次變更沒把文件帶上。
+
+**裁決——以哪邊為準**:文件記的是**意圖**,程式碼是**當下現實**;「以文件為準」適用於「記憶 vs 文件」,不適用於「現實 vs 文件」。追 CHG 鏈決定修正方向:
+- 程式現況有某份已驗收 CHG 能解釋、只是文件沒同步 → **改文件**對齊(文件同步變更)。
+- 沒有任何 CHG 能解釋程式現況 → 這是**未經治理的變更**:該保留就補開 CHG 讓它合法化;不該保留就回滾(回滾也是 CHG);意圖不明時**問使用者**,不要默默選邊。
+
+## 成長與歸檔
+
+`docs/changes/` 與 `docs/acceptance/` 會無限成長;超過門檻(建議約 50 筆已收尾記錄,或每季)進場掃描會變慢變吵:
+- 把**完全收尾**的記錄(CHG 已驗收 + 對應 ACC)搬進 `docs/changes/archive/` / `docs/acceptance/archive/`;未收尾的一律不歸檔。
+- 每筆歸檔記錄在 `docs/changes/INDEX.md` 留一行索引(編號/標題/狀態/連結),歸檔後仍可追溯。
+- 進場檢查(handshake、`doc_integrity_check.py`)只掃未歸檔記錄。
