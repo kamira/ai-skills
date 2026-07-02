@@ -2,6 +2,18 @@
 
 本檔記錄 `ai-sdlc` skill 的版本變更。格式參考 Keep a Changelog;版本採語意化(references 內容微調→patch、新增 reference/機制→minor、流程或契約破壞性改動→major)。tag 採 skill 範圍 `ai-sdlc-vX.Y.Z`。版本號寫於 `skills/ai-sdlc/SKILL.md` 的 `metadata.version`。
 
+## [1.2.0] — 2026-07-02
+
+### Added
+- **進場握手 `handshake`**:每次進場/接手的固定讀取順序(分支 → Guideline → knowledge → coordination → 未收尾 CHG/ACC → 結構)、重點與回述確認格式,讓 AI 一進場就對齊既有約束。
+- **修正指示知識庫 `knowledge`**:把「修正指示(非需求變更)」納入知識庫防止再犯;entry 分 error/directive;更新即取代(每條規則僅一個現行版);**高優先權**;與使用者需求衝突時走**三次確認 + 告知影響層面**再依決定,並回寫知識庫。需求變更走 CHG、修正指示走 knowledge。
+- **分支隔離 `branch-isolation`**:需求/CHG/ACC 綁定分支;驗證與需求只能引用**當前分支**來源,不得引用其他分支開出的需求;跨分支內容僅在合併時匯入;與 cross-repo 區分。
+
+### Changed
+- **結構調整/需求更新後修正 Guideline**:requirement-analysis 加「Guideline 維護(變更後回修)」段;modification-guide 工作流第 4 步改為「同步結構文件 + 回修 Guideline」。
+- Guideline / CHG / ACC 模板新增 **Branch 欄**。
+- SKILL 偵測即載入表新增三列(進場→handshake、修正/衝突→knowledge、多分支→branch-isolation);`assets/role_refs.json` 升為 v2(common 基本集含 handshake/knowledge/doc-integrity + multi_branch 情境);`scripts/role_loadout.py` 加 `--multi-branch` 並合併 common 集;agent-hierarchy 角色→references 表同步。
+
 ## [1.1.0] — 2026-06-18
 
 ### Added

@@ -47,6 +47,7 @@ description: >
 # ACC-YYYYMMDD-NN — <驗收標的>
 
 - 專案:<專案代號 / 名稱>   ← 跨專案時必填,對應同專案的 CHG / Guideline
+- 分支(Branch):<branch>   ← 多分支時必填;驗收條件只取同分支的 Guideline/CHG(見 branch-isolation)
 - 日期:YYYY-MM-DD
 - 標的:<功能 / 變更編號 CHG-...>
 - 驗收者:<人 / agent id>   ← 應 ≠ 該 CHG 的實作者(高風險變更必須不同;CI 可據此做身分檢查)

@@ -55,7 +55,8 @@ Produce `docs/ai-guideline.md` using this fixed structure:
 # AI Guideline — <project/feature name>
 
 - Project: <project id / name>   ← required across projects, so this doc is clearly attributable
-- Version: v1.0
+- Branch: <branch>   ← required with multiple branches; use same-branch sources only (see branch-isolation)
+- Version: v1.0   ← after a structure change or requirement update, revise this doc and bump (see below)
 - Date: YYYY-MM-DD
 - Status: Draft / Confirmed
 
@@ -105,6 +106,10 @@ which skills to pair with, etc.>
 - **State "out of scope" explicitly**: the boundary of scope prevents disputes better than the scope itself.
 - **Mark open items**: don't hard-fill uncertainties — put them under "open items" for the user to fill.
 - **Section 8 is for the future AI**: spell out conventions specific to this project so later stages have a basis.
+
+## Guideline maintenance (revise after any change)
+
+The Guideline is a living document, not one-off: **whenever the structure is adjusted or requirements change, the existing Guideline must be revised in sync and bumped** (update the affected FR/scope/acceptance criteria, version +1, note it in the change history). The modification flow (modification-guide) checks at close-out that the Guideline kept up; doc verification (doc-integrity) treats "Guideline lagging behind the agreed structure/requirements" as drift. A stale Guideline misleads every later stage.
 
 ## After delivery
 

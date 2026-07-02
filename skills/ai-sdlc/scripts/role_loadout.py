@@ -20,6 +20,7 @@ from pathlib import Path
 
 FLAG_TO_KEY = {
     "multi_repo": "multi_repo",
+    "multi_branch": "multi_branch",
     "parallel": "parallel_or_handoff",
     "autonomous": "autonomous_run",
     "cicd": "cicd",
@@ -45,6 +46,7 @@ def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--role")
     ap.add_argument("--multi-repo", action="store_true")
+    ap.add_argument("--multi-branch", action="store_true")
     ap.add_argument("--parallel", action="store_true")
     ap.add_argument("--autonomous", action="store_true")
     ap.add_argument("--cicd", action="store_true")
@@ -67,11 +69,14 @@ def main(argv: list[str]) -> int:
     if role not in cfg.get("roles", {}):
         print(f"❌ 未知角色:{args.role}(可用:{', '.join(cfg['roles'])})"); return 2
 
-    refs = list(cfg["roles"][role])
+    refs = []
+    for r in list(cfg.get("common", [])) + list(cfg["roles"][role]):
+        if r not in refs:
+            refs.append(r)
     sit = cfg.get("situational", {})
     active = []
-    for flag, on in [("multi_repo", args.multi_repo), ("parallel", args.parallel),
-                     ("autonomous", args.autonomous), ("cicd", args.cicd)]:
+    for flag, on in [("multi_repo", args.multi_repo), ("multi_branch", args.multi_branch),
+                     ("parallel", args.parallel), ("autonomous", args.autonomous), ("cicd", args.cicd)]:
         if on:
             for r in sit.get(FLAG_TO_KEY[flag], []):
                 if r not in refs:

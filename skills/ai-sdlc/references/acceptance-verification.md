@@ -49,6 +49,7 @@ If these documents are missing, return to the matching skill to fill in the base
 # ACC-YYYYMMDD-NN — <acceptance target>
 
 - Project: <project id / name>   ← required across projects, matching the CHG / Guideline of the same project
+- Branch: <branch>   ← required with multiple branches; take acceptance criteria only from the same branch's Guideline/CHG (see branch-isolation)
 - Date: YYYY-MM-DD
 - Target: <feature / change ID CHG-...>
 - Verifier: <person / agent id>   ← should be ≠ the CHG's implementer (must differ for high-risk; CI can identity-check on this)
