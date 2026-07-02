@@ -2,6 +2,16 @@
 
 本檔記錄 `ai-sdlc` skill 的版本變更。格式參考 Keep a Changelog;版本採語意化(references 內容微調→patch、新增 reference/機制→minor、流程或契約破壞性改動→major)。tag 採 skill 範圍 `ai-sdlc-vX.Y.Z`。版本號寫於 `skills/ai-sdlc/SKILL.md` 的 `metadata.version`。
 
+## [1.7.0] — 2026-07-02
+
+確認閘與「先問不代決」(見 `docs/ai-sdlc/changes/CHG-20260702-05.md`)。
+
+### Added
+- **確認閘**(modification-guide 工作流步驟 6):任何風險等級的變更,動碼前都要把「動機/影響範圍/代決事項/風險分級」摘要給使用者確認;使用者可**預授權**某類變更(記為 knowledge directive)豁免逐次確認;自主連跑走 halt 契約——同一意圖、兩通道(autonomy 註記)。
+- **「推不出的先問,不代決」總則**(SKILL 使用原則 6):文件與使用者指示推導不出的抉擇(新需求、範圍外相依、規格空白、兩可裁決)→ 列選項+建議問使用者;僅低風險可逆細節可先做並標「代決」供追認。
+- **風險自評補洞**(modification-guide):高風險清單命中即高、不接受自評降級;使用者在確認閘覆核風險欄。
+- **evals +2**(id 16 確認閘、id 17 規格空白先問)。
+
 ## [1.6.0] — 2026-07-02
 
 十二項優先修正(見 `docs/ai-sdlc/changes/CHG-20260702-04.md`)。
@@ -108,6 +118,7 @@ requirement-analysis、structure-design、modification-guide、acceptance-verifi
 - 雙語(`.md` 英文 / `.zh-tw.md` 繁中);發佈 `dist/ai-sdlc.skill`、`ai-sdlc.zh-tw.skill`。
 - 回歸集 `evals/evals.json`(skilltest)。
 
+[1.7.0]: 對應 tag ai-sdlc-v1.7.0
 [1.6.0]: 對應 tag ai-sdlc-v1.6.0
 [1.5.0]: 對應 tag ai-sdlc-v1.5.0
 [1.4.0]: 對應 tag ai-sdlc-v1.4.0
