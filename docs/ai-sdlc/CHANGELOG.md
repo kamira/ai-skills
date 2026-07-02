@@ -2,7 +2,69 @@
 
 本檔記錄 `ai-sdlc` skill 的版本變更。格式參考 Keep a Changelog;版本採語意化(references 內容微調→patch、新增 reference/機制→minor、流程或契約破壞性改動→major)。tag 採 skill 範圍 `ai-sdlc-vX.Y.Z`。版本號寫於 `skills/ai-sdlc/SKILL.md` 的 `metadata.version`。
 
-## [1.2.0] — 2026-07-02
+## [1.6.0] — 2026-07-02
+
+十二項優先修正(見 `docs/ai-sdlc/changes/CHG-20260702-04.md`)。
+
+### Added
+- **慣例版本遷移**:CHG/ACC 模板加 `Skill: ai-sdlc vX.Y` 欄;doc-integrity 定「新規則只往後適用」(lint 硬性欄僅 v1.0 起即有者,嚴檢走旗標);handshake 加 skill 版本自檢(記錄比 skill 新=skill 過舊先升級)。
+- **無 git 降級模式**(handshake):commit 錨定家族不適用時的替代(步驟勾選+worklog 為唯一中斷標記);lint 無 .git/shallow clone 給明確提示。
+- **squash / rebase / PR 相容**(modification-guide+handshake):錨定主鍵=message 的 CHG 編號(活得過改寫),hash 盡力而為;squash commit 必帶 CHG 編號、trunk 以 squash 粒度掃描;收尾回填 trunk commit/PR 號。
+- **並行實體隔離**(cross-agent):claim=邏輯鎖,真正並行每 agent 各用 git worktree/clone;claim=誰可以做、worktree=在哪做。
+- **CHG-lite**(modification-guide):低風險一屏記錄+內嵌自驗取代獨立 ACC(僅限低風險);lint 加豁免(低風險+自驗字樣)。
+- **Guideline pivot**(requirement-analysis):major 升版、FR 標棄用不重用、舊 CHG/ACC 對其引用版本仍有效。
+- **批次核准**(autonomy):同一 CHG 其餘關卡可一次核准並記錄;永遠停點不可批次;驗收失敗即失效。
+- **證據可重跑**(acceptance-verification):證據=指令+關鍵輸出或檔案/行號,敘述性「通過」視同未驗證;迴歸指向用反引號。
+- **迴歸腐爛 lint**(doc_integrity_check.py):regression.md 反引號指向的檔案必須存在。
+- **健康度閾值→行動**(governance_health.py):`--hanging-max`(3)/`--stale-max`(0)/緊急占比>10% 警示;`--gate` 可變閘門。
+- **雙語結構檢查 `scripts/bilingual_check.py`**:en↔zh-tw 每對檔案比對 ##/###/fence 數,只改單邊即抓;首跑本 repo 16 對全平行。
+- **evals +6**(id 10–15):中斷恢復、停滯 claim 接管、跨分支撞號合併、緊急通道、範圍握手、暫停交錯——補上 1.3–1.5 新機制的回歸案例。
+
+### Fixed
+- 欄位 lint 的 Risk regex 支援 lite 單行式(`| Risk: low |`)——fixture 實測抓出後修正。
+
+## [1.5.0] — 2026-07-02
+
+時間統一與握手分層(見 `docs/ai-sdlc/changes/CHG-20260702-03.md`)。
+
+### Added
+- **分層握手(handshake)**:完整握手(單人進場/主 agent/接手整專案/無派發者的對等並行)vs **範圍握手**(被派發的 subagent;四鍵 = branch + 結構位置 + 需求切片 + 鎖定位置)。subagent 只讀主 agent 組的**派發包**+自己範圍,不讀其他分支、其他模組的 claim/worklog;**全域 knowledge 穿透範圍**(唯一例外);scoped ack 回派發者,由其比對四鍵後才准動手;代價與補償控制(影響分析/整合驗收/V1)明文化。agent-hierarchy 上層職責與 I1.x 輸入、cross-agent 對等例外同步。
+- **時間慣例 UTC+0**:治理文件一切時間戳(編號/檔名日期、標頭日期、worklog 時刻、claim/租約)一律 UTC+0 且寫明;租約逾期與「同日」序號以 UTC+0 判定。模板(CHG/ACC/knowledge/worklog/claim)標注;`governance_health.py` 改用 UTC 時鐘並在報告標明。
+
+## [1.4.0] — 2026-07-02
+
+九項機制:「掉了也追得回、追得早」(缺口分析與取捨見 `docs/ai-sdlc/changes/CHG-20260702-02.md`)。
+
+### Added
+- **commit 錨定**:CHG/ACC 模板加 `Commit/PR` 欄;「commit 粒度」規則(碼+CHG+ACC 同 commit/PR、message 帶 CHG 編號);handshake 加 commit 歷史掃描(錨點→HEAD 未引用 CHG 的 commit=未治理);`doc_integrity_check.py --commits-since`。
+- **累積迴歸集**(acceptance-verification):`docs/acceptance/regression.md` 登記歷次 ACC 可腳本化條件;中/高風險驗收必跑受影響範圍,弄壞舊條件=未通過;風險分級表同步。
+- **緊急通道**(modification-guide + autonomy):人宣告緊急→先修後補(24h 內追溯 CHG+ACC);違規=不補記,不是用車道;人為宣告即停點核准,契約仍只加嚴。
+- **mini-handshake(session 中重新對齊)**:每個 autonomy 關卡、驗收前、察覺壓縮跡象、長 session 定期——重讀 Guideline+進行中 CHG 並發兩行 ack;SKILL 原則 5 掛明確觸發點。
+- **文件污染防護**:knowledge 條目加「信度」(使用者確認=拘束力/agent 推斷=建議性、首次套用要說);doc-integrity 清單加「不含 secrets」與「保護名單文件不得默默改」;agent-worklog 加 secrets 消毒。
+- **模板 schema lint**(doc_integrity_check.py):CHG/ACC 必填欄檢查(`--require-branch`/`--require-commit` 加嚴;`--no-field-lint`/`--no-secret-scan` 逃生口);docs/ secrets 掃描。
+- **決策假設欄**(modification-guide):決策表加「前提假設」;影響分析須查先前 CHG 假設是否被推翻。
+- **暫停-恢復協定**:CHG 狀態加「暫停(原因+恢復條件)」;啟動檢查列出、有意識恢復;lint 視暫停為合法 WIP 不判懸空。
+- **治理健康度 `scripts/governance_health.py`**:狀態分佈、懸空、暫停、停滯 claim、緊急/文件同步次數、ACC 通過率、迴歸集規模、歸檔量;`--json`;唯讀不設閘門。
+
+### Changed
+- `doc_integrity_check.py` 大改版(欄位 lint、暫停狀態、secrets、commit 掃描);fixture 實測通過(髒/淨兩組)。
+
+## [1.3.0] — 2026-07-02
+
+補強「非正常結束」路徑(缺口分析與細節見 `docs/ai-sdlc/changes/CHG-20260702-01.md`)。
+
+### Added
+- **working-tree 對帳**:handshake 步驟 1 加 `git status`、步驟 5 加「未提交變更必須對應到某 CHG 的修改步驟,對不上視為漂移」;ack 格式加 worktree 行;SKILL Session 啟動檢查插入同款第 3 步。
+- **claim 租約與停滯接管**(cross-agent):claim 是租約非永久佔有;逾時且 worklog/協調檔無更新即為停滯,可留痕接管——解掛掉的 agent 造成的死鎖。並行時建議「一 claim 一檔」避免協調檔本身的競態。
+- **跨分支編號與合併規則**(branch-isolation):CHG/ACC 編號只在同分支內唯一,撞號於合併時重編;合併本身開 merge-CHG 並重掛匯入記錄的 Branch 欄;cherry-pick 只帶碼不帶文件=未治理變更,須在目標分支補 CHG;切換分支視同重新進場、重做握手。
+- **中斷點標記**(modification-guide):修改步驟模板改 checkbox,每完成一步立刻打勾,勾選狀態即中斷後續作點;觸發清單明列「回滾也是 CHG」。
+- **漂移裁決與歸檔**(doc-integrity):新增「以哪邊為準」裁決規則(文件=意圖、程式=現實,追 CHG 鏈決定修正方向,意圖不明問使用者);新增「成長與歸檔」段(收尾記錄歸檔 + INDEX 索引,進場只掃未歸檔)。
+- **入口錨點**(SKILL 文件存放慣例):第一次建 `docs/` 時在目標專案 CLAUDE.md / AGENTS.md 加指引,讓不認識本 skill 的 session 也被導入流程。
+
+### Changed
+- SKILL 偵測表 handshake 列補「working tree」;啟動檢查由 3 步改 4 步。
+
+
 
 ### Added
 - **進場握手 `handshake`**:每次進場/接手的固定讀取順序(分支 → Guideline → knowledge → coordination → 未收尾 CHG/ACC → 結構)、重點與回述確認格式,讓 AI 一進場就對齊既有約束。
@@ -46,5 +108,10 @@ requirement-analysis、structure-design、modification-guide、acceptance-verifi
 - 雙語(`.md` 英文 / `.zh-tw.md` 繁中);發佈 `dist/ai-sdlc.skill`、`ai-sdlc.zh-tw.skill`。
 - 回歸集 `evals/evals.json`(skilltest)。
 
+[1.6.0]: 對應 tag ai-sdlc-v1.6.0
+[1.5.0]: 對應 tag ai-sdlc-v1.5.0
+[1.4.0]: 對應 tag ai-sdlc-v1.4.0
+[1.3.0]: 對應 tag ai-sdlc-v1.3.0
+[1.2.0]: 對應 tag ai-sdlc-v1.2.0
 [1.1.0]: 對應 tag ai-sdlc-v1.1.0
 [1.0.0]: 對應 tag ai-sdlc-v1.0.0

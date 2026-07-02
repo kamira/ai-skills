@@ -64,6 +64,14 @@ A single change may override via an `Autonomy:` field in the CHG header:
 - `Autonomy: auto` (loosen) → **only effective for non-"always-halt" items, and loosening a high-risk halt requires prior human approval**; the contract won't auto-loosen high risk (still returns HALT for a human to confirm).
 Principle: **overrides may only tighten; loosening needs a human's nod.**
 
+## Emergency override (human-declared)
+
+When a human explicitly declares an emergency (see modification-guide "Expedited path"), that declaration **is** the human approval the halt gates await — the run may proceed through halts for the incident fix, with the human present. Always-halt actions are still performed with/by the human, never silently. The relief is temporary and scoped to the incident; the backfill duty (retroactive CHG + ACC within 24h) is unchanged. The machine contract stays tighten-only — an emergency is a human approval channel, not a policy loosening.
+
+## Batch approval (halt fatigue)
+
+High risk halts at every gate — five prompts for one change train the human to rubber-stamp, which defeats the halts. A human may **batch-approve per CHG**: when approving at a gate, explicitly say the remaining gates for this CHG are approved too; record it in the CHG header (`Autonomy: auto (remaining gates approved by <user> at <gate>, <time UTC+0>)`) and proceed without re-asking. Limits: **always-halt actions are never batchable**; the batch covers **this CHG only**; an acceptance failure or scope change **voids it** (back to per-gate).
+
 ## Machine-readable contract & query tool
 
 - Contract: [`assets/halt_policy.json`](../assets/halt_policy.json) (editable; the gates matrix + always_halt_actions).

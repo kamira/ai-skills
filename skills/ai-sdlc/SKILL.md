@@ -12,7 +12,7 @@ description: >
   a modification or new feature, go through modification governance first rather than editing
   code directly.
 metadata:
-  version: 1.2.0
+  version: 1.6.0
 ---
 
 # ai-sdlc — AI Development Governance
@@ -38,7 +38,7 @@ acting, read here to decide "which stage applies now", then read the matching gu
 | Dispatch sub-agents / multi-agent split | you plan to spawn subagents; task large enough to split across units; words: dispatch, sub-agent, split tasks, divide, orchestrate | `agent-worklog` + `agent-hierarchy` |
 | Modification / new feature (existing system) | adjust/fix/extend/refactor/rename/delete an existing feature/file/table; words: change, add, tweak, refactor, optimize, fix bug, replace | `modification-guide` (**mandatory**) |
 | Acceptance / confirm it meets the bar | "done / is this right / verify / check / test it"; a change just implemented | `acceptance-verification`; **high-risk → `independent-acceptance`** |
-| Taking over / cross-session entry | every new session start, or taking over an existing `docs/` project | `handshake` (entry handshake: read docs+knowledge+branch, echo back) + `doc-integrity` |
+| Taking over / cross-session entry | every new session start, or taking over an existing `docs/` project | `handshake` (entry handshake: read docs+knowledge+branch+working tree, echo back; dispatched subagents use the scoped tier) + `doc-integrity` |
 | User correction directive / request conflicts with a known rule | "don't do this", "I told you before"; or a new request violates an existing directive | `knowledge` (record/update; on conflict → triple confirm + impact disclosure) |
 | Multiple branches exist | feature/release/hotfix in parallel; requirements/acceptance on different branches | `branch-isolation` (use only current-branch sources; no cross-branch reference) |
 | Has / adopting CI/CD | repo has `.github/`, `.gitlab-ci.yml`, `.pre-commit-config.yaml`, Jenkinsfile; or mentions pipeline/hook/gate | `ci-cd` (optional) |
@@ -105,9 +105,10 @@ Read only the reference for the current stage to avoid loading irrelevant conten
 
 **On every re-entry, before touching any new requirement, scan existing docs for stages left half-done:**
 
-1. Read the latest CHG under `docs/changes/`: any whose status is not "Accepted" means the previous session's change is only half complete.
+1. Read the latest CHG under `docs/changes/`: any whose status is not "Accepted" means the previous session's change is only half complete. (A status of "Paused" is legitimate WIP: list it and consciously resume or close it, rather than treating it as broken.)
 2. Cross-check `docs/acceptance/`: if a CHG has no matching ACC report, acceptance was handed off but nobody picked it up.
-3. **Close those pending acceptances first (run acceptance-verification), then start the new requirement.**
+3. Check the working tree (`git status`): every uncommitted change must map to some CHG's modification steps; an unmatched change means interrupted or ungoverned work — reconcile it per handshake / doc-integrity.
+4. **Close those pending items first (run acceptance-verification / reconcile the working tree), then start the new requirement.**
 
 Why: the most common break in cross-session work is "the modification flow treats acceptance as the next step and hands it off, but the next session brings a new feature, not the acceptance" — so acceptance hangs forever. Checking on entry lets the "modify -> verify" loop reconnect across sessions.
 
@@ -140,10 +141,20 @@ target-project/docs/
 If the target project already has a documentation convention, follow that and note the actual
 paths in the AI Guideline.
 
+**Entry anchor**: the first time you create `docs/`, also add a short pointer to the target
+project's `CLAUDE.md` / `AGENTS.md` (e.g. "Governance docs live under `docs/`; before any change,
+run the ai-sdlc entry handshake and modification governance") — so a session that knows nothing
+about this skill still gets routed into the flow instead of editing ungoverned.
+
+**Time convention (UTC+0)**: every timestamp in governance docs — the date in CHG/ACC ids and
+filenames, header dates, worklog times, claim/lease times — uses **UTC+0**, and written times
+state it (e.g. `2026-07-02 09:30 (UTC+0)`). Lease expiry and "same-day" sequence numbers are
+judged on the UTC+0 clock, so cross-timezone teams share one clock.
+
 ## Operating principles
 
 1. **Read before doing**: read the stage guide and existing docs before acting.
 2. **Documents are the truth**: if the structure changes, update the structure docs in sync.
 3. **Trace every change**: a modification always leaves a record under `docs/changes/`.
 4. **Acceptance aligns to source**: criteria come from the Guideline and the change's mod guide.
-5. **Don't rely on memory — rely on the docs**: a long conversation's context may be compacted, losing or distorting earlier decisions. **Don't go by recollection** — before acting, re-confirm existing constraints and decisions from the files under `docs/` (Guideline, structure, CHG, ACC); when memory and the docs disagree, the docs win. This keeps compaction, cross-session work, and handoffs from causing drift.
+5. **Don't rely on memory — rely on the docs**: a long conversation's context may be compacted, losing or distorting earlier decisions. **Don't go by recollection** — before acting, re-confirm existing constraints and decisions from the files under `docs/` (Guideline, structure, CHG, ACC); when memory and the docs disagree, the docs win. This keeps compaction, cross-session work, and handoffs from causing drift. Re-reading has concrete triggers, not just goodwill: at every autonomy gate, before starting acceptance, on signs of compaction, and periodically in long sessions, re-read the Guideline + active CHG and emit a mini-ack (see handshake "mid-session re-sync").
