@@ -33,6 +33,7 @@ doc_integrity_check.py — 文檔抗漂移的機器檢查 / doc-integrity enforc
 """
 from __future__ import annotations
 import argparse
+import json
 import re
 import subprocess
 import sys
@@ -198,6 +199,38 @@ def check_regression_pointers(repo: Path) -> list[str]:
     return problems
 
 
+KN_TIERS = {"shallow", "deep", "user-confirmed"}
+KN_STATUS = {"observing", "active", "retired"}
+
+
+def check_knowledge_entries(repo: Path) -> list[str]:
+    """JSON 條目 fail-loud 驗證:解析不了/缺必填/enum 錯/id≠檔名 → 擋。靜默少一條規則比擋一次提交更糟。"""
+    entries = repo / "docs" / "knowledge" / "entries"
+    if not entries.is_dir():
+        return []
+    problems = []
+    for f in sorted(entries.glob("*.json")):
+        rel = f"docs/knowledge/entries/{f.name}"
+        try:
+            d = json.loads(f.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as e:
+            problems.append(f"{rel} JSON 解析失敗(fail-loud,不跳過):{e}")
+            continue
+        missing = [k for k in ("id", "tier", "rule", "tags", "status") if k not in d]
+        if missing:
+            problems.append(f"{rel} 缺必填欄:{', '.join(missing)}(schema:assets/knowledge_entry.schema.json)")
+            continue
+        if d["id"] != f.stem:
+            problems.append(f"{rel} id「{d['id']}」≠ 檔名「{f.stem}」— 檔名即 id")
+        if d["tier"] not in KN_TIERS:
+            problems.append(f"{rel} tier「{d['tier']}」不在 {sorted(KN_TIERS)}")
+        if d["status"] not in KN_STATUS:
+            problems.append(f"{rel} status「{d['status']}」不在 {sorted(KN_STATUS)}")
+        if not isinstance(d["tags"], list) or not d["tags"]:
+            problems.append(f"{rel} tags 須為非空陣列(小寫英文檢索鍵)")
+    return problems
+
+
 def check_knowledge_index(repo: Path) -> list[str]:
     """拆檔模式的輕量交叉檢查:條目檔 id ↔ INDEX.md 雙向存在(完整比對交給 knowledge_index.py --check)。"""
     entries = repo / "docs" / "knowledge" / "entries"
@@ -208,7 +241,7 @@ def check_knowledge_index(repo: Path) -> list[str]:
         return ["docs/knowledge/entries/ 存在但無 INDEX.md — 拆檔模式的 INDEX 是生成物:跑 scripts/knowledge_index.py"]
     idx_text = index.read_text(encoding="utf-8", errors="ignore")
     problems = []
-    file_ids = {f.stem for f in entries.glob("*.md")}
+    file_ids = {f.stem for f in entries.glob("*.md")} | {f.stem for f in entries.glob("*.json")}
     for fid in sorted(file_ids):
         if fid not in idx_text:
             problems.append(f"knowledge 條目 {fid} 不在 INDEX.md — INDEX 過期,重跑 knowledge_index.py")
@@ -264,6 +297,7 @@ def main(argv: list[str]) -> int:
     if not args.no_secret_scan:
         problems += check_secrets(repo)
     problems += check_regression_pointers(repo)
+    problems += check_knowledge_entries(repo)
     problems += check_knowledge_index(repo)
     if args.commits_since:
         problems += check_commits(repo, args.commits_since)

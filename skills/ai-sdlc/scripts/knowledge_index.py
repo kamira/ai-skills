@@ -14,6 +14,7 @@ INDEX.md 變成「生成物」:掃描條目、抽 metadata、重寫 docs/knowled
 """
 from __future__ import annotations
 import argparse
+import json
 import re
 import sys
 from datetime import datetime, timezone
@@ -49,12 +50,33 @@ def parse_entry(f: Path) -> dict:
     return {"id": eid, "tier": tier, "tags": tags, "rule": rule, "status": status}
 
 
+def parse_entry_json(f: Path) -> dict:
+    """JSON 正典條目:解析失敗直接拋(fail-loud)——寧可炸,不可讀錯。"""
+    d = json.loads(f.read_text(encoding="utf-8"))
+    counters = d.get("counters") or {}
+    status = str(d.get("status", "—"))
+    if counters:
+        status += f"(seen {counters.get('seen', 0)} / applied {counters.get('applied', 0)})"
+    return {
+        "id": d.get("id", f.stem),
+        "tier": d.get("tier", "shallow"),
+        "tags": " ".join(d.get("tags", [])) or "—",
+        "rule": str(d.get("rule", "—"))[:80],
+        "status": status,
+    }
+
+
 def build_index(repo: Path) -> str | None:
     entries_dir = repo / "docs" / "knowledge" / "entries"
     if not entries_dir.is_dir():
         return None
     rows = []
-    for f in sorted(entries_dir.glob("*.md")):
+    for f in sorted(entries_dir.glob("*.json")):
+        try:
+            rows.append(parse_entry_json(f))
+        except json.JSONDecodeError as e:
+            raise SystemExit(f"❌ {f} JSON 解析失敗(fail-loud,不猜不跳過):{e}")
+    for f in sorted(entries_dir.glob("*.md")):  # 過渡期:舊 md 條目仍收錄
         rows.append(parse_entry(f))
     order = {"user-confirmed": 0, "deep": 1, "shallow": 2}
     rows.sort(key=lambda r: (order.get(r["tier"], 3), r["id"]))

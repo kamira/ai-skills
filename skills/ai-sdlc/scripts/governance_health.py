@@ -163,7 +163,21 @@ def main(argv: list[str]) -> int:
     kn_dir_n = kn_deep = kn_shallow = 0
     kn_path = repo / "docs" / "knowledge"
     if kn_path.is_dir():
-        for kf in sorted(kn_path.rglob("*.md")):
+        for kf in sorted(kn_path.rglob("*.json")):  # JSON 正典:結構化讀,不 regex
+            if "archive" in kf.parts:
+                continue
+            try:
+                kd = json.loads(read(kf))
+            except json.JSONDecodeError:
+                continue  # 壞檔由 doc_integrity fail-loud 把關,統計端跳過
+            tier = kd.get("tier")
+            if tier == "user-confirmed" or str(kd.get("id", "")).startswith("DIR"):
+                kn_dir_n += 1
+            elif tier == "deep":
+                kn_deep += 1
+            elif tier == "shallow":
+                kn_shallow += 1
+        for kf in sorted(kn_path.rglob("*.md")):  # 過渡期 md 條目
             if "archive" in kf.parts or kf.name == "INDEX.md":
                 continue
             kt = read(kf)

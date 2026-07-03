@@ -246,6 +246,17 @@
         "檢索規則不變:讀索引+scope 內條目",
         "提及語言正規化:英文 tags、可測試的規則措辭"
       ]
+    },
+    {
+      "id": 23,
+      "prompt": "拆檔模式下要新增一條 knowledge 條目,用什麼格式寫?為什麼不用 YAML 或 markdown?",
+      "expected_output": "JSON 正典(entries/<id>.json,檔名=id):必填 id/tier/rule/tags/status,依 assets/knowledge_entry.schema.json;解析 fail-loud——壞檔擋提交不跳過(靜默少一條規則比擋提交更糟);不用 YAML 因隱性轉型會讀錯(1.10→1.1、no→false),不用 regex 解析 markdown 因容錯即誤讀溫床;註解放欄位;人用視圖=生成的 INDEX.md(JSON 真相+生成視圖的分層混合)。",
+      "expectations": [
+        "指明 JSON 正典、檔名=id、必填欄與 schema",
+        "說明 fail-loud:壞檔擋下而非跳過",
+        "能講出不用 YAML(隱性轉型)/markdown(regex 容錯)的理由",
+        "指出人用視圖由 INDEX 生成(分層混合,不是逐檔混格式)"
+      ]
     }
   ]
 }

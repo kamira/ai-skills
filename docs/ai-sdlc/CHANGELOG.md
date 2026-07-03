@@ -2,6 +2,18 @@
 
 本檔記錄 `ai-sdlc` skill 的版本變更。格式參考 Keep a Changelog;版本採語意化(references 內容微調→patch、新增 reference/機制→minor、流程或契約破壞性改動→major)。tag 採 skill 範圍 `ai-sdlc-vX.Y.Z`。版本號寫於 `skills/ai-sdlc/SKILL.md` 的 `metadata.version`。
 
+## [1.11.0] — 2026-07-03
+
+knowledge 條目正典改 JSON(見 `docs/ai-sdlc/changes/CHG-20260702-09.md`)。
+
+### Added
+- **JSON 正典條目**(拆檔模式):`entries/<id>.json`,schema `assets/knowledge_entry.schema.json`(必填 id/tier/rule/tags/status、enum 固定);**fail-loud**——解析不了/不合 schema 擋提交不跳過(靜默少一條規則比擋提交更糟);不用 YAML(隱性轉型 `1.10`→`1.1`、`no`→`false` 正是要消滅的誤讀)、不用 regex 解析 markdown(容錯即誤讀溫床);註解放欄位。單檔 md 模式保留給小專案;過渡期舊 .md 條目仍被讀。
+- **分工原則明文**:全量解析屬腳本(index 生成/lint/健康度,模型 context 成本零);模型只讀生成的 INDEX(每條約一行)+ scope 內 3–5 個條目——知識庫越大淨 context 越省;命中 20+ 條=tags 太寬。
+- `knowledge_index.py` 讀 JSON(壞檔 SystemExit);lint 新增 `check_knowledge_entries`;health 以結構化方式讀 JSON tier;evals +1(id 23),共 23。
+
+### Fixed
+- v1.10 交叉檢查 `file_ids` 只掃 `*.md`,JSON 條目被誤判為缺檔——fixture 抓出並修復。
+
 ## [1.10.0] — 2026-07-03
 
 knowledge 規模化與語言正規化(見 `docs/ai-sdlc/changes/CHG-20260702-08.md`)。
@@ -151,6 +163,7 @@ requirement-analysis、structure-design、modification-guide、acceptance-verifi
 - 雙語(`.md` 英文 / `.zh-tw.md` 繁中);發佈 `dist/ai-sdlc.skill`、`ai-sdlc.zh-tw.skill`。
 - 回歸集 `evals/evals.json`(skilltest)。
 
+[1.11.0]: 對應 tag ai-sdlc-v1.11.0
 [1.10.0]: 對應 tag ai-sdlc-v1.10.0
 [1.9.0]: 對應 tag ai-sdlc-v1.9.0
 [1.8.0]: 對應 tag ai-sdlc-v1.8.0
