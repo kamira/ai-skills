@@ -250,6 +250,25 @@ def check_knowledge_entries(repo: Path) -> list[str]:
     return problems
 
 
+STUB_FILES = ["CLAUDE.md", "GEMINI.md", ".cursorrules", ".windsurfrules",
+              ".github/copilot-instructions.md"]
+
+
+def check_entry_point(repo: Path) -> list[str]:
+    """進入點在 root、適用任何 AI:治理專案必有 AGENTS.md;工具專屬檔只准當指向它的 stub。"""
+    problems = []
+    governed = (repo / "docs" / "changes").is_dir()
+    agents = repo / "AGENTS.md"
+    if governed and not agents.is_file():
+        problems.append("治理專案缺 root 進入點 AGENTS.md — 進入點要在 root、讓任何 AI 最快識別(見 SKILL 入口錨點)")
+    if agents.is_file():
+        for s in STUB_FILES:
+            f = repo / s
+            if f.is_file() and "AGENTS.md" not in f.read_text(encoding="utf-8", errors="ignore"):
+                problems.append(f"{s} 存在但未指向 AGENTS.md — 工具檔只放兩行 stub,內容不得分岔")
+    return problems
+
+
 def check_knowledge_index(repo: Path) -> list[str]:
     """拆檔模式的輕量交叉檢查:條目檔 id ↔ INDEX.md 雙向存在(完整比對交給 knowledge_index.py --check)。"""
     entries = repo / "docs" / "knowledge" / "entries"
@@ -316,6 +335,7 @@ def main(argv: list[str]) -> int:
     if not args.no_secret_scan:
         problems += check_secrets(repo)
     problems += check_regression_pointers(repo)
+    problems += check_entry_point(repo)
     problems += check_knowledge_entries(repo)
     problems += check_knowledge_index(repo)
     if args.commits_since:

@@ -12,7 +12,7 @@ description: >
   a modification or new feature, go through modification governance first rather than editing
   code directly.
 metadata:
-  version: 1.13.0
+  version: 1.14.0
 ---
 
 # ai-sdlc — AI Development Governance
@@ -146,10 +146,26 @@ target-project/docs/
 If the target project already has a documentation convention, follow that and note the actual
 paths in the AI Guideline.
 
-**Entry anchor**: the first time you create `docs/`, also add a short pointer to the target
-project's `CLAUDE.md` / `AGENTS.md` (e.g. "Governance docs live under `docs/`; before any change,
-run the ai-sdlc entry handshake and modification governance") — so a session that knows nothing
-about this skill still gets routed into the flow instead of editing ungoverned.
+**Entry anchor (root-level, any-AI)**: the entry point lives at the **repo root, not under
+`docs/`** — the root is where every agent, from any vendor, looks first; `docs/` is the archive,
+not the door. The first time you create `docs/`, also create a root **`AGENTS.md`** (the closest
+thing to a vendor-neutral convention) that is scannable in seconds: what the entry is, what's
+mandatory, what's non-negotiable:
+
+```markdown
+# AGENTS.md — AI entry point (any agent, any vendor)
+1. MANDATORY before any change: run the ai-sdlc entry handshake —
+   docs/ai-guideline.md → docs/knowledge/ INDEX → open CHG / branch state.
+2. Governance lives under docs/ (changes/ acceptance/ structure/ knowledge/).
+3. Non-negotiables: changes go through governance first (CHG); every commit
+   message carries its CHG id; confirm with the user before implementing.
+```
+
+In-suite platform neutrality is not enough — **the entry must be findable by different AIs**.
+For every tool-specific convention file present (`CLAUDE.md`, `GEMINI.md`, `.cursorrules`,
+`.github/copilot-instructions.md`, …) keep a **two-line stub pointing at `AGENTS.md`**; stubs
+never carry content of their own (duplicates drift). The lint enforces both: a governed repo
+(`docs/changes/` exists) must have the root entry, and existing stubs must still point.
 
 **Time convention (UTC+0)**: every timestamp in governance docs — the date in CHG/ACC ids and
 filenames, header dates, worklog times, claim/lease times — uses **UTC+0**, and written times

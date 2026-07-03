@@ -2,6 +2,15 @@
 
 本檔記錄 `ai-sdlc` skill 的版本變更。格式參考 Keep a Changelog;版本採語意化(references 內容微調→patch、新增 reference/機制→minor、流程或契約破壞性改動→major)。tag 採 skill 範圍 `ai-sdlc-vX.Y.Z`。版本號寫於 `skills/ai-sdlc/SKILL.md` 的 `metadata.version`。
 
+## [1.14.0] — 2026-07-03
+
+進入點上移 root、適用任何 AI(見 `docs/ai-sdlc/changes/CHG-20260703-03.md`)。
+
+### Changed
+- **入口錨點重設計**(取代 v1.3 版):進入點在 **repo root、不在 docs/**(root=任何廠牌 agent 最快識別處;docs/=庫房不是門)。root `AGENTS.md` 為唯一正典(宣告:必讀順序=握手→knowledge INDEX→未收尾狀態;治理位置;不可協商規則),含模板;工具專屬檔(CLAUDE.md/GEMINI.md/.cursorrules/copilot-instructions⋯)一律**兩行 stub 指向**、永不承載內容。
+- lint 新增 `check_entry_point`:治理專案(有 docs/changes/)缺 root AGENTS.md → 報;工具檔存在但未指向 → 報。
+- 本 repo root 新增 `AGENTS.md`(dogfood,依 docs/<skill>/ 慣例調適);evals +1(id 26),共 26。
+
 ## [1.13.0] — 2026-07-03
 
 最後一次行為紀律(見 `docs/ai-sdlc/changes/CHG-20260703-02.md`)。
@@ -184,6 +193,7 @@ requirement-analysis、structure-design、modification-guide、acceptance-verifi
 - 雙語(`.md` 英文 / `.zh-tw.md` 繁中);發佈 `dist/ai-sdlc.skill`、`ai-sdlc.zh-tw.skill`。
 - 回歸集 `evals/evals.json`(skilltest)。
 
+[1.14.0]: 對應 tag ai-sdlc-v1.14.0
 [1.13.0]: 對應 tag ai-sdlc-v1.13.0
 [1.12.0]: 對應 tag ai-sdlc-v1.12.0
 [1.11.0]: 對應 tag ai-sdlc-v1.11.0

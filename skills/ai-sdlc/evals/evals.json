@@ -279,6 +279,17 @@
         "說明勾選狀態是中斷後的續作點",
         "理解正常結束=恰好方便的 crash(交接清單是驗證非急救)"
       ]
+    },
+    {
+      "id": 26,
+      "prompt": "你(任何廠牌的 AI agent)第一次進入一個有治理的專案 repo。你先讀哪個檔?為什麼是那個位置?如果 repo 裡也有 CLAUDE.md,它該長什麼樣?",
+      "expected_output": "先讀 root 的 AGENTS.md——root 是任何 agent 最快識別處,docs/ 是庫房不是門;AGENTS.md 宣告必讀順序(進場握手:guideline→knowledge INDEX→未收尾 CHG/分支)與不可協商規則(先治理、commit 帶編號、實作前確認);CLAUDE.md 等工具專屬檔=兩行 stub 指向 AGENTS.md、不承載內容(複本分岔);lint 驗治理專案必有 root 入口、stub 必指向。",
+      "expectations": [
+        "指明 root AGENTS.md 為進入點並說明 root=最快識別、docs=庫房非門",
+        "講出必讀順序與不可協商規則來自 AGENTS.md 宣告",
+        "工具專屬檔(CLAUDE.md 等)只作兩行 stub 指向,不放內容",
+        "提及 lint 強制:治理專案缺門即報、stub 未指向即報"
+      ]
     }
   ]
 }
