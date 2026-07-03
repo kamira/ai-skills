@@ -201,14 +201,23 @@ def check_regression_pointers(repo: Path) -> list[str]:
 
 KN_TIERS = {"shallow", "deep", "user-confirmed"}
 KN_STATUS = {"observing", "active", "retired"}
+KN_KNOWN_FIELDS = {"id", "tier", "rule", "tags", "keywords", "status", "branch", "date",
+                   "evidence", "counters", "source_quote", "reason", "note", "history"}
 
 
 def check_knowledge_entries(repo: Path) -> list[str]:
-    """JSON 條目 fail-loud 驗證:解析不了/缺必填/enum 錯/id≠檔名 → 擋。靜默少一條規則比擋一次提交更糟。"""
+    """JSON 條目 fail-loud 驗證:解析不了/缺必填/enum 錯/id≠檔名/未知欄位(打錯欄名=資料靜默消失)→ 擋。"""
     entries = repo / "docs" / "knowledge" / "entries"
     if not entries.is_dir():
         return []
     problems = []
+    vocab = None
+    vocab_file = repo / "docs" / "knowledge" / "vocabulary.json"
+    if vocab_file.is_file():
+        try:
+            vocab = json.loads(vocab_file.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as e:
+            problems.append(f"docs/knowledge/vocabulary.json 解析失敗(fail-loud):{e}")
     for f in sorted(entries.glob("*.json")):
         rel = f"docs/knowledge/entries/{f.name}"
         try:
@@ -228,6 +237,16 @@ def check_knowledge_entries(repo: Path) -> list[str]:
             problems.append(f"{rel} status「{d['status']}」不在 {sorted(KN_STATUS)}")
         if not isinstance(d["tags"], list) or not d["tags"]:
             problems.append(f"{rel} tags 須為非空陣列(小寫英文檢索鍵)")
+        elif isinstance(vocab, dict):
+            unregistered = [t for t in d["tags"] if t not in vocab or str(t).startswith("_")]
+            if unregistered:
+                problems.append(f"{rel} tags {unregistered} 未註冊於 vocabulary.json — 先登記再用(擋 tag 增殖)")
+        if "keywords" in d and (not isinstance(d["keywords"], list)
+                                or not all(isinstance(x, str) for x in d["keywords"])):
+            problems.append(f"{rel} keywords 須為字串陣列(自由語言命中詞)")
+        unknown = set(d) - KN_KNOWN_FIELDS
+        if unknown:
+            problems.append(f"{rel} 未知欄位 {sorted(unknown)} — 打錯欄名=資料靜默消失(schema 為準)")
     return problems
 
 

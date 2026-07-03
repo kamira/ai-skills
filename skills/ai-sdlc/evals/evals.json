@@ -257,6 +257,17 @@
         "能講出不用 YAML(隱性轉型)/markdown(regex 容錯)的理由",
         "指出人用視圖由 INDEX 生成(分層混合,不是逐檔混格式)"
       ]
+    },
+    {
+      "id": 24,
+      "prompt": "使用者說「幫我改一下對帳匯出的格式」。knowledge INDEX 裡有 tags=payment(keywords 含「對帳」)、tags=report(keywords 含「匯出」)、tags=auth 三類條目,vocabulary.json 存在。你載入哪些 knowledge?怎麼決定的?",
+      "expected_output": "命中程序:任務側取鍵(需求名詞「對帳」「匯出」+相關模組路徑)→ 過 vocabulary.json 別名正規化成 tags,並以原文對 INDEX 的 keywords 欄子串命中 → 載入 payment 與 report 條目+全域條目,不載 auth、不讀整份;召回優先(寧多中後篩);若 tag 未註冊於詞彙表,lint 會擋。",
+      "expectations": [
+        "任務側取鍵並經 vocabulary 別名正規化,不憑語感",
+        "keywords 欄以原文(含中文)子串命中",
+        "只載命中+全域條目,明確排除不相關類(auth)",
+        "說明召回優先與 tag 須註冊於詞彙表"
+      ]
     }
   ]
 }

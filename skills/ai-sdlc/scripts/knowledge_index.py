@@ -47,7 +47,7 @@ def parse_entry(f: Path) -> dict:
     cm = COUNT_RE.search(text)
     if cm:
         status = f"{status}({cm.group(2).strip()[:30]})"
-    return {"id": eid, "tier": tier, "tags": tags, "rule": rule, "status": status}
+    return {"id": eid, "tier": tier, "tags": tags, "keywords": "—", "rule": rule, "status": status}
 
 
 def parse_entry_json(f: Path) -> dict:
@@ -61,6 +61,7 @@ def parse_entry_json(f: Path) -> dict:
         "id": d.get("id", f.stem),
         "tier": d.get("tier", "shallow"),
         "tags": " ".join(d.get("tags", [])) or "—",
+        "keywords": " ".join(d.get("keywords", []))[:60] or "—",
         "rule": str(d.get("rule", "—"))[:80],
         "status": status,
     }
@@ -85,11 +86,11 @@ def build_index(repo: Path) -> str | None:
         "",
         GEN_MARK,
         "",
-        "| id | tier | tags/scope | rule | status |",
-        "|----|------|-----------|------|--------|",
+        "| id | tier | tags/scope | keywords | rule | status |",
+        "|----|------|-----------|----------|------|--------|",
     ]
     for r in rows:
-        lines.append(f"| {r['id']} | {r['tier']} | {r['tags']} | {r['rule']} | {r['status']} |")
+        lines.append(f"| {r['id']} | {r['tier']} | {r['tags']} | {r['keywords']} | {r['rule']} | {r['status']} |")
     lines += ["", f"_entries: {len(rows)} · regenerated: "
               f"{datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M')} (UTC+0)_", ""]
     return "\n".join(lines)

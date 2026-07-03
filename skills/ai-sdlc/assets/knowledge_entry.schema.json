@@ -9,6 +9,7 @@
     "tier":   { "enum": ["shallow", "deep", "user-confirmed"] },
     "rule":   { "type": "string", "minLength": 3 },
     "tags":   { "type": "array", "items": { "type": "string", "pattern": "^[a-z0-9\\-]+$" }, "minItems": 1 },
+    "keywords": { "type": "array", "items": { "type": "string" }, "description": "hit axis: free language, any language — user's words, API names, error strings" },
     "status": { "enum": ["observing", "active", "retired"] },
     "branch": { "type": "string", "description": "branch name or 'all'" },
     "date":   { "type": "string", "description": "YYYY-MM-DD (UTC+0)" },

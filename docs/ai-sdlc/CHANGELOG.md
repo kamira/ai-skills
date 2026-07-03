@@ -2,6 +2,15 @@
 
 本檔記錄 `ai-sdlc` skill 的版本變更。格式參考 Keep a Changelog;版本採語意化(references 內容微調→patch、新增 reference/機制→minor、流程或契約破壞性改動→major)。tag 採 skill 範圍 `ai-sdlc-vX.Y.Z`。版本號寫於 `skills/ai-sdlc/SKILL.md` 的 `metadata.version`。
 
+## [1.12.0] — 2026-07-03
+
+命中機制(見 `docs/ai-sdlc/changes/CHG-20260702-10.md`)。
+
+### Added
+- **命中契約**(knowledge):`tags`=分類軸(受控詞彙、INDEX 主鍵);**`keywords`=命中軸**(schema 新欄,自由語言任何語言——使用者原詞/API 名/錯誤字串,露出為 INDEX 欄位,索引層即可命中);**`docs/knowledge/vocabulary.json`=橋與註冊處**(tag→別名;lint 驗條目 tags ⊆ 詞彙表,擋 tag 增殖;解析失敗 fail-loud;無檔豁免)。命中程序:任務側取鍵→別名正規化→tags 交集+keywords 子串;**召回優先於精準**。
+- **未知欄位檢查**(lint):打錯欄名(`taggs`)=資料靜默消失,比照 constraint 擋下——「database-like」的正確拿法:檔名=主鍵、schema=DDL、lint=constraints、INDEX=物化視圖、vocabulary=維度表;儲存引擎維持純文字(git 可合併/AI 直讀/diff 可審計不可退讓),數千條再上衍生查詢快取(backlog)。
+- evals +1(id 24),共 24。
+
 ## [1.11.0] — 2026-07-03
 
 knowledge 條目正典改 JSON(見 `docs/ai-sdlc/changes/CHG-20260702-09.md`)。
@@ -163,6 +172,7 @@ requirement-analysis、structure-design、modification-guide、acceptance-verifi
 - 雙語(`.md` 英文 / `.zh-tw.md` 繁中);發佈 `dist/ai-sdlc.skill`、`ai-sdlc.zh-tw.skill`。
 - 回歸集 `evals/evals.json`(skilltest)。
 
+[1.12.0]: 對應 tag ai-sdlc-v1.12.0
 [1.11.0]: 對應 tag ai-sdlc-v1.11.0
 [1.10.0]: 對應 tag ai-sdlc-v1.10.0
 [1.9.0]: 對應 tag ai-sdlc-v1.9.0

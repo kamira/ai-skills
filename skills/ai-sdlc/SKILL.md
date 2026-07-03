@@ -12,7 +12,7 @@ description: >
   a modification or new feature, go through modification governance first rather than editing
   code directly.
 metadata:
-  version: 1.11.0
+  version: 1.12.0
 ---
 
 # ai-sdlc — AI Development Governance
