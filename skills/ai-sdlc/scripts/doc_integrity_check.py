@@ -198,6 +198,26 @@ def check_regression_pointers(repo: Path) -> list[str]:
     return problems
 
 
+def check_knowledge_index(repo: Path) -> list[str]:
+    """拆檔模式的輕量交叉檢查:條目檔 id ↔ INDEX.md 雙向存在(完整比對交給 knowledge_index.py --check)。"""
+    entries = repo / "docs" / "knowledge" / "entries"
+    if not entries.is_dir():
+        return []
+    index = repo / "docs" / "knowledge" / "INDEX.md"
+    if not index.is_file():
+        return ["docs/knowledge/entries/ 存在但無 INDEX.md — 拆檔模式的 INDEX 是生成物:跑 scripts/knowledge_index.py"]
+    idx_text = index.read_text(encoding="utf-8", errors="ignore")
+    problems = []
+    file_ids = {f.stem for f in entries.glob("*.md")}
+    for fid in sorted(file_ids):
+        if fid not in idx_text:
+            problems.append(f"knowledge 條目 {fid} 不在 INDEX.md — INDEX 過期,重跑 knowledge_index.py")
+    for iid in re.findall(r"\|\s*((?:KN|DIR)-[\w.]+)\s*\|", idx_text):
+        if iid not in file_ids:
+            problems.append(f"INDEX.md 列了 {iid} 但 entries/ 無此檔 — INDEX 過期或條目被移走未重生")
+    return problems
+
+
 def check_commits(repo: Path, since: str) -> list[str]:
     if not (repo / ".git").exists():
         return [f"--commits-since 需要 git repo(未偵測到 .git)— 無 git 模式下 commit 錨定不適用(見 handshake 降級模式)"]
@@ -244,6 +264,7 @@ def main(argv: list[str]) -> int:
     if not args.no_secret_scan:
         problems += check_secrets(repo)
     problems += check_regression_pointers(repo)
+    problems += check_knowledge_index(repo)
     if args.commits_since:
         problems += check_commits(repo, args.commits_since)
 

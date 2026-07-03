@@ -2,6 +2,16 @@
 
 本檔記錄 `ai-sdlc` skill 的版本變更。格式參考 Keep a Changelog;版本採語意化(references 內容微調→patch、新增 reference/機制→minor、流程或契約破壞性改動→major)。tag 採 skill 範圍 `ai-sdlc-vX.Y.Z`。版本號寫於 `skills/ai-sdlc/SKILL.md` 的 `metadata.version`。
 
+## [1.10.0] — 2026-07-03
+
+knowledge 規模化與語言正規化(見 `docs/ai-sdlc/changes/CHG-20260702-08.md`)。
+
+### Added
+- **拆檔模式**(knowledge):超過 ~30 條 → 一條目一檔 `docs/knowledge/entries/<id>.md`(檔名=id=第一層過濾;失效移 `entries/archive/`)——解單寫者熱點、merge 衝突、計數 diff 噪音。
+- **生成式 INDEX**:`scripts/knowledge_index.py` 從條目 metadata 重生 `INDEX.md`(排序:user-confirmed→deep→shallow),**永不手改**;`--check` 驗新鮮;doc-integrity lint 雙向交叉驗「條目檔↔INDEX id」;governance_health 改 rglob 統計 entries/。檢索規則不變、與模式無關。
+- **AI-friendly 語言正規化**:tags 一律小寫英文固定詞彙(token/grep/跨模型);規則行祈使句、一條一義、可測試措辭、附正反例;來源引文保留使用者原語言;shallow→deep 升級含語言正規化一次。
+- evals +1(id 22),共 22。
+
 ## [1.9.0] — 2026-07-02
 
 knowledge 自主觸發與生命週期(見 `docs/ai-sdlc/changes/CHG-20260702-07.md`)。
@@ -141,6 +151,7 @@ requirement-analysis、structure-design、modification-guide、acceptance-verifi
 - 雙語(`.md` 英文 / `.zh-tw.md` 繁中);發佈 `dist/ai-sdlc.skill`、`ai-sdlc.zh-tw.skill`。
 - 回歸集 `evals/evals.json`(skilltest)。
 
+[1.10.0]: 對應 tag ai-sdlc-v1.10.0
 [1.9.0]: 對應 tag ai-sdlc-v1.9.0
 [1.8.0]: 對應 tag ai-sdlc-v1.8.0
 [1.7.0]: 對應 tag ai-sdlc-v1.7.0

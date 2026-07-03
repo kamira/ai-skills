@@ -163,7 +163,9 @@ def main(argv: list[str]) -> int:
     kn_dir_n = kn_deep = kn_shallow = 0
     kn_path = repo / "docs" / "knowledge"
     if kn_path.is_dir():
-        for kf in sorted(kn_path.glob("*.md")):
+        for kf in sorted(kn_path.rglob("*.md")):
+            if "archive" in kf.parts or kf.name == "INDEX.md":
+                continue
             kt = read(kf)
             kn_dir_n += len(re.findall(r"^##\s*DIR-", kt, re.MULTILINE))
             kn_deep += len(re.findall(r"tier\s*[::]\s*deep", kt, re.IGNORECASE))

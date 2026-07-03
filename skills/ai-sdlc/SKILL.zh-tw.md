@@ -9,7 +9,7 @@ description: >
   或「新功能」,必須先走修改治理(modification-guide)而非直接改程式碼。Use this whenever
   planning, designing, modifying, or verifying software so the work stays documented and traceable.
 metadata:
-  version: 1.9.0
+  version: 1.10.0
 ---
 
 # ai-sdlc — AI 開發治理流程

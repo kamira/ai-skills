@@ -69,7 +69,7 @@ description: >
 ## KN-<n> — <一句規則假說>
 - tier:shallow / deep(+升級日期)
 - 日期 / 分支:YYYY-MM-DD(UTC+0)/ <branch 或全分支>
-- tags/scope:<模組 / 主題——檢索鍵>
+- tags/scope:<模組 / 主題——小寫英文固定詞彙;這是檢索鍵>
 - 觸發證據:<CHG-… 編號 / 需求提及(≥2 次)>
 - 計數:seen <n> / applied <n> / last-applied <日期>
 - 狀態:觀察中 / 生效 / 失效(原因)
@@ -89,6 +89,23 @@ description: >
 ```
 
 檢索規則(進場與派發皆同):讀 INDEX → 載入**全域條目 + tags 與當前 scope 相交的條目**——僅此而已。派發包用同一規則夾帶相符條目(見 handshake 範圍握手層)。
+
+## 規模:一條目一檔(拆檔模式)
+
+超過 **~30 條**,單檔就成了負債:並行 agent 下的單寫者熱點、跨分支的 merge 衝突磁鐵、`applied` 計數讓 diff 又髒又吵;手維護的 INDEX 開始與條目漂移。此時**拆檔**:
+
+- **一條目一檔**:`docs/knowledge/entries/KN-004.md`、`entries/DIR-002.md`(檔名=id;檔名就是第一層過濾)。失效條目移 `entries/archive/`。
+- **INDEX 變成生成物**:`docs/knowledge/INDEX.md`,由 `scripts/knowledge_index.py` 從條目 metadata 重生——**永不手改**(手維護的複本會漂移;生成物不會)。`--check` 驗新鮮;doc-integrity lint 雙向交叉驗「條目檔 ↔ INDEX id」。
+- 檢索不變、與模式無關:讀 INDEX(單檔模式=檔首節;拆檔模式=`INDEX.md`)→ 只載 scope 內條目。
+
+## AI-friendly 語言(正規化)
+
+結構不夠,用字也算:
+
+- **tags:小寫英文固定詞彙。** token 便宜、grep 穩定、跨模型(見平台中立);CJK 分詞邊界的模糊會傷檢索。
+- **規則行:正規化。** 祈使句、一條一義、**可測試措辭**(「一律 X」——絕不是「盡量 X」)、不用含糊代名詞;規則容易被誤讀時,附一正一反例。
+- **來源引文保留使用者原語言**(證據保真);規則行優先寫給機器讀。
+- shallow → deep 升級時做一次**語言正規化**——把措辭洗乾淨是升級儀式的一部分。
 
 - 動手前(handshake)先讀知識庫;規劃與實作都要遵守現行 directive。
 - **當知識庫與使用者「新需求」衝突時**(新需求要做的,正好違反某條 directive):**不可自行取捨**(既不可默默照 knowledge、也不可默默照新需求)。改走**三次確認 + 影響揭露**:

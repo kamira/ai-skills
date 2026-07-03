@@ -235,6 +235,17 @@
         "說明升級規則:applied ≥3 無糾正→deep;使用者明說→DIR;永不自我升為使用者確認",
         "更新 INDEX 且說明檢索只讀索引+scope 內條目"
       ]
+    },
+    {
+      "id": 22,
+      "prompt": "docs/knowledge/knowledge.md 已經累積 45 條規則,多個 agent 並行時常常搶著改這個檔,INDEX 也開始跟條目對不上。怎麼處理?",
+      "expected_output": "超過門檻(~30)→ 切拆檔模式:一條目一檔 docs/knowledge/entries/<id>.md(失效移 entries/archive/);INDEX.md 改為生成物,用 scripts/knowledge_index.py 重生、--check 驗新鮮、lint 交叉驗條目↔INDEX;檢索規則不變(讀 INDEX+scope 內條目);順帶做語言正規化:tags 小寫英文、規則行祈使句可測試措辭。",
+      "expectations": [
+        "辨識單檔規模問題(寫入熱點/衝突/INDEX 漂移)並切一條目一檔",
+        "INDEX 改為腳本生成物、永不手改,並提到新鮮度驗證",
+        "檢索規則不變:讀索引+scope 內條目",
+        "提及語言正規化:英文 tags、可測試的規則措辭"
+      ]
     }
   ]
 }

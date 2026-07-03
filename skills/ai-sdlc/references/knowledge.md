@@ -72,7 +72,7 @@ Don't wait to be corrected — **the same need/purpose appearing a second time a
 ## KN-<n> — <one-line rule hypothesis>
 - tier: shallow / deep(+ promotion date)
 - date / branch: YYYY-MM-DD (UTC+0) / <branch or all-branches>
-- tags/scope: <module / topic — the retrieval keys>
+- tags/scope: <module / topic — lowercase English, fixed vocabulary; these are the retrieval keys>
 - evidence: <CHG-… ids / requirement mentions (≥2 occurrences)>
 - counters: seen <n> / applied <n> / last-applied <date>
 - status: observing / active / retired (reason)
@@ -92,6 +92,23 @@ Nobody reads the whole knowledge base — that's catalog-thinking. The file **st
 ```
 
 Retrieval rule (entry and dispatch alike): read the INDEX → load **global entries + entries whose tags intersect your current scope** — nothing else. Dispatch briefings carry the matching entries the same way (see handshake's scoped tier).
+
+## Scale: per-entry files (split mode)
+
+Past **~30 entries** a single file becomes a liability: it's the single-writer hotspot under parallel agents, a merge-conflict magnet across branches, and the `applied` counters make its diffs noisy; a hand-maintained INDEX starts drifting from the entries. At that point **split**:
+
+- **One entry per file**: `docs/knowledge/entries/KN-004.md`, `entries/DIR-002.md` (filename = id; the filename is the first-level filter). Retired entries move to `entries/archive/`.
+- **INDEX becomes a generated artifact**: `docs/knowledge/INDEX.md`, regenerated from entry metadata by `scripts/knowledge_index.py` — **never hand-edited** (hand-maintained copies drift; generated ones can't). `--check` verifies freshness; the doc-integrity lint cross-checks entry files ↔ INDEX ids both ways.
+- Retrieval is unchanged and mode-agnostic: read the INDEX (file-top section in single-file mode, `INDEX.md` in split mode) → load only in-scope entries.
+
+## AI-friendly language (normalization)
+
+Structure isn't enough — the words matter too:
+
+- **tags: lowercase English, fixed vocabulary.** Cheap tokens, stable grep, cross-model (see platform neutrality); CJK word-boundary ambiguity hurts retrieval.
+- **Rule line: normalized.** Imperative mood, one rule per entry, **testable wording** ("always X" — never "prefer X when possible"), no ambiguous pronouns; when a rule invites misreading, add one positive and one negative example.
+- **Source quotes keep the user's original language** (evidence fidelity); the rule line is written for machines first.
+- The shallow → deep promotion includes a **language-normalization pass** — cleaning the wording is part of the promotion ritual.
 
 - Read it on entry (handshake); planning and implementation must obey current directives.
 - **When the knowledge base conflicts with a new user request** (the new request would violate a directive): **do not decide unilaterally** (neither silently follow knowledge nor silently follow the new request). Use **triple confirmation + impact disclosure**:
