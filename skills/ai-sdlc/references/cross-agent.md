@@ -38,6 +38,8 @@ The validated common case (matches the cross-session scenario in the loop test).
   - [ ] latest decisions and open items are written into CHG / Guideline
   - [ ] the next step is stated in the record (the next agent can pick up just by reading docs)
 
+  > Under last-act discipline (see handshake), a graceful exit and a crash leave the **same** state — this checklist *verifies* that the invariant held; it is not a rescue procedure.
+
 ## Mode B: parallel multi-agent (touching the same project at once)
 
 Risks: overwriting each other, conflicting structure docs, duplicate/conflicting changes, CHG number clashes. Mechanism:

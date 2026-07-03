@@ -2,6 +2,13 @@
 
 本檔記錄 `ai-sdlc` skill 的版本變更。格式參考 Keep a Changelog;版本採語意化(references 內容微調→patch、新增 reference/機制→minor、流程或契約破壞性改動→major)。tag 採 skill 範圍 `ai-sdlc-vX.Y.Z`。版本號寫於 `skills/ai-sdlc/SKILL.md` 的 `metadata.version`。
 
+## [1.13.0] — 2026-07-03
+
+最後一次行為紀律(見 `docs/ai-sdlc/changes/CHG-20260703-02.md`)。
+
+### Added
+- **crash-only 紀律**:每個動作都當作 session 的最後一個——一步一落盤(動手前意圖落盤、做完立刻記結果),禁止批次補記;沒有東西只活在對話裡;正常結束=恰好方便的 crash。handshake 新增紀律節(進場假設由它保證);SKILL 原則 7(日常);cross-agent 交接清單註記「驗證非急救」(離場)。既有點狀機制(步驟勾選、worklog 先寫後做、當場驗收)收攏為本紀律的實例。evals +1(id 25),共 25。
+
 ## [1.12.1] — 2026-07-03
 
 ### Changed
@@ -177,6 +184,7 @@ requirement-analysis、structure-design、modification-guide、acceptance-verifi
 - 雙語(`.md` 英文 / `.zh-tw.md` 繁中);發佈 `dist/ai-sdlc.skill`、`ai-sdlc.zh-tw.skill`。
 - 回歸集 `evals/evals.json`(skilltest)。
 
+[1.13.0]: 對應 tag ai-sdlc-v1.13.0
 [1.12.0]: 對應 tag ai-sdlc-v1.12.0
 [1.11.0]: 對應 tag ai-sdlc-v1.11.0
 [1.10.0]: 對應 tag ai-sdlc-v1.10.0
