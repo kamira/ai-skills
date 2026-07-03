@@ -224,6 +224,17 @@
         "發 scoped ack(四鍵)給派發者後才動工",
         "範圍外一律上報,不橫向讀取或擴權"
       ]
+    },
+    {
+      "id": 21,
+      "prompt": "這是這個月第二次有人要求「匯出報表要附欄位說明頁」了(上次是 CHG-20260615-02)。這次的變更做完收尾時,你要對 knowledge 做什麼?",
+      "expected_output": "偵測到同樣需求/目的第二次出現→自主建立 shallow record(KN 條目:規則假說、tags/scope、觸發證據=兩筆 CHG 編號、計數 seen 2,落在 docs/knowledge/ 文件中因為跨 session);之後每次套用未被糾正 applied+1,滿 3 次無糾正升 deep(deep 預設套用不逐次宣告但 ack 列出);使用者若明說則轉 DIR;更新 INDEX。",
+      "expectations": [
+        "辨識重複需求並自主建 shallow record(不等使用者糾正)",
+        "條目含觸發證據(CHG 編號)與計數,寫入文件而非記憶",
+        "說明升級規則:applied ≥3 無糾正→deep;使用者明說→DIR;永不自我升為使用者確認",
+        "更新 INDEX 且說明檢索只讀索引+scope 內條目"
+      ]
     }
   ]
 }

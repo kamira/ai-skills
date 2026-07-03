@@ -2,6 +2,16 @@
 
 本檔記錄 `ai-sdlc` skill 的版本變更。格式參考 Keep a Changelog;版本採語意化(references 內容微調→patch、新增 reference/機制→minor、流程或契約破壞性改動→major)。tag 採 skill 範圍 `ai-sdlc-vX.Y.Z`。版本號寫於 `skills/ai-sdlc/SKILL.md` 的 `metadata.version`。
 
+## [1.9.0] — 2026-07-02
+
+knowledge 自主觸發與生命週期(見 `docs/ai-sdlc/changes/CHG-20260702-07.md`)。
+
+### Added
+- **自主觸發(KN 模式記錄)**:同樣需求/目的第 2 次跨 CHG/需求出現 → AI 自主建 **shallow record**(證據=CHG 編號、計數落在條目內、跨 session);CHG 收尾時比對動機重複(modification-guide);SKILL 偵測表加線索。
+- **生命週期單一階梯**:shallow(假說,套用要宣告,一句話可推翻)→ `applied ≥3` 無糾正升 **deep**(預設套用不逐次宣告、ack 列出、仍一句話可推翻)→ 使用者明說才轉 **DIR**(三次確認保護);永不自我升級;deep 被糾正降級留痕,反向規則轉 DIR。取代 v1.4「來源信度」段,一把尺不打架。
+- **AI-friendly 檢索(INDEX)**:knowledge 檔首 INDEX(id/tier/tags/一句規則/狀態),條目帶 tags/scope 錨點;進場與派發**只讀索引+全域+scope 相交條目,不讀整份**(handshake 步驟 3 同步改寫)。
+- 健康度:knowledge 階梯統計(DIR/deep/shallow;shallow 長期不升不退=review 訊號);evals +1(id 21),共 21。
+
 ## [1.8.0] — 2026-07-02
 
 輕的更輕、重的更穩,以風險分級切換(見 `docs/ai-sdlc/changes/CHG-20260702-06.md`)。
@@ -131,6 +141,7 @@ requirement-analysis、structure-design、modification-guide、acceptance-verifi
 - 雙語(`.md` 英文 / `.zh-tw.md` 繁中);發佈 `dist/ai-sdlc.skill`、`ai-sdlc.zh-tw.skill`。
 - 回歸集 `evals/evals.json`(skilltest)。
 
+[1.9.0]: 對應 tag ai-sdlc-v1.9.0
 [1.8.0]: 對應 tag ai-sdlc-v1.8.0
 [1.7.0]: 對應 tag ai-sdlc-v1.7.0
 [1.6.0]: 對應 tag ai-sdlc-v1.6.0

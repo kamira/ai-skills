@@ -12,7 +12,7 @@ description: >
   a modification or new feature, go through modification governance first rather than editing
   code directly.
 metadata:
-  version: 1.8.0
+  version: 1.9.0
 ---
 
 # ai-sdlc — AI Development Governance
@@ -40,7 +40,7 @@ acting, read here to decide "which stage applies now", then read the matching gu
 | Acceptance / confirm it meets the bar | "done / is this right / verify / check / test it"; a change just implemented | `acceptance-verification`; **high-risk → `independent-acceptance`** |
 | Medium/high-risk change decision | CHG graded medium or high; grading disputed; rules exceed one agent's context | `review-panel` (seats by domain; full panel at high, three seats at medium; serialized self-review when spawning isn't available) |
 | Taking over / cross-session entry | every new session start, or taking over an existing `docs/` project | `handshake` (entry handshake: read docs+knowledge+branch+working tree, echo back; dispatched subagents use the scoped tier) + `doc-integrity` |
-| User correction directive / request conflicts with a known rule | "don't do this", "I told you before"; or a new request violates an existing directive | `knowledge` (record/update; on conflict → triple confirm + impact disclosure) |
+| User correction directive / request conflicts with a known rule / recurring need | "don't do this", "I told you before"; a new request violates an existing directive; **the same need/purpose recurs across CHGs/requirements** | `knowledge` (record/update; autonomous shallow→deep pattern records; on conflict → triple confirm + impact disclosure) |
 | Multiple branches exist | feature/release/hotfix in parallel; requirements/acceptance on different branches | `branch-isolation` (use only current-branch sources; no cross-branch reference) |
 | Has / adopting CI/CD | repo has `.github/`, `.gitlab-ci.yml`, `.pre-commit-config.yaml`, Jenkinsfile; or mentions pipeline/hook/gate | `ci-cd` (optional) |
 | Autonomous multi-stage run / external orchestrator drives the flow | an agent will auto-run several stages, or Python/etc. drives it; words: run end-to-end, autonomous, unattended, automated flow | `autonomy` (halt-point contract; query `scripts/halt_gate.py`) |

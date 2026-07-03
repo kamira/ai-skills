@@ -159,6 +159,17 @@ def main(argv: list[str]) -> int:
     r["claims_in_progress"] = active
     r["stale_claims(lease_days=%d)" % args.lease_days] = stale
 
+    # --- knowledge 階梯統計(DIR / deep / shallow)---
+    kn_dir_n = kn_deep = kn_shallow = 0
+    kn_path = repo / "docs" / "knowledge"
+    if kn_path.is_dir():
+        for kf in sorted(kn_path.glob("*.md")):
+            kt = read(kf)
+            kn_dir_n += len(re.findall(r"^##\s*DIR-", kt, re.MULTILINE))
+            kn_deep += len(re.findall(r"tier\s*[::]\s*deep", kt, re.IGNORECASE))
+            kn_shallow += len(re.findall(r"tier\s*[::]\s*shallow", kt, re.IGNORECASE))
+    r["knowledge"] = {"directives": kn_dir_n, "deep": kn_deep, "shallow": kn_shallow}
+
     # --- 迴歸集規模 + 歸檔量 ---
     reg = acc_dir / "regression.md"
     reg_items = 0
@@ -198,6 +209,7 @@ def main(argv: list[str]) -> int:
     print(f"緊急/追溯 CHG:{emergency_n}(常態性偏高=正常流程太慢的訊號)")
     print(f"文件同步 CHG(漂移訊號):{docsync_n}")
     print(f"lite 佔比:{lite_n}/{sum(status_counts.values())};預授權使用:{preauth_n}(異常偏高=白名單/邊界該 review)")
+    print(f"knowledge 階梯:DIR {kn_dir_n} / deep {kn_deep} / shallow {kn_shallow}(shallow 長期不升不退=該 review)")
     print(f"進行中 claim:{active};停滯:{len(stale)}")
     for s in stale:
         print(f"  - {s}")
