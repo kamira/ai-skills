@@ -22,7 +22,7 @@
         "last_applied": { "type": ["string", "null"] }
       }
     },
-    "source_quote": { "type": "string", "description": "user's words, original language preserved" },
+    "source_quote": { "type": "string", "deprecated": true, "description": "deprecated (v1.12.1): the rule is user-confirmed at recording, disputes re-consult the user, git history archives versions; a quote is a second never-updated representation + the biggest PII vector. Tolerated on legacy entries." },
     "reason":  { "type": "string" },
     "note":    { "type": "string" },
     "history": { "type": "array", "items": { "type": "object" } }

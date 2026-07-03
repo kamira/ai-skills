@@ -35,7 +35,6 @@ When you receive a user correction (not a requirement change), **write it into t
 - context: <when it applies>
 - rule: <do / don't>
 - reason: <why (user's reason or inferred)>
-- source: <summary of the user's instruction>
 - confidence: user-confirmed / agent-inferred   ← who established the rule (see priority below)
 - status: active
 ```
@@ -130,7 +129,6 @@ Past **~30 entries** a single file becomes a liability: it's the single-writer h
   "evidence": ["CHG-20260615-02", "CHG-20260702-01"],
   "counters": {"seen": 2, "applied": 0, "last_applied": null},
   "status": "observing",
-  "source_quote": "使用者原文保留原語言",
   "note": "comments are fields, not syntax"
 }
 ```
@@ -146,7 +144,7 @@ Structure isn't enough — the words matter too:
 
 - **tags: lowercase English, fixed vocabulary.** Cheap tokens, stable grep, cross-model (see platform neutrality); CJK word-boundary ambiguity hurts retrieval.
 - **Rule line: normalized.** Imperative mood, one rule per entry, **testable wording** ("always X" — never "prefer X when possible"), no ambiguous pronouns; when a rule invites misreading, add one positive and one negative example.
-- **Source quotes keep the user's original language** (evidence fidelity); the rule line is written for machines first.
+- **No source quotes** (deprecated): the rule is what the user confirmed at recording time — that's the fidelity mechanism; later disputes re-consult the user (triple confirmation), and git history already archives every version of the entry. A quote inside the entry is a second, never-updated representation (a drift surface) and the biggest PII vector in the knowledge base. `evidence` (CHG ids) carries traceability.
 - The shallow → deep promotion includes a **language-normalization pass** — cleaning the wording is part of the promotion ritual.
 
 - Read it on entry (handshake); planning and implementation must obey current directives.

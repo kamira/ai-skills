@@ -2,6 +2,11 @@
 
 本檔記錄 `ai-sdlc` skill 的版本變更。格式參考 Keep a Changelog;版本採語意化(references 內容微調→patch、新增 reference/機制→minor、流程或契約破壞性改動→major)。tag 採 skill 範圍 `ai-sdlc-vX.Y.Z`。版本號寫於 `skills/ai-sdlc/SKILL.md` 的 `metadata.version`。
 
+## [1.12.1] — 2026-07-03
+
+### Changed
+- **source_quote 棄用**(CHG-lite:`docs/ai-sdlc/changes/CHG-20260703-01.md`):rule 為唯一作用表示;保真=記錄時使用者確認+爭議回問活人+git 歷史;引文是漂移面與 PII 向量。schema 標 deprecated、範例/模板移除;lint 容忍 legacy 條目(prospective)。
+
 ## [1.12.0] — 2026-07-03
 
 命中機制(見 `docs/ai-sdlc/changes/CHG-20260702-10.md`)。
