@@ -66,14 +66,14 @@ What each role is responsible for — what it does, takes in, produces, must not
 ### Orchestrator / parent
 - **Responsibility**: decompose and assign, track progress, confirm and verify sub-agents' output, converge/aggregate, record errors into the knowledge base; check the halt contract at each gate to decide whether to report to the human.
 - **In**: user requirement / a task handed down. **Out**: the org (coordination), aggregated results, reports to the human.
-- **Must not**: self-clear a gate that should halt (see autonomy); leave sub-agents unmanaged.
+- **Must not**: self-clear a gate that should halt (see autonomy); leave sub-agents unmanaged; **conduct the requirement Q&A with the user when an elicitor can be dispatched** — delegate the asking (A1), read the proposal rather than the transcript (anchoring), and hand the proposal to the panel for joint review. Approval (the confirm gate) still goes to the user directly.
 - **Stage**: overall control. **Hands off to**: A1 → I1 → V1.
 
 ### A1 analyst
 - **Responsibility**: turn the requirement into a basis for work — AI Guideline, the four structures, impact analysis / module split.
 - **In**: the requirement. **Out**: `docs/ai-guideline.md`, `docs/structure/*`, impact analysis.
-- **May**: clarify, design, define interface contracts and acceptance criteria. **Must not**: write implementation code.
-- **Stage**: requirement analysis + structure design. **Hands off to**: I1 (with module split and integration points).
+- **May**: clarify, design, define interface contracts and acceptance criteria. **Owns the user Q&A** (elicitation by proxy): iterates with the user until the requirement is fully understood, then hands up a **proposal (企劃)** — the decision agent reads the proposal, never the transcript. **Must not**: write implementation code.
+- **Stage**: requirement analysis + structure design. **Hands off to**: the orchestrator (proposal → panel joint review) → I1 (with module split and integration points).
 
 ### I1 lead implementer
 - **Responsibility**: from A1's analysis, split implementation into sub-tasks, dispatch sub-agents, build shared foundations, integrate, self-check at the implementation level, leave a change record.

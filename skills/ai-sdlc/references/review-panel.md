@@ -65,6 +65,8 @@ The dispatcher adjudicates on the **post-cross** set; cross lines are appended t
 
 Quotas bind only **when subagents can be dispatched** — decisions take no fewer than **5** reviewers, verification no fewer than **3** (see independent-acceptance). The no-spawn degradation (serialized self-review) keeps the same seat list without the headcount, and notes it.
 
+The panel's remit isn't only CHG decisions: **an elicited proposal (企劃) handed up by A1** (see requirement-analysis "elicitation by proxy") goes through the same joint review at the decision quota before the flow proceeds.
+
 ## Recursive roll-up (the pyramid)
 
 Every dispatching layer owes three things: a **briefing down**, an **adjudication at its own level**, and a **one-line verdict summary up**. Per-layer compression is the point — but **hard fails escalate uncompressed, unconditionally: no intermediate layer may swallow one** (the review-layer mirror of worklog's "never silently swallow an error"). Prefer **wide over deep** — spawning is cheap, hops are lossy. Panels are task forces: they dissolve when the change closes; the memory stays in `docs/`, not in the org.

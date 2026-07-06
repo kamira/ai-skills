@@ -12,7 +12,7 @@ description: >
   a modification or new feature, go through modification governance first rather than editing
   code directly.
 metadata:
-  version: 1.15.0
+  version: 1.16.0
 ---
 
 # ai-sdlc — AI Development Governance
@@ -180,4 +180,5 @@ judged on the UTC+0 clock, so cross-timezone teams share one clock.
 4. **Acceptance aligns to source**: criteria come from the Guideline and the change's mod guide.
 5. **Don't rely on memory — rely on the docs**: a long conversation's context may be compacted, losing or distorting earlier decisions. **Don't go by recollection** — before acting, re-confirm existing constraints and decisions from the files under `docs/` (Guideline, structure, CHG, ACC); when memory and the docs disagree, the docs win. This keeps compaction, cross-session work, and handoffs from causing drift. Re-reading has concrete triggers, not just goodwill: at every autonomy gate, before starting acceptance, on signs of compaction, and periodically in long sessions, re-read the Guideline + active CHG and emit a mini-ack (see handshake "mid-session re-sync").
 6. **Ask before deciding for the user**: when a choice can't be derived from the docs or the user's instructions — a new requirement surfacing mid-task, an out-of-scope dependency, a spec blank, an ambiguous adjudication — present options + a recommendation and **ask**; don't decide unilaterally and inform afterwards. Only low-risk, reversible implementation details may proceed unasked, and those are marked "decided on user's behalf" in the CHG for review at the confirm gate (see modification-guide).
+Where dispatch is available, questions are **relayed by the elicitor** (A1) — the decision agent stays out of the Q&A and reads the resulting proposal (see requirement-analysis "elicitation by proxy"); approval still goes to the user directly.
 7. **Act as if each action is your last**: the session may end after any single step — intent lands on disk before acting, the outcome immediately after (one step, one durable write; see handshake "last-act discipline"). When this holds, a graceful exit and a crash leave identical states, and interruption recovery stops being an emergency procedure — it's just ordinary entry.

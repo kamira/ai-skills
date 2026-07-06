@@ -2,6 +2,15 @@
 
 本檔記錄 `ai-sdlc` skill 的版本變更。格式參考 Keep a Changelog;版本採語意化(references 內容微調→patch、新增 reference/機制→minor、流程或契約破壞性改動→major)。tag 採 skill 範圍 `ai-sdlc-vX.Y.Z`。版本號寫於 `skills/ai-sdlc/SKILL.md` 的 `metadata.version`。
 
+## [1.16.0] — 2026-07-03
+
+引導者分離 + 知識庫先建(見 `docs/ai-sdlc/changes/CHG-20260703-05.md`)。
+
+### Added
+- **代問模式(引導 ≠ 裁決)**:能派 subagent 時,**主決策 agent 不參與使用者需求問答**——A1 代問到完全了解,上交**企劃**(Guideline 草稿+釐清結果+影響概描);主 agent **讀企劃不讀逐字稿**(防錨定,與「不給驗收者實作者自述」同構);企劃交審議會共同審議(決策席次 ≥5);**確認閘仍直達使用者**(核准權永不轉包)。無 spawn 降級=自問自裁並註明。A1/orchestrator 職責卡同步。
+- **知識庫先建**:需求分析建 `docs/` 時一併建 `docs/knowledge/`(空 INDEX + vocabulary 骨架即合法)——不等第一次糾正;**互動/指示風格為一級條目**(tag `interaction`),連「使用者指示下達方式需要調整」都入庫。
+- evals +1(id 28),共 28。
+
 ## [1.15.0] — 2026-07-03
 
 席次下限、交叉驗證、常駐握手(見 `docs/ai-sdlc/changes/CHG-20260703-04.md`)。
@@ -204,6 +213,7 @@ requirement-analysis、structure-design、modification-guide、acceptance-verifi
 - 雙語(`.md` 英文 / `.zh-tw.md` 繁中);發佈 `dist/ai-sdlc.skill`、`ai-sdlc.zh-tw.skill`。
 - 回歸集 `evals/evals.json`(skilltest)。
 
+[1.16.0]: 對應 tag ai-sdlc-v1.16.0
 [1.15.0]: 對應 tag ai-sdlc-v1.15.0
 [1.14.0]: 對應 tag ai-sdlc-v1.14.0
 [1.13.0]: 對應 tag ai-sdlc-v1.13.0
