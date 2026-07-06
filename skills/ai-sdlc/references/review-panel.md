@@ -33,10 +33,21 @@ Each seat gets a **scoped briefing**: the CHG draft + its one domain reference (
 ## Verdict format (one line per seat)
 
 ```
-[verdict] <seat> | pass / fail / concern | <evidence pointer> | <one-line reason>
+[verdict] <seat> | <model> | pass / fail / concern | <evidence pointer> | <one-line reason>
 ```
 
+Seats **need not share a model** — when the platform offers several, spread seats across models (same-model panels share the same blind spots); record each seat's model in its verdict line; on a single-model platform, note the limitation.
+
 Verdicts are appended to the CHG (a "Review verdicts" section) — the lint checks that **implemented high-risk CHGs carry them**.
+
+## Two-phase cross-validation
+
+Verdicts are not just collected — they cross-check each other, in two phases:
+
+- **Phase 1 — independent**: every seat produces its verdict **without seeing the others'** (anti-anchoring; a seat that reads first agrees first).
+- **Phase 2 — cross-read**: each seat then reads the other verdicts and flags disagreements: `[cross] <seatA>→<seatB> | agree / disagree | <one-line reason>`. A disagreement is **reconciled or escalated — never averaged**; unresolved cross-flags go to the user via the confirm gate.
+
+The dispatcher adjudicates on the **post-cross** set; cross lines are appended to the CHG alongside the verdicts.
 
 ## Adjudication (the dispatcher)
 
@@ -46,11 +57,13 @@ Verdicts are appended to the CHG (a "Review verdicts" section) — the lint chec
 
 ## Risk-scaled invocation (panels are depth for risk, not a tax on everything)
 
-| Risk | Panel |
-|------|-------|
-| high | **full panel, mandatory** |
-| medium | risk + impact + drift (three seats) |
+| Risk | Panel (when spawning is available) |
+|------|------------------------------------|
+| high | **full panel (all six seats), mandatory** |
+| medium | **at least five seats** (pick by relevance from the six) |
 | low | none — fast path (see modification-guide "CHG-lite") |
+
+Quotas bind only **when subagents can be dispatched** — decisions take no fewer than **5** reviewers, verification no fewer than **3** (see independent-acceptance). The no-spawn degradation (serialized self-review) keeps the same seat list without the headcount, and notes it.
 
 ## Recursive roll-up (the pyramid)
 

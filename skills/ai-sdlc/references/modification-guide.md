@@ -122,7 +122,7 @@ Grade each change's risk first so **governance rigor matches risk** (don't over-
 | Level | Typical cases | Required rigor |
 |-------|---------------|----------------|
 | **High** | data model / migration, auth, payments, deletion / irreversible, cross-module interfaces, security | **full review panel** (see review-panel) + **independent acceptance** (verifier ≠ implementer) + **multi-scenario** + **regression run (affected scope)**; CI **identity check**; full pipeline; rollback plan required |
-| **Medium** | behavior change to existing features, new non-breaking endpoint/field | three-seat review (risk/impact/drift); at least independent acceptance or full tests; **regression run (affected scope)**; structure sync; pipeline gate |
+| **Medium** | behavior change to existing features, new non-breaking endpoint/field | **≥5-seat review** when spawnable (see review-panel); at least independent acceptance or full tests (≥3 verifiers when spawnable); **regression run (affected scope)**; structure sync; pipeline gate |
 | **Low** | copy, comments, styling, pure internal refactor with test coverage | self-verify + tests green; pre-commit is enough |
 
 When in doubt, grade up. Put the risk in the CHG header; it drives the acceptance and CI gates that follow.

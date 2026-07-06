@@ -2,6 +2,17 @@
 
 本檔記錄 `ai-sdlc` skill 的版本變更。格式參考 Keep a Changelog;版本採語意化(references 內容微調→patch、新增 reference/機制→minor、流程或契約破壞性改動→major)。tag 採 skill 範圍 `ai-sdlc-vX.Y.Z`。版本號寫於 `skills/ai-sdlc/SKILL.md` 的 `metadata.version`。
 
+## [1.15.0] — 2026-07-03
+
+席次下限、交叉驗證、常駐握手(見 `docs/ai-sdlc/changes/CHG-20260703-04.md`)。
+
+### Added
+- **席次下限(能派 subagent 時)**:決策審議 ≥5 席(中風險由三席升至至少五席;高=全席六席)、驗收 ≥3 個獨立驗收者;降級(無 spawn)不受人數限制並註明。
+- **兩階段交叉驗證**(review-panel + independent-acceptance):先各自獨立出判決/結論(防錨定)、再互讀標 `[cross]` 歧異;歧異調和或上呈、**永不平均**。
+- **跨模型**:席位與驗收者不必同一個模型,多模型平台應分散(同模型共享盲點);判決行加 model 欄,ACC 記驗收者集+各自模型。
+- **常駐握手**(handshake):ack 落盤為 `docs/worklog/handshake-<id>.md`,每步邊界更新(現在做/步驟 n/m/下一步/UTC+0)——任何時刻中斷,檔案都是最新續作點;=最後一次行為紀律作用在握手本身。
+- evals +1(id 27),共 27。
+
 ## [1.14.0] — 2026-07-03
 
 進入點上移 root、適用任何 AI(見 `docs/ai-sdlc/changes/CHG-20260703-03.md`)。
@@ -193,6 +204,7 @@ requirement-analysis、structure-design、modification-guide、acceptance-verifi
 - 雙語(`.md` 英文 / `.zh-tw.md` 繁中);發佈 `dist/ai-sdlc.skill`、`ai-sdlc.zh-tw.skill`。
 - 回歸集 `evals/evals.json`(skilltest)。
 
+[1.15.0]: 對應 tag ai-sdlc-v1.15.0
 [1.14.0]: 對應 tag ai-sdlc-v1.14.0
 [1.13.0]: 對應 tag ai-sdlc-v1.13.0
 [1.12.0]: 對應 tag ai-sdlc-v1.12.0

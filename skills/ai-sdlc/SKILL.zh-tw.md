@@ -9,7 +9,7 @@ description: >
   或「新功能」,必須先走修改治理(modification-guide)而非直接改程式碼。Use this whenever
   planning, designing, modifying, or verifying software so the work stays documented and traceable.
 metadata:
-  version: 1.14.0
+  version: 1.15.0
 ---
 
 # ai-sdlc — AI 開發治理流程
@@ -31,7 +31,7 @@ metadata:
 | 派子代理 / 多 agent 分工 | 你打算開 subagent;任務大到要拆給多個執行單位;字眼:分派、子代理、拆任務、分工、orchestrate | `agent-worklog` + `agent-hierarchy` |
 | 修改 / 新功能(對既有系統) | 對已存在的功能/檔案/資料表要調整、修正、擴充、重構、改名、刪除;字眼:改、加、調整、重構、優化、修 bug、換掉 | `modification-guide`(**強制**) |
 | 要驗收 / 確認達標 | 「做完了/對嗎/驗一下/檢查/測測看」;一項變更剛實作完 | `acceptance-verification`;**高風險 → `independent-acceptance`** |
-| 中/高風險變更決策 | CHG 判為中或高;分級有爭議;規則多到單 agent 吃不下 | `review-panel`(依領域開席;高=全席、中=三席;不能 spawn 就序列自審) |
+| 中/高風險變更決策 | CHG 判為中或高;分級有爭議;規則多到單 agent 吃不下 | `review-panel`(依領域開席;高=全席、中=能 spawn 時**至少五席**;兩階段交叉驗證;不能 spawn 就序列自審) |
 | 進場接手 / 跨 session | 每次新 session 開始、或接手既有 `docs/` 專案 | `handshake`(進場握手:讀 docs+knowledge+分支+working tree、回述確認;被派發的 subagent 走範圍層)+ `doc-integrity` |
 | 收到使用者修正指示 / 需求與已知規則衝突 / 需求重複出現 | 「別這樣做」「上次講過」;新需求違反既有 directive;**同樣需求/目的跨 CHG 反覆出現** | `knowledge`(納庫/更新;自主 shallow→deep 模式記錄;衝突→三次確認+告知影響) |
 | 存在多個分支 | feature/release/hotfix 並行;需求/驗收分屬不同分支 | `branch-isolation`(只採當前分支來源,不跨分支引用) |
