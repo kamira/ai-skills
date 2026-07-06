@@ -208,6 +208,9 @@ def main(argv: list[str]) -> int:
     total_chg = sum(status_counts.values())
     if total_chg >= 10 and emergency_n / total_chg > 0.1:
         warnings.append(f"緊急/追溯占比 {emergency_n}/{total_chg} 超過 10%:正常流程太慢,檢討流程本身")
+    if total_chg >= 5 and (kn_dir_n + kn_deep + kn_shallow) == 0:
+        warnings.append(f"{total_chg} 筆 CHG 但 knowledge 0 筆:收尾「重複性檢查」可能被系統性跳過,"
+                        "或知識庫未 bootstrap(見 knowledge「先建」/ handshake 進場補建)")
     r["warnings"] = warnings
 
     if args.json:

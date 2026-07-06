@@ -1,0 +1,6 @@
+{
+  "_doc": "tag 註冊處+別名橋:key=受控 tag,value=任何語言的別名(見 references/knowledge 命中機制)",
+  "governance": ["治理", "流程", "閘門", "gate", "lint", "process"],
+  "knowledge": ["知識庫", "knowledge base", "KN", "DIR", "重複性檢查", "recurrence"],
+  "interaction": ["互動", "指示方式", "instruction style", "確認風格"]
+}

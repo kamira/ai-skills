@@ -312,6 +312,17 @@
         "確認閘/核准權仍直達使用者,不被代問取代",
         "知識庫先建(空 INDEX 合法),互動風格以 interaction tag 第一天入庫"
       ]
+    },
+    {
+      "id": 29,
+      "prompt": "你接手一個既有專案:docs/changes/ 已有 8 筆 CHG,但 docs/knowledge/ 不存在。進場要做什麼?收一筆新變更時,收尾除了 ACC 還要做什麼、記在哪?哪些情況會被機器擋下?",
+      "expected_output": "進場握手第 3 步發現受治理 repo 缺 docs/knowledge/ → 當場 bootstrap 骨架(零條目 INDEX + 種子 vocabulary.json)並在 ack 註明(「先建」規則前的存量專案由進場補建;doc-integrity lint 強制,缺目錄即報)。收尾時比對本次變更動機是否重複先前 CHG(第二次出現→建 shallow KN,證據與計數落條目),結果不論有無重複都寫進 CHG 標頭「重複性檢查/Recurrence check」欄——「無重複」也是答案,空欄=沒做;此欄對 Skill ≥ v1.17 的記錄由 lint 前瞻強制(舊記錄與缺 Skill 欄者豁免)。governance_health 對「CHG ≥5 且 knowledge 0 筆」發警示(非閘門)。",
+      "expectations": [
+        "進場發現缺 docs/knowledge/ 即補建骨架並入 ack,不是只讀不建",
+        "收尾動機重複比對,結果落「重複性檢查」欄,無重複也要寫",
+        "lint 前瞻強制:v1.17+ 缺欄即擋、受治理 repo 缺 knowledge 目錄即擋;舊 CHG 豁免",
+        "health 對多 CHG 零 knowledge 發警示且知其為訊號非閘門"
+      ]
     }
   ]
 }
