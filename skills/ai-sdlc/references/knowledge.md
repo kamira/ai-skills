@@ -25,7 +25,7 @@ The knowledge base is the durable memory that keeps the AI from repeating the sa
 
 - **Interaction rules are first-class**: how the user prefers to deliver instructions, confirmation style, communication adjustments — these are DIR/KN entries like any other, tagged `interaction`. Even "the way instructions are given needs adjusting" is knowledge.
 
-Location: `docs/knowledge/` (suggest `errors.md`, `directives.md` — or a combined `knowledge.md` with an INDEX). **Founded at project start** (created with `docs/` during requirement analysis — an empty INDEX is a valid knowledge base; don't wait for the first correction). **Read the index on entry, load only in-scope entries** (see retrieval below and handshake).
+Location: `docs/knowledge/` (suggest `errors.md`, `directives.md` — or a combined `knowledge.md` with an INDEX). **Founded at project start** (created with `docs/` during requirement analysis — an empty INDEX is a valid knowledge base; don't wait for the first correction). For repos governed **before** this rule (`docs/changes/` exists but `docs/knowledge/` doesn't), the entry handshake bootstraps the skeleton on the spot (see handshake), and the doc-integrity lint enforces its presence. **Read the index on entry, load only in-scope entries** (see retrieval below and handshake).
 
 ## Recording correction directives (req 3)
 

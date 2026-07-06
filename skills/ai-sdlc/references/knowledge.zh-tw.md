@@ -22,7 +22,7 @@ description: >
 
 - **互動規則是一級條目**:使用者偏好的指示下達方式、確認風格、溝通調整——與其他規則同等的 DIR/KN 條目,tag `interaction`。連「指示下達方式需要調整」都是知識。
 
-位置:`docs/knowledge/`(建議 `errors.md`、`directives.md`——或合併成帶 INDEX 的 `knowledge.md`)。**專案一開始就建**(需求分析建 `docs/` 時一併建——空 INDEX 就是合法知識庫;不要等第一次糾正)。**進場讀索引、只載入 scope 內條目**(見下方檢索與 handshake)。
+位置:`docs/knowledge/`(建議 `errors.md`、`directives.md`——或合併成帶 INDEX 的 `knowledge.md`)。**專案一開始就建**(需求分析建 `docs/` 時一併建——空 INDEX 就是合法知識庫;不要等第一次糾正)。在此規則**之前**就受治理的存量專案(有 `docs/changes/` 而無 `docs/knowledge/`),由進場握手當場補建骨架(見 handshake),且 doc-integrity lint 強制其存在。**進場讀索引、只載入 scope 內條目**(見下方檢索與 handshake)。
 
 ## 收錄修正指示(需求 3)
 

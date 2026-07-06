@@ -17,6 +17,10 @@ doc_integrity_check.py — 文檔抗漂移的機器檢查 / doc-integrity enforc
   4) secrets 掃描:docs/ 內出現疑似金鑰/token/私鑰 → 失敗。(文件長存共用,不可含 secrets)
   5) commit 治理掃描(--commits-since <ref>):<ref>..HEAD 的每個 commit message 都應
      引用 CHG/XCHG 編號;沒有 → 失敗。(對應「commit 粒度 / commit 錨定」)
+  6) 知識庫先建:受治理 repo(有 docs/changes/)必有 docs/knowledge/ → 缺 = 失敗。
+     (對應 knowledge「先建」與 handshake 進場補建;容器不存在,自主記錄永遠不會發生)
+  7) 重複性檢查欄:Skill ≥ v1.17 的 CHG 必有「重複性檢查/Recurrence check」欄 → 缺 = 失敗。
+     (前瞻適用;對應 modification-guide 第 7 步收尾比對)
 
 用法 / usage:
   # pre-commit(staged 結構漂移 + CHG/ACC + 欄位 + secrets):
@@ -269,6 +273,36 @@ def check_entry_point(repo: Path) -> list[str]:
     return problems
 
 
+RECURRENCE_RE = re.compile(r"(重複性檢查|Recurrence check)\s*[::]", re.IGNORECASE)
+SKILL_VER_RE = re.compile(r"Skill\s*[::]\s*ai-sdlc\s*v(\d+)\.(\d+)", re.IGNORECASE)
+RECURRENCE_SINCE = (1, 17)
+
+
+def check_knowledge_bootstrap(repo: Path) -> list[str]:
+    """知識庫先建(v1.16)+存量補建(v1.17):受治理 repo 必有 docs/knowledge/——容器不存在,自主記錄永遠不會發生。"""
+    if (repo / "docs" / "changes").is_dir() and not (repo / "docs" / "knowledge").is_dir():
+        return ["治理專案缺 docs/knowledge/ — 知識庫要先建(空 INDEX 也是合法知識庫):"
+                "建 knowledge.md(INDEX)+ vocabulary.json(見 knowledge「先建」;存量專案進場補建見 handshake)"]
+    return []
+
+
+def check_recurrence_field(repo: Path) -> list[str]:
+    """收尾「重複性檢查」欄(v1.17 起前瞻強制):散文步驟無欄位對應=實測次次被略過(見 modification-guide 第 7 步)。"""
+    ch_dir = repo / "docs" / "changes"
+    if not ch_dir.is_dir():
+        return []
+    problems = []
+    for chg in sorted(ch_dir.glob("CHG-*.md")):
+        text = chg.read_text(encoding="utf-8", errors="ignore")
+        m = SKILL_VER_RE.search(text)
+        if not m or (int(m.group(1)), int(m.group(2))) < RECURRENCE_SINCE:
+            continue  # 新規則只往後適用(見 doc-integrity):舊版記錄與缺 Skill 欄者豁免
+        if not RECURRENCE_RE.search(text):
+            problems.append(f"{chg.name} 依 v1.17+ 寫成但缺「重複性檢查/Recurrence check」欄 — "
+                            "收尾必比對動機是否重複並記結果,「無重複」也要寫(見 modification-guide 第 7 步)")
+    return problems
+
+
 def check_knowledge_index(repo: Path) -> list[str]:
     """拆檔模式的輕量交叉檢查:條目檔 id ↔ INDEX.md 雙向存在(完整比對交給 knowledge_index.py --check)。"""
     entries = repo / "docs" / "knowledge" / "entries"
@@ -336,6 +370,8 @@ def main(argv: list[str]) -> int:
         problems += check_secrets(repo)
     problems += check_regression_pointers(repo)
     problems += check_entry_point(repo)
+    problems += check_knowledge_bootstrap(repo)
+    problems += check_recurrence_field(repo)
     problems += check_knowledge_entries(repo)
     problems += check_knowledge_index(repo)
     if args.commits_since:

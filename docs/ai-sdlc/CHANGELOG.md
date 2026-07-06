@@ -2,6 +2,17 @@
 
 本檔記錄 `ai-sdlc` skill 的版本變更。格式參考 Keep a Changelog;版本採語意化(references 內容微調→patch、新增 reference/機制→minor、流程或契約破壞性改動→major)。tag 採 skill 範圍 `ai-sdlc-vX.Y.Z`。版本號寫於 `skills/ai-sdlc/SKILL.md` 的 `metadata.version`。
 
+## [1.17.0] — 2026-07-06
+
+knowledge 自動建立補完:欄位化+存量補建+機械 enforcement(見 `docs/ai-sdlc/changes/CHG-20260706-01.md`)。
+
+### Added
+- **收尾「重複性檢查」欄位化**(modification-guide):CHG 完整與 lite 模板新增「重複性檢查/Recurrence check」標頭欄——收尾動機重複比對的結果必須落欄(「無重複」也是答案,空欄=沒做檢查);lint 對 Skill ≥ v1.17 的記錄**前瞻強制**(舊記錄豁免)。根因:v1.9 起的散文規則至 v1.16 為止 15 筆 CHG 無一執行(零 KN 條目)。
+- **存量專案進場補建**(handshake 第 3 步+knowledge):受治理 repo(有 docs/changes/)缺 docs/knowledge/ 時,進場握手當場建骨架(零條目 INDEX+種子 vocabulary.json)並入 ack——補上 v1.16「先建」只覆蓋新專案側的缺口。
+- **機械 enforcement**:doc_integrity_check 新增檢查 6(受治理 repo 缺 docs/knowledge/ → 擋)與檢查 7(v1.17+ CHG 缺「重複性檢查」欄 → 擋);governance_health 新增警示(CHG ≥5 且 knowledge 0 筆=收尾檢查被系統性跳過或未 bootstrap 的訊號)。
+- SKILL 存放慣例樹補 `knowledge/`;evals +1(id 29),共 29。
+- dogfood:本 repo 建 `docs/ai-sdlc/knowledge/`(KN-001:治理規則必須有「模板欄位+lint 檢查」對應,純散文要求實務上不會被執行——觸發證據五筆 CHG)。
+
 ## [1.16.0] — 2026-07-03
 
 引導者分離 + 知識庫先建(見 `docs/ai-sdlc/changes/CHG-20260703-05.md`)。

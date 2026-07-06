@@ -12,7 +12,7 @@ description: >
   a modification or new feature, go through modification governance first rather than editing
   code directly.
 metadata:
-  version: 1.16.0
+  version: 1.17.0
 ---
 
 # ai-sdlc — AI Development Governance
@@ -140,7 +140,8 @@ target-project/docs/
 ├── ai-guideline.md          # from requirement analysis
 ├── structure/{directory,logical,design,data}.md   # from structure design
 ├── changes/CHG-YYYYMMDD-NN.md                      # one per change
-└── acceptance/ACC-YYYYMMDD-NN.md                   # one per acceptance
+├── acceptance/ACC-YYYYMMDD-NN.md                   # one per acceptance
+└── knowledge/                                      # founded at start (see knowledge); entry handshake bootstraps repos governed before this rule
 ```
 
 If the target project already has a documentation convention, follow that and note the actual
