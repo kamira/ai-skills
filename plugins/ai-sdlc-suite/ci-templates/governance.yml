@@ -1,0 +1,21 @@
+# ai-sdlc governance workflow 範本 — 複製到目標專案 .github/workflows/governance.yml
+# 前提:skill 腳本位於 skills/ai-sdlc/scripts/(不同位置改 entry 路徑)
+name: ai-sdlc governance
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: doc integrity (full repo)
+        run: python3 skills/ai-sdlc/scripts/doc_integrity_check.py --repo .
+      - name: governance health (informational)
+        run: python3 skills/ai-sdlc/scripts/governance_health.py --repo . || true
