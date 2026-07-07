@@ -8,7 +8,7 @@ description: >
   時使用。可單一 SKILL 呼叫、跑完整慢情報流程、或快情報精簡流程;預測一律登錄檔案化版本鏈
   帳本(docs/intel/predictions/)。繁中版;23 條核心紀律必遵。
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # intel-analysis — 分析方法論技能總管理
@@ -18,6 +18,8 @@ metadata:
 ## 概述
 
 本 skill 是「共用分析方法論:從利益到行動的十步驟框架」的技能模組化管理入口。每個 SKILL 對應框架中的一個步驟或系統層,可獨立呼叫、組合使用。
+
+**標準對齊**:ICD 203 分析工藝標準(不確定性表達/替代分析/來源描述/判斷變化解釋)、估計性語言對表(紀律 16)、NATO Admiralty 評級 A–F×1–6(SKILL-03,含舊制對照)、ICD 206 關鍵判斷來源附錄(SKILL-11)、SAT 技法(ACH/紅隊/Red Hat 對手代言人/MOM-POP-MOSES-EVE 欺騙偵測)。
 
 ## 使用方式
 
