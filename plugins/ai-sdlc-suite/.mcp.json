@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ai-sdlc": {
+      "command": "python3",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/ai_sdlc_mcp.py"]
+    }
+  }
+}

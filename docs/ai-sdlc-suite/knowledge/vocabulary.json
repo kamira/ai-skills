@@ -1,0 +1,8 @@
+{
+  "_doc": "tag 註冊處+別名橋:key=受控 tag,value=任何語言的別名",
+  "plugin": ["大補帖", "marketplace", "套件", "bundle"],
+  "mcp": ["server", "工具供給", "model context protocol"],
+  "hook": ["攔截", "session 強制", "warn", "block"],
+  "ci": ["pre-commit", "workflow", "接線", "pipeline"],
+  "interaction": ["互動", "指示方式", "instruction style"]
+}

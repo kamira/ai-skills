@@ -49,12 +49,28 @@ references(16 份,依偵測/選擇載入):
 
 可安裝版在 [`dist/`](dist/):`ai-sdlc.skill`(英文)、`ai-sdlc.zh-tw.skill`(繁中)。
 
+## 一鍵大補帖(Claude Code plugin)
+
+比照 Superpowers 的發佈型態,`ai-sdlc-suite` plugin 一次打包:兩個 skill + MCP server(五個唯讀治理工具)+ hooks(預設 warn,`AI_SDLC_HOOK_MODE=block/off` 可調)+ CI 範本。**MCP 與 hooks 皆選配**——不裝也不影響核心契約在任何平台運作。
+
+```
+/plugin marketplace add kamira/ai-skills
+/plugin install ai-sdlc-suite@ai-skills
+```
+
+詳見 [`plugins/ai-sdlc-suite/README.md`](plugins/ai-sdlc-suite/README.md)。plugin 內 skills 為建置複本(單一真相在 `skills/`,由 `plugins/build_suite.py` 同步;CI 驗同步)。
+
 ## 目錄結構
 
 ```
 ai-skills/
 ├── README.md                      # 本文件
 ├── AGENTS.md                      # AI 進入點(root 錨點:必讀順序+不可協商規則,任何廠牌 agent 適用)
+├── .claude-plugin/marketplace.json # plugin marketplace 清單(→ plugins/ai-sdlc-suite)
+├── .github/workflows/governance.yml # 本 repo 治理 CI(雙語/py_compile/JSON/plan-check/複本同步)
+├── plugins/                       # 一鍵大補帖(Claude Code plugin)
+│   ├── ai-sdlc-suite/             # skills 複本(建置產物)+ mcp/(五工具 server)+ hooks/(warn|block|off)+ ci-templates/
+│   └── build_suite.py             # 同步 skills 複本進 plugin(--check 供 CI 驗同步)
 ├── .gitignore                     # 排除評測產物等
 ├── dist/                          # 可安裝的 .skill 發佈版
 │   ├── ai-sdlc.skill / .zh-tw.skill            # 英文 / 繁中

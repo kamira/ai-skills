@@ -1,0 +1,17 @@
+# ai-sdlc pre-commit 範本 — 複製到目標專案根目錄為 .pre-commit-config.yaml
+# 前提:skill 腳本位於 skills/ai-sdlc/scripts/(不同位置改下方兩處 entry 路徑)
+repos:
+  - repo: local
+    hooks:
+      - id: ai-sdlc-doc-integrity
+        name: ai-sdlc doc integrity (staged)
+        entry: python3 skills/ai-sdlc/scripts/doc_integrity_check.py --staged
+        language: system
+        pass_filenames: false
+        always_run: true
+      - id: ai-sdlc-knowledge-index
+        name: ai-sdlc knowledge INDEX freshness (split mode only)
+        entry: python3 skills/ai-sdlc/scripts/knowledge_index.py --check
+        language: system
+        pass_filenames: false
+        always_run: true

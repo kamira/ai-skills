@@ -1,0 +1,22 @@
+{
+  "name": "ai-skills",
+  "owner": {
+    "name": "kamira"
+  },
+  "metadata": {
+    "description": "AI skills marketplace: governed AI-SDLC suite (governance + autopilot + MCP + hooks)",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "ai-sdlc-suite",
+      "source": "./plugins/ai-sdlc-suite",
+      "description": "一鍵大補帖:ai-sdlc 治理 + ai-sdlc-autopilot 自動駕駛 + MCP server(治理工具供給)+ hooks(選配,預設 warn)。Governed AI-SDLC suite bundle.",
+      "version": "1.0.0",
+      "author": {
+        "name": "kamira"
+      },
+      "keywords": ["governance", "sdlc", "autopilot", "tdd", "mcp", "hooks"]
+    }
+  ]
+}
