@@ -32,10 +32,14 @@ jobs:
                    plugins/ai-sdlc-suite/.mcp.json docs/*/knowledge/vocabulary.json; do
             python3 -m json.tool "$f" > /dev/null || exit 1
           done
-      - name: autopilot plan-check (suite ledger CHGs)
+      - name: autopilot plan-check (plan-format CHGs only; lite/classic templates skipped with log)
         run: |
           for f in docs/ai-sdlc-autopilot/changes/CHG-*.md docs/ai-sdlc-suite/changes/CHG-*.md docs/intel-analysis/changes/CHG-*.md; do
-            python3 skills/ai-sdlc-autopilot/scripts/autopilot_runner.py plan-check --chg "$f" || exit 1
+            if grep -qE "^### Global Constraints" "$f" || grep -qE "^- \[.\] T[0-9]" "$f"; then
+              python3 skills/ai-sdlc-autopilot/scripts/autopilot_runner.py plan-check --chg "$f" || exit 1
+            else
+              echo "(skip non-plan CHG: $f)"
+            fi
           done
       - name: plugin skills copies in sync
         run: python3 plugins/build_suite.py --check
