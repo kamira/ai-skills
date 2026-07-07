@@ -8,7 +8,7 @@ description: >
   時使用。可單一 SKILL 呼叫、跑完整慢情報流程、或快情報精簡流程;預測一律登錄檔案化版本鏈
   帳本(docs/intel/predictions/)。繁中版;23 條核心紀律必遵。
 metadata:
-  version: 1.1.0
+  version: 1.2.0
 ---
 
 # intel-analysis — 分析方法論技能總管理
