@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-build_suite.py — 同步 repo 頂層 skills/ 複本進 plugins/ai-sdlc-suite/skills/(建置產物)
+build_suite.py — 同步 repo 頂層 skills/ 複本進各 plugin 的 skills/(建置產物)
 
-單一真相在 skills/;plugin 內複本只由本腳本產生(冪等)。
+單一真相在 skills/;plugin 內複本只由本腳本產生(冪等)。PLUGINS 對照表定義每個 plugin
+打包哪些 skill。
 用法:
   python3 plugins/build_suite.py           # 同步(回報新增/更新/刪除數)
   python3 plugins/build_suite.py --check   # 只比對:不同步 → exit 1(CI 用)
@@ -15,8 +16,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "skills"
-DST = ROOT / "plugins" / "ai-sdlc-suite" / "skills"
-SKILLS = ("ai-sdlc", "ai-sdlc-autopilot")
+PLUGINS = {
+    "ai-sdlc-suite": ("ai-sdlc", "ai-sdlc-autopilot"),
+    "intel-analysis": ("intel-analysis",),
+}
 EXCLUDE = ("__pycache__", ".DS_Store")
 
 
@@ -28,28 +31,29 @@ def files_of(base: Path):
 def main(argv) -> int:
     check = "--check" in argv
     added = updated = removed = 0
-    for name in SKILLS:
-        src, dst = SRC / name, DST / name
-        if not src.is_dir():
-            print(f"ERROR: 缺來源 {src}")
-            return 1
-        sfiles, dfiles = files_of(src), files_of(dst) if dst.is_dir() else {}
-        for rel, sp in sorted(sfiles.items()):
-            dp = dst / rel
-            if rel not in dfiles:
-                added += 1
-                if not check:
-                    dp.parent.mkdir(parents=True, exist_ok=True)
-                    shutil.copy2(sp, dp)
-            elif not filecmp.cmp(sp, dp, shallow=False):
-                updated += 1
-                if not check:
-                    shutil.copy2(sp, dp)
-        for rel, dp in sorted(dfiles.items()):
-            if rel not in sfiles:
-                removed += 1
-                if not check:
-                    dp.unlink()
+    for plugin, skills in PLUGINS.items():
+        for name in skills:
+            src, dst = SRC / name, ROOT / "plugins" / plugin / "skills" / name
+            if not src.is_dir():
+                print(f"ERROR: 缺來源 {src}")
+                return 1
+            sfiles, dfiles = files_of(src), files_of(dst) if dst.is_dir() else {}
+            for rel, sp in sorted(sfiles.items()):
+                dp = dst / rel
+                if rel not in dfiles:
+                    added += 1
+                    if not check:
+                        dp.parent.mkdir(parents=True, exist_ok=True)
+                        shutil.copy2(sp, dp)
+                elif not filecmp.cmp(sp, dp, shallow=False):
+                    updated += 1
+                    if not check:
+                        shutil.copy2(sp, dp)
+            for rel, dp in sorted(dfiles.items()):
+                if rel not in sfiles:
+                    removed += 1
+                    if not check:
+                        dp.unlink()
     total = added + updated + removed
     tag = "check" if check else "sync"
     print(f"[{tag}] 新增 {added} / 更新 {updated} / 移除 {removed}(共 {total} 變更)")

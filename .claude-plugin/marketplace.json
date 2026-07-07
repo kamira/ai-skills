@@ -17,6 +17,16 @@
         "name": "kamira"
       },
       "keywords": ["governance", "sdlc", "autopilot", "tdd", "mcp", "hooks"]
+    },
+    {
+      "name": "intel-analysis",
+      "source": "./plugins/intel-analysis",
+      "description": "情報分析方法論大補帖:十步驟框架(SKILL-01〜20)+ 23 條核心紀律 + 檔案化預測驗證帳本(版本鏈、Brier 校準)。Intelligence-analysis methodology bundle.",
+      "version": "1.0.0",
+      "author": {
+        "name": "kamira"
+      },
+      "keywords": ["intelligence", "geopolitics", "forecasting", "brier", "osint", "analysis"]
     }
   ]
 }
