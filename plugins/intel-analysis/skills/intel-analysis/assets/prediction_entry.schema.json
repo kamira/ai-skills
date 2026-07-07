@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "prediction_entry.schema.json",
+  "title": "intel-analysis 預測快照(版本鏈單一版本)",
+  "type": "object",
+  "required": ["id", "chain_root", "version_seq", "version_status", "statement", "probability"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^P-\\d{4}-\\d{4}-\\d{2}(-v\\d+)?$", "description": "=檔名;首發 P-YYYY-MMDD-NN,後續 -vK"},
+    "chain_root": {"type": "string", "pattern": "^P-\\d{4}-\\d{4}-\\d{2}$", "description": "鏈根 ID;首發=自己"},
+    "prev_id": {"type": ["string", "null"], "description": "上一版 id;第 1 版為 null"},
+    "version_seq": {"type": "integer", "minimum": 1},
+    "version_status": {"type": "string", "enum": ["latest", "superseded", "verified", "invalidated"]},
+    "version_note": {"type": "string", "description": "觸發訊號/調整理由;v>=2 必填(lint 強制)"},
+    "tracking_status": {"type": "string", "enum": ["active", "observing", "dormant", "verified", "invalidated"]},
+    "statement": {"type": "string", "description": "預測內容(可測試措辭)"},
+    "probability": {"type": "integer", "minimum": 0, "maximum": 100, "multipleOf": 5, "description": "整數 %,5% 步進(紀律 6)"},
+    "wording": {"type": "string", "enum": ["幾乎確定", "很可能", "可能", "兩可", "不太可能", "很不可能", "幾乎不可能"], "description": "選填;與 % 衝突時以 % 為準(紀律 16)"},
+    "key_assumptions": {"type": "array", "items": {"type": "string"}},
+    "triggers": {"type": "array", "items": {"type": "string"}},
+    "indicators": {"type": "array", "items": {"type": "string"}},
+    "window": {"type": "object", "properties": {"start": {"type": "string"}, "end": {"type": "string"}}, "additionalProperties": false},
+    "source_analysis": {"type": "string"},
+    "outcome": {"type": "object", "properties": {"result": {"type": "string"}, "value": {"type": "integer", "enum": [0, 1]}, "calibration_note": {"type": "string"}}, "additionalProperties": false},
+    "tags": {"type": "array", "items": {"type": "string"}},
+    "actors": {"type": "array", "items": {"type": "string"}},
+    "note": {"type": "string", "description": "註解是欄位,不是語法"}
+  }
+}
