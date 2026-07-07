@@ -3,5 +3,6 @@
   "migration": ["遷移", "轉檔", "notion", "保真"],
   "prediction": ["預測", "版本鏈", "快照", "brier", "校準"],
   "discipline": ["紀律", "紅隊", "red team", "可證偽", "政治化"],
+  "automation": ["自動化", "runner", "狀態機", "盤點"],
   "interaction": ["互動", "指示方式", "instruction style"]
 }

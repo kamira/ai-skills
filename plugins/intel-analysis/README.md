@@ -16,7 +16,7 @@
 | SKILL.md | `skills/intel-analysis/` | orchestrator:三流程(快情報/慢情報/追蹤循環)+ 20 skill 偵測表 + 23 紀律索引(複本;單一真相在 repo 頂層 `skills/`) |
 | references ×22 | `skills/intel-analysis/references/` | skill-01〜20 + disciplines(紀律全文)+ prediction-ledger(帳本規範) |
 | 預測帳本 schema | `skills/intel-analysis/assets/` | prediction_entry.schema.json + estimative_language.json(措辭↔機率表) |
-| 帳本工具 | `skills/intel-analysis/scripts/` | `prediction_lint.py`(fail-loud 鏈驗證+INDEX 生成)/`brier_report.py`(Brier+措辭對表+漂移清單) |
+| 帳本工具 | `skills/intel-analysis/scripts/` | `prediction_lint.py`(fail-loud 鏈驗證+INDEX 生成)/`brier_report.py`(Brier+措辭對表+漂移清單)/`intel_daily.py`(每日盤點:待覆蓋鏈/視窗到期/冷鏈候選/處置記錄——**資訊獲取由使用者自理**,見 daily-loop) |
 
 ## 預測驗證帳本(檔案化版本鏈)
 
@@ -30,7 +30,7 @@ python3 skills/intel-analysis/scripts/brier_report.py --repo .             # Bri
 
 ## 與 ai-sdlc-suite 的關係
 
-獨立領域、獨立安裝——情報分析不相依開發治理。若同時安裝,knowledge/預測帳本互不干涉(各自目錄)。每日自動盤點(紀律 19〜23 的 runner 化)為後續版本規劃。
+獨立領域、獨立安裝——情報分析不相依開發治理。若同時安裝,knowledge/預測帳本互不干涉(各自目錄)。每日盤點的**帳本側**已由 `intel_daily.py` 機械化(紀律 19-23);資訊獲取與判讀由使用者自理(daily-loop 明定分工)。
 
 ## 來源與正典
 
