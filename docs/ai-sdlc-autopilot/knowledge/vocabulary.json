@@ -1,0 +1,9 @@
+{
+  "_doc": "tag 註冊處+別名橋:key=受控 tag,value=任何語言的別名(見 ai-sdlc references/knowledge 命中機制)",
+  "autopilot": ["自動駕駛", "自動化", "driver", "runner", "loop"],
+  "plan": ["計畫", "任務拆解", "task", "interfaces", "constraints"],
+  "review": ["審查", "task-review", "verdict", "品質判定"],
+  "tdd": ["測試先行", "red-green", "test-first"],
+  "governance": ["治理", "停點", "halt", "風險分級"],
+  "interaction": ["互動", "指示方式", "instruction style"]
+}
