@@ -21,8 +21,8 @@
     {
       "name": "intel-analysis",
       "source": "./plugins/intel-analysis",
-      "description": "情報分析方法論大補帖:十步驟框架(SKILL-01〜20)+ 23 條核心紀律 + 檔案化預測驗證帳本(版本鏈、Brier 校準)。Intelligence-analysis methodology bundle.",
-      "version": "1.0.0",
+      "description": "情報分析方法論大補帖:十步驟框架(SKILL-01〜20)+ 23 條核心紀律 + 檔案化預測驗證帳本(版本鏈、Brier 校準);對齊 ICD 203/206 與 NATO Admiralty 評級。Intelligence-analysis methodology bundle.",
+      "version": "1.1.0",
       "author": {
         "name": "kamira"
       },
