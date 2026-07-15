@@ -43,3 +43,8 @@ jobs:
           done
       - name: plugin skills copies in sync
         run: python3 plugins/build_suite.py --check
+      - name: catalog version (static + bump-on-change)
+        run: |
+          python3 plugins/catalog_check.py --repo . --check
+          git fetch origin main --depth=50 || true
+          python3 plugins/catalog_check.py --repo . --since origin/main

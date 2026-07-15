@@ -48,3 +48,21 @@ Hooks 內部錯誤一律放行(exit 0)——治理工具自己不能成為故障
 ```
 python3 plugins/build_suite.py   # 從 repo 頂層 skills/ 同步,冪等
 ```
+
+## 版本與發佈(維護者)
+
+三層版本各有其位:**skill** `metadata.version`(功能演進)→ **plugin.json** `version`(bundle 對外版)→ **marketplace `metadata.version`**(catalog 目錄版,client 用它偵測「有沒有更新」)。
+
+**發佈鐵律**:任何 `plugins/**` 或 `skills/**` 實質變動,**必同步 bump `.claude-plugin/marketplace.json` 的 `metadata.version`**——否則 client 認定目錄無變更、不重抓新版(這就是「plugin 無法更新」)。
+
+發佈步驟:
+1. bump 變動 skill 的 `metadata.version` + 該 skill 的 CHANGELOG
+2. bump 對應 plugin.json + marketplace entry 的 `version`(兩者須相等)
+3. **bump marketplace `metadata.version`(catalog)** + 記 `docs/ai-sdlc-suite/CHANGELOG.md`
+4. `python3 plugins/build_suite.py`(同步複本)
+5. `python3 plugins/catalog_check.py --check`(靜態驗版本一致)
+
+CI 機械強制(governance workflow):`catalog_check.py --check` 恆跑;`--since origin/main` 在 PR 驗「plugins/skills 變了 catalog 必 bump」。
+
+**client 端更新**:`/plugin marketplace update ai-skills`(重抓 marketplace.json)**再** `/plugin update`——光跑後者會用到快取的舊 catalog。
+
