@@ -7,7 +7,7 @@ description: >
   端到端自動完成一筆變更」、要 TDD/逐 task 審查紀律、或要跑 autopilot runner 時使用。
   硬相依 ai-sdlc skill(>= v1.17)作為治理層——先跑其進場握手。
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # ai-sdlc-autopilot — 受治理的自動駕駛執行
@@ -38,19 +38,21 @@ metadata:
 
 ```
 ai-sdlc 握手 → CHG(plan-check 閘)
-  → [ 逐 task:TDD 施工 → 測試 → 唯讀 task review → 打勾 + commit ]
-  → 整支 review → ACC → PR →(依 policy)merge → knowledge 收尾
+  → [ 逐 task:TDD 施工 → 單元/build 測試 → 唯讀 task review → 打勾 + commit ]
+  → 整支 review → 實際操作驗收(真的跑起來)→ ACC → PR →(依 policy)merge → knowledge 收尾
 ```
 
 任一時刻中斷都安全:已勾 checkbox 是續作點,live handshake 檔(`docs/worklog/handshake-autopilot.md`)在每個 task 邊界更新。
 
+**task 測試 ≠ 驗收**:逐 task 的 `test:` 是單元/build 級;驗收前 runner 要求一次**操作測試**(計畫的 `### Acceptance operation`——operate/observe/pass,真的跑一次)。程式 CHG 缺它(又無 `docs-only` 標記)會在驗收前停——見 autopilot-loop。
+
 ## 停點策略(風險×階段——只准加嚴)
 
-| 風險 | 確認閘 | task review | 驗收 | PR | merge |
-|------|--------|-------------|------|----|-------|
-| 低 | auto | auto | auto(自驗) | auto | auto |
-| 中 | **confirm**(可預授權) | auto | auto | auto | auto |
-| 高 | **halt** | auto | **halt**(獨立驗收者) | auto | **halt** |
+| 風險 | 確認閘 | task review | 操作驗收 | 驗收 | PR | merge |
+|------|--------|-------------|----------|------|----|-------|
+| 低 | auto | auto | auto(verify-cmd / 人) | auto(自驗) | auto | auto |
+| 中 | **confirm**(可預授權) | auto | auto(verify-cmd / 人) | auto | auto | auto |
+| 高 | **halt** | auto | **halt**(人執行) | **halt**(獨立驗收者) | auto | **halt** |
 
 **永遠停點**(永不自動、硬編碼、任何設定不可放寬):不可逆刪除、金流、生產資料遷移、安全邊界變更。決策順序:永遠停點 → CHG `Autonomy:` 欄(只准加嚴)→ policy 矩陣 → 查無=halt。
 
@@ -59,9 +61,11 @@ ai-sdlc 握手 → CHG(plan-check 閘)
 ```
 python3 scripts/autopilot_runner.py plan-check --chg <CHG.md>
 python3 scripts/autopilot_runner.py run --chg <CHG.md> --repo . \
-    [--agent-cmd 'claude -p "$(cat {brief})"'] [--test-cmd 'pytest -q'] [--dry-run] [--no-commit]
+    [--agent-cmd 'claude -p "$(cat {brief})"'] [--test-cmd 'pytest -q'] [--verify-cmd './run-smoke.sh'] [--dry-run] [--no-commit]
 python3 scripts/autopilot_runner.py status --chg <CHG.md>
 ```
+
+`--test-cmd` = 逐 task 單元/build 測試;`--verify-cmd` = 末端操作測試(把變更真的跑一次)。無 `--verify-cmd` 時操作驗收階段停(exit 3),交人執行。
 
 runner **不含 LLM**:它是狀態機與裁判——施工與審查由你設定的任意 headless agent 指令執行。Exit codes:`0` 完成、`1` 非預期錯誤、`2` 計畫無效、`3` 合法停點(印出原因;cron/CI 據此接線)。
 

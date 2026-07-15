@@ -14,9 +14,14 @@
   - interfaces: consumes <輸入/前置> / produces <輸出/交付>
   - test: <驗證方式——指令或可斷言條件>
 - [ ] T2. ...
+
+### Acceptance operation(末端操作測試——程式類必附;純文件改一行 `Acceptance-operation: n/a (docs-only)`)
+- operate: <怎麼真的跑/操作>
+- observe: <什麼確認可用>
+- pass: <通過標準>
 ```
 
-plan-check 規則:必有 Global Constraints 節;每 task 必有 `interfaces:` 與 `test:` 行;task 編號 T1..Tn 連續;至少一個未勾 task 才可 run。
+plan-check 規則:必有 Global Constraints 節;每 task 必有 `interfaces:` 與 `test:` 行;task 編號 T1..Tn 連續;至少一個未勾 task 才可 run。缺 `### Acceptance operation` 且非 docs-only 者,plan-check 僅提示(非阻斷);run 的操作驗收階段才強制(見 logical 狀態機)。
 
 ## 2. autopilot_policy.json
 
