@@ -20,7 +20,7 @@
                │ 契約(格式與判定行)
 ┌─ 驅動層 = autopilot-loop + policy + runner ──────────┐
 │ 狀態機:握手→CHG(plan-check)→[T_i:施工→測→review→   │
-│ 勾+commit]→整支 review→ACC→PR→(policy)merge→收尾   │
+│ 勾+commit]→整支 review→操作驗收→ACC→PR→merge→收尾   │
 └───────────────────────────────────────────────────────┘
 ```
 

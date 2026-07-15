@@ -9,7 +9,7 @@ description: >
   governance, wants TDD / per-task-review discipline, or wants to run the autopilot runner.
   Requires the ai-sdlc skill (>= v1.17) as the governance layer — run its entry handshake first.
 metadata:
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # ai-sdlc-autopilot — governed autopilot execution
@@ -40,19 +40,21 @@ Three layers: **governance** (ai-sdlc, external, read-only), **execution** (the 
 
 ```
 ai-sdlc handshake → CHG (plan-check gate)
-  → [ per task: TDD build → tests → read-only task review → tick + commit ]
-  → whole-branch review → ACC → PR → (policy) merge → knowledge close-out
+  → [ per task: TDD build → unit/build tests → read-only task review → tick + commit ]
+  → whole-branch review → operational verify (run it for real) → ACC → PR → (policy) merge → knowledge close-out
 ```
 
 Interruption at any point is safe: ticked checkboxes are the resume point, and the live handshake file (`docs/worklog/handshake-autopilot.md`) is updated at every task boundary.
 
+**Task tests ≠ acceptance**: per-task `test:` is unit/build level; before ACC the runner requires an **operational test** (the plan's `### Acceptance operation` — operate/observe/pass, run for real). A code CHG without it (and without a `docs-only` marker) halts before acceptance — see autopilot-loop.
+
 ## Halt policy (risk × stage — tighten only)
 
-| Risk | confirm gate | task review | acceptance | PR | merge |
-|------|--------------|-------------|------------|----|-------|
-| low | auto | auto | auto (self-verify) | auto | auto |
-| medium | **confirm** (pre-authorizable) | auto | auto | auto | auto |
-| high | **halt** | auto | **halt** (independent verifier) | auto | **halt** |
+| Risk | confirm gate | task review | operational verify | acceptance | PR | merge |
+|------|--------------|-------------|--------------------|------------|----|-------|
+| low | auto | auto | auto (verify-cmd / human) | auto (self-verify) | auto | auto |
+| medium | **confirm** (pre-authorizable) | auto | auto (verify-cmd / human) | auto | auto | auto |
+| high | **halt** | auto | **halt** (human-performed) | **halt** (independent verifier) | auto | **halt** |
 
 **Permanent halts** (never automated, hard-coded, no config can relax them): irreversible deletion, payments, production data migration, security-boundary changes. Decision order: permanent halts → CHG `Autonomy:` field (tighten only) → policy matrix → unknown = halt.
 
@@ -61,9 +63,11 @@ Interruption at any point is safe: ticked checkboxes are the resume point, and t
 ```
 python3 scripts/autopilot_runner.py plan-check --chg <CHG.md>
 python3 scripts/autopilot_runner.py run --chg <CHG.md> --repo . \
-    [--agent-cmd 'claude -p "$(cat {brief})"'] [--test-cmd 'pytest -q'] [--dry-run] [--no-commit]
+    [--agent-cmd 'claude -p "$(cat {brief})"'] [--test-cmd 'pytest -q'] [--verify-cmd './run-smoke.sh'] [--dry-run] [--no-commit]
 python3 scripts/autopilot_runner.py status --chg <CHG.md>
 ```
+
+`--test-cmd` = per-task unit/build tests; `--verify-cmd` = the end-stage operational test (run the change for real). Without `--verify-cmd` the operational-verify stage halts (exit 3) for a human to perform it.
 
 The runner contains **no LLM**: it is a state machine and referee — the building and reviewing are done by whatever headless agent command you configure. Exit codes: `0` done, `1` unexpected error, `2` invalid plan, `3` legitimate halt (the reason is printed; wire cron/CI on these).
 

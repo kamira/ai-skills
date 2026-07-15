@@ -25,7 +25,14 @@ description: >
   - interfaces: consumes <輸入/前置> / produces <輸出/交付>
   - test: <驗證方式——指令或可斷言條件>
 - [ ] T2. ...
+
+### Acceptance operation(末端操作測試——程式類變更必附)
+- operate: <怎麼把變更真的跑起來/操作——指令或步驟>
+- observe: <什麼可觀察行為確認可用>
+- pass: <通過標準>
 ```
+
+**純文件 CHG** 無可操作面時,整節改為一行標頭欄:`Acceptance-operation: n/a (docs-only)`。
 
 ## 規則(plan-check 機器強制)
 
@@ -33,6 +40,7 @@ description: >
 - 每個 task 必帶 **`interfaces:` 行**(消耗什麼、產出什麼——task 可組合、可審查的關鍵)與 **`test:` 行**(指令或可斷言條件;純文件 task 改寫可重跑的檢核)。
 - Task 編號 **T1..Tn 連續**;每個 task 的大小以一次 agent 執行可完成為準(夠小;若一個 task 需要自己的計畫,就是太大——拆)。
 - 勾選在 **task 通過 review 的當下**寫入——它們是任何中斷後的續作點(crash-only 紀律)。
+- **`### Acceptance operation`** 宣告末端操作測試(`operate`/`observe`/`pass`)。這**不是** task 級 `test:` 行——task 測試是單元/build 級,這一個把整個變更真的跑一次。plan-check 只在缺它時*提示*(非阻斷);**run** 階段的操作驗收才強制(程式 CHG 缺它又無 `docs-only` 標記,會在驗收前停——見 autopilot-loop)。
 
 ## 與帳本的關係
 

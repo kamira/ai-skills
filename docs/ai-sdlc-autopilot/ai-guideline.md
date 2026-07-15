@@ -46,6 +46,7 @@ ai-sdlc(v1.17)解決「所有變更如何被治理」——帳本、閘門、驗
 | FR-6 | 收尾自動落帳:ACC 產出(task-review 記錄為證據)、CHG 重複性檢查欄、錯誤入 knowledge | P0 | 全走 ai-sdlc v1.17 格式,lint 可驗 |
 | FR-7 | 末端整支 review:所有 task 完成後,對整個 branch diff 做一次總 review 再進 ACC | P1 | 取自 Superpowers v6 whole-branch review |
 | FR-8 | systematic-debugging:測試連續失敗時的假說→驗證迴圈,根因入 knowledge | P1 | 取代盲目重試 |
+| FR-9 | 實際操作驗收(operational_verify):整支 review 後、ACC 前把變更真的跑一次(operate/observe/pass);程式 CHG 缺操作測試不得抵達 ACC;docs-only 可豁免;高風險人執行 | P0 | v1.1.0;task 測試=單元/build,操作驗收=整支末端實跑 |
 
 ## 5. 非功能需求
 | 類別 | 要求 |

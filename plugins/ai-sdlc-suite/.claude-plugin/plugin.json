@@ -1,6 +1,6 @@
 {
   "name": "ai-sdlc-suite",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Governed AI-SDLC suite: ai-sdlc governance + ai-sdlc-autopilot execution, with optional MCP server (governance tools) and hooks (default warn mode). 一鍵大補帖:治理+自動駕駛+MCP+hooks,MCP 與 hooks 皆選配。",
   "author": {
     "name": "kamira"

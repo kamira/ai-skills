@@ -27,18 +27,20 @@ from pathlib import Path
 
 # 永遠停點:硬編碼——任何設定檔不可移除或放寬(見 autopilot-loop「停點決策順序」第 1 層)
 PERMANENT_HALTS = ("irreversible-delete", "payments", "prod-migration", "security-boundary")
-STAGES = ("confirm_gate", "task_review", "acceptance", "pr", "merge")
+STAGES = ("confirm_gate", "task_review", "operational_verify", "acceptance", "pr", "merge")
 ACTIONS = {"auto", "confirm", "halt", "halt_independent"}
 DEFAULT_POLICY = {
-    "low":    {"confirm_gate": "auto",    "task_review": "auto", "acceptance": "auto",             "pr": "auto", "merge": "auto"},
-    "medium": {"confirm_gate": "confirm", "task_review": "auto", "acceptance": "auto",             "pr": "auto", "merge": "auto"},
-    "high":   {"confirm_gate": "halt",    "task_review": "auto", "acceptance": "halt_independent", "pr": "auto", "merge": "halt"},
+    "low":    {"confirm_gate": "auto",    "task_review": "auto", "operational_verify": "auto", "acceptance": "auto",             "pr": "auto", "merge": "auto"},
+    "medium": {"confirm_gate": "confirm", "task_review": "auto", "operational_verify": "auto", "acceptance": "auto",             "pr": "auto", "merge": "auto"},
+    "high":   {"confirm_gate": "halt",    "task_review": "auto", "operational_verify": "halt", "acceptance": "halt_independent", "pr": "auto", "merge": "halt"},
 }
 
 TASK_RE = re.compile(r"^- \[(?P<tick>[ xX])\] (?P<tid>T\d+)\. (?P<title>.+?)\s*$")
 IFACE_RE = re.compile(r"^\s+-\s*interfaces:\s*\S")
 TEST_RE = re.compile(r"^\s+-\s*test:\s*(?P<v>\S.*)$")
 GC_RE = re.compile(r"^###\s*Global Constraints", re.MULTILINE)
+AOP_RE = re.compile(r"^###\s*Acceptance operation", re.MULTILINE)  # 末端操作測試節
+DOCS_ONLY_RE = re.compile(r"Acceptance-operation:\s*n/?a|docs-only", re.IGNORECASE)  # 純文件豁免宣告
 RISK_RE = re.compile(r"(風險分級|Risk)\s*[::]\s*[^\n]{0,40}?(高|high|中|medium|低|low)", re.IGNORECASE)
 CHG_ID_RE = re.compile(r"CHG-\d{8}-\d+")
 PERM_RE = re.compile(r"permanent-halt:\s*([\w-]+)")
@@ -162,6 +164,9 @@ def cmd_plan_check(args) -> int:
         for p in problems:
             print(f"  - {p}")
         return 2
+    text = read_chg(Path(args.chg))
+    if not AOP_RE.search(text) and not DOCS_ONLY_RE.search(text):
+        print("  (提示:無「### Acceptance operation」——收尾將要求實際操作驗收;純文件變更請標「Acceptance-operation: n/a (docs-only)」。此為非阻斷提示。)")
     print(f"✅ plan-check 通過({len(tasks)} 個 task,格式完整)。")
     return 0
 
@@ -245,8 +250,29 @@ def cmd_run(args) -> int:
             print(f"[skip-commit] 等效訊息:{chg_id}: {t['tid']} {t['title']}")
         ran += 1
 
-    # 整支 review → 驗收 → PR → merge
+    # 整支 review → 實際操作驗收 → 驗收 → PR → merge
     print("[stage] 整支 review:" + ("[dry-run] 模擬 [task-review] branch | spec: pass | quality: pass" if args.dry_run else "以最強模型對整條 branch diff 審一次(判定行入 ACC)"))
+
+    # 實際操作驗收(task 測試=單元/build;此處把整個變更真的跑一次)
+    op_act = stage_action(matrix, risk, "operational_verify", text)
+    if DOCS_ONLY_RE.search(text) and not AOP_RE.search(text):
+        print("[stage] 實際操作驗收:docs-only 宣告,略過")
+    elif not AOP_RE.search(text):
+        return die("缺實際操作驗收:程式類變更不得只憑 task 級測試收尾——請在 CHG 補「### Acceptance operation」"
+                   "(operate/observe/pass)或標記「Acceptance-operation: n/a (docs-only)」", 3)
+    elif args.dry_run:
+        print(f"[dry-run] 實際操作驗收=模擬 operate/observe/pass 通過(op_act={op_act})")
+    elif op_act == "auto" and args.verify_cmd:
+        vr = run_shell(args.verify_cmd, repo)
+        if vr.returncode != 0:
+            return die(f"實際操作驗收失敗(--verify-cmd 非零):{vr.stderr.strip()[:200] or vr.stdout.strip()[:200]}", 3)
+        print(f"[stage] 實際操作驗收:--verify-cmd 通過\n{vr.stdout.strip()[:300]}")
+    else:
+        m = AOP_RE.search(text)
+        print(text[m.start():m.start() + 600])
+        reason = "高風險:操作簽核須由人執行" if op_act == "halt" else "無 --verify-cmd(人在迴圈)"
+        return die(f"實際操作驗收({reason}):請依上方 operate/observe/pass 實際操作、記錄證據入 ACC,再續 merge", 3)
+
     act = stage_action(matrix, risk, "acceptance", text)
     if act == "halt_independent":
         return die("驗收(高風險):需獨立驗收者(≠實作者)產 ACC——autopilot 停,交人/獨立 agent", 3)
@@ -274,7 +300,8 @@ def main(argv) -> int:
         if name == "run":
             p.add_argument("--repo", default=".")
             p.add_argument("--agent-cmd", default=None, help="headless agent 指令模板,{brief}=簡報檔路徑")
-            p.add_argument("--test-cmd", default=None)
+            p.add_argument("--test-cmd", default=None, help="每個 task 的單元/build 測試指令")
+            p.add_argument("--verify-cmd", default=None, help="末端操作測試指令(把變更真的跑一次;見 ### Acceptance operation)")
             p.add_argument("--policy", default=None, help="autopilot_policy.json 路徑(預設內建矩陣)")
             p.add_argument("--dry-run", action="store_true")
             p.add_argument("--no-commit", action="store_true")
