@@ -4,8 +4,8 @@
     "name": "kamira"
   },
   "metadata": {
-    "description": "AI skills marketplace: governed AI-SDLC suite (governance + autopilot + MCP + hooks)",
-    "version": "1.0.0"
+    "description": "AI skills marketplace: governed AI-SDLC suite (governance + autopilot + MCP + hooks) + intel-analysis. Catalog version bumps on every plugin change (enforced by plugins/catalog_check.py).",
+    "version": "1.2.0"
   },
   "plugins": [
     {
